@@ -61,18 +61,18 @@ class ProjectTest extends TestCase
         $this->assertModelExists($project);
     }
 
-    public function test_client_cannot_choose_or_change_project_owner_or_cover(): void
+    public function test_client_cannot_choose_or_change_project_owner(): void
     {
         $other = app(EnsurePortfolio::class)->handle(User::factory()->create());
         $user = User::factory()->create();
         $this->actingAs($user)->post(route('admin.projects.store'), $this->data([
-            'portfolio_id' => $other->id, 'cover_image' => '/injected.png',
+            'portfolio_id' => $other->id,
         ]))->assertSessionHasNoErrors();
         $project = Project::query()->sole();
         $this->assertSame($user->portfolio->id, $project->portfolio_id);
         $this->assertNull($project->cover_image);
         $this->put(route('admin.projects.update', $project), $this->data([
-            'portfolio_id' => $other->id, 'cover_image' => '/injected.png',
+            'portfolio_id' => $other->id,
         ]))->assertSessionHasNoErrors();
         $this->assertSame($user->portfolio->id, $project->fresh()->portfolio_id);
         $this->assertNull($project->fresh()->cover_image);

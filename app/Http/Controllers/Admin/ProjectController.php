@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Actions\DeleteProject;
+use App\Actions\SaveProject;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\SaveProjectRequest;
 use App\Models\Project;
@@ -28,9 +30,13 @@ class ProjectController extends Controller
         return view('admin.projects.create', ['project' => new Project(['display_order' => 0, 'is_featured' => false])]);
     }
 
-    public function store(SaveProjectRequest $request): RedirectResponse
+    public function store(SaveProjectRequest $request, SaveProject $saveProject): RedirectResponse
     {
-        $request->user()->portfolio->projects()->create($request->validated());
+        $saveProject->handle(
+            $request->user()->portfolio,
+            $request->safe()->except(['cover_image', 'remove_cover']),
+            cover: $request->file('cover_image'),
+        );
 
         return to_route('admin.projects.index')->with('status', 'Projeto criado com sucesso!');
     }
@@ -42,17 +48,23 @@ class ProjectController extends Controller
         return view('admin.projects.edit', compact('project'));
     }
 
-    public function update(SaveProjectRequest $request, Project $project): RedirectResponse
+    public function update(SaveProjectRequest $request, Project $project, SaveProject $saveProject): RedirectResponse
     {
-        $project->update($request->validated());
+        $saveProject->handle(
+            $request->user()->portfolio,
+            $request->safe()->except(['cover_image', 'remove_cover']),
+            $project,
+            $request->file('cover_image'),
+            $request->boolean('remove_cover'),
+        );
 
         return to_route('admin.projects.index')->with('status', 'Projeto atualizado com sucesso!');
     }
 
-    public function destroy(Project $project): RedirectResponse
+    public function destroy(Project $project, DeleteProject $deleteProject): RedirectResponse
     {
         Gate::authorize('delete', $project);
-        $project->delete();
+        $deleteProject->handle($project);
 
         return to_route('admin.projects.index')->with('status', 'Projeto excluído com sucesso!');
     }

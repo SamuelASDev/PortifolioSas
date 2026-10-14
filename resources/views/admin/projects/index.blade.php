@@ -14,6 +14,9 @@
                 @forelse ($projects as $project)
                     <article class="p-6 flex flex-col sm:flex-row gap-4 sm:items-start sm:justify-between">
                         <div class="min-w-0 space-y-2">
+                            @if ($project->cover_url)
+                                <img src="{{ $project->cover_url }}" alt="Capa de {{ $project->title }}" loading="lazy" class="w-full sm:w-56 h-32 object-cover rounded-lg">
+                            @endif
                             <h3 class="font-semibold text-gray-900 dark:text-gray-100 break-words">{{ $project->title }}</h3>
                             <p class="text-sm text-gray-500 dark:text-gray-400">Ordem: {{ $project->display_order }} @if ($project->is_featured) · Em destaque @endif</p>
                             @if ($project->description)
