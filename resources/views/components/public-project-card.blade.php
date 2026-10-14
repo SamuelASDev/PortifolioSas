@@ -12,8 +12,8 @@
             <span class="pf-badge">Em destaque</span>
         @endif
         <h3><a class="pf-title-link" href="{{ route('portfolio.projects.show', [$portfolio->slug, $project->id]) }}">{{ $project->title }}</a></h3>
-        @if ($project->description)
-            <p class="pf-muted pf-excerpt">{{ \Illuminate\Support\Str::limit($project->description, 180) }}</p>
+        @if ($project->description_text)
+            <p class="pf-muted pf-excerpt">{{ \Illuminate\Support\Str::limit($project->description_text, 180) }}</p>
         @endif
         <a class="pf-link pf-card-more" href="{{ route('portfolio.projects.show', [$portfolio->slug, $project->id]) }}">Conhecer projeto <span aria-hidden="true">→</span><span class="sr-only">: {{ $project->title }}</span></a>
     </div>

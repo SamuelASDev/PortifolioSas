@@ -21,7 +21,8 @@ class SaveProjectRequest extends FormRequest
     {
         return [
             'title' => ['required', 'string', 'max:255'],
-            'description' => ['nullable', 'string', 'max:50000'],
+            'description' => ['present_with:description_format', 'nullable', 'string', 'max:50000'],
+            'description_format' => ['sometimes', 'required', Rule::in(['text', 'html'])],
             'link_demo' => ['nullable', 'url:http,https', 'max:255'],
             'link_github' => ['nullable', 'url:http,https', 'max:255'],
             'is_featured' => ['required', 'boolean'],

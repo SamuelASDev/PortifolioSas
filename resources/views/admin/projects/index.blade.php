@@ -19,8 +19,8 @@
                             @endif
                             <h3 class="font-semibold text-gray-900 dark:text-gray-100 break-words">{{ $project->title }}</h3>
                             <p class="text-sm text-gray-500 dark:text-gray-400">Ordem: {{ $project->display_order }} @if ($project->is_featured) · Em destaque @endif</p>
-                            @if ($project->description)
-                                <p class="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-line break-words">{{ \Illuminate\Support\Str::limit($project->description, 300) }}</p>
+                            @if ($project->description_text)
+                                <p class="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-line break-words">{{ \Illuminate\Support\Str::limit($project->description_text, 300) }}</p>
                             @endif
                         </div>
                         <div class="flex shrink-0 items-center gap-4">

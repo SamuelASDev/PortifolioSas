@@ -1,3 +1,5 @@
+@import './project-prose.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -77,7 +79,8 @@
 .pf-project-cover { width: 100%; height: auto; max-height: 42rem; object-fit: contain; background: var(--surface); border: 1px solid var(--line); border-radius: 1rem; }
 .pf-project-description { max-width: 48rem; padding-top: 3rem; }
 .pf-project-description h2 { margin-bottom: 1.5rem; }
-.pf-description-text { white-space: pre-wrap; overflow-wrap: anywhere; }
+.pf-site .project-prose h2 { font-size: 1.65em; margin-block: 1.8rem .9rem; }
+.pf-site .project-prose h3 { font-size: 1.3em; margin-block: 1.5rem .75rem; }
 .pf-skip { position: absolute; top: -10rem; left: 1rem; z-index: 10; padding: 1rem; background: var(--ink); color: var(--page); border-radius: .5rem; }
 .pf-skip:focus { top: 1rem; }
 @media (max-width: 960px) {

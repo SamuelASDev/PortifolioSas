@@ -18,12 +18,7 @@
     <x-text-input id="title" name="title" class="block mt-1 w-full" :value="old('title', $project->title)" required maxlength="255" />
     <x-input-error :messages="$errors->get('title')" class="mt-2" />
 </div>
-<div>
-    <x-input-label for="description" value="Descrição" />
-    <textarea id="description" name="description" rows="8" maxlength="50000" class="block mt-1 w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 focus:ring-indigo-500">{{ old('description', $project->description) }}</textarea>
-    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Texto simples, sem formatação HTML.</p>
-    <x-input-error :messages="$errors->get('description')" class="mt-2" />
-</div>
+<x-project-description-editor :project="$project" />
 <div>
     <x-input-label for="link_demo" value="Link da demonstração (opcional)" />
     <x-text-input id="link_demo" name="link_demo" type="url" class="block mt-1 w-full" :value="old('link_demo', $project->link_demo)" maxlength="255" placeholder="https://" />

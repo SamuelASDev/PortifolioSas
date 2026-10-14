@@ -5,16 +5,28 @@ namespace App\Actions;
 use App\Models\Portfolio;
 use App\Models\Project;
 use App\Services\ProjectCoverStorage;
+use App\Services\ProjectDescription;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Throwable;
 
 class SaveProject
 {
-    public function __construct(private ProjectCoverStorage $covers) {}
+    public function __construct(private ProjectCoverStorage $covers, private ProjectDescription $descriptions) {}
 
     public function handle(Portfolio $portfolio, array $attributes, ?Project $project = null, ?UploadedFile $cover = null, bool $removeCover = false): Project
     {
+        if (array_key_exists('description', $attributes)) {
+            $attributes['description_format'] ??= 'text';
+
+            if ($attributes['description_format'] === 'html') {
+                $clean = $this->descriptions->sanitize($attributes['description']);
+                $attributes['description'] = $this->descriptions->text($clean, 'html') === '' ? null : $clean;
+            }
+        } else {
+            unset($attributes['description_format']);
+        }
+
         $newPath = $cover ? $this->covers->store($portfolio->id, $cover) : null;
         $oldPath = null;
 

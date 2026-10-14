@@ -45,3 +45,10 @@ Quando houver navegador disponível, conferir em desktop e em largura de celular
 4. Abrir um projeto e conferir descrição completa, capa, links externos e retorno para a listagem.
 5. Despublicar e recarregar os dois links em janela anônima: ambos devem retornar 404.
 6. Repetir com outra conta e conferir que a combinação do slug de uma com o ID de projeto da outra retorna 404.
+
+## Editor de descrição
+
+- Suíte PHP: 138 testes, 626 assertions. Os 27 novos testes cobrem formatação, sanitização de scripts/atributos/URIs, leitura defensiva do banco, textos legados, resumos, metadados, validação e isolamento.
+- Testes JavaScript: 7 testes com Node/JSDOM verificam a importação literal do texto antigo, marcação existente, sincronização do formulário, negrito, links, limite de tamanho e conteúdo vazio. Esses testes de documento/eventos não substituem revisão visual.
+- Migration incremental aplicada no MySQL local, com snapshot privado anterior em `storage/app/private/backups/before-richtext-20261014-235024.json`. Campos anteriores e contagens 1/1/1 preservados; o projeto existente recebeu formato `text`.
+- Roteiro visual para o responsável: abrir uma descrição antiga, conferir texto e quebras de linha; aplicar títulos/listas/citações/links/código; salvar e reabrir; conferir a página pública e os resumos; provocar erro de validação em outro campo e conferir que o texto continua disponível. No celular, verificar quebra da barra de ferramentas e uso do painel de links.
