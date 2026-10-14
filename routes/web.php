@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\PortfolioController;
+use App\Http\Controllers\Admin\PortfolioPublicationController;
 use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicPortfolioController;
@@ -26,6 +27,7 @@ Route::middleware('auth')->group(function () {
         // Configurações do Portfólio (Slug, Cores, Tema)
         Route::get('/portfolio', [PortfolioController::class, 'edit'])->name('portfolio.edit');
         Route::patch('/portfolio', [PortfolioController::class, 'update'])->name('portfolio.update');
+        Route::patch('/portfolio/publication', [PortfolioPublicationController::class, 'update'])->name('portfolio.publication.update');
 
         // CRUD de Projetos
         Route::resource('projects', ProjectController::class)->except('show');
@@ -35,4 +37,5 @@ Route::middleware('auth')->group(function () {
 require __DIR__.'/auth.php';
 
 // --- VITRINE PÚBLICA (Deve ficar sempre no final) ---
+Route::get('/{slug}/projects/{project}', [PublicPortfolioController::class, 'project'])->whereNumber('project')->name('portfolio.projects.show');
 Route::get('/{slug}', [PublicPortfolioController::class, 'show'])->name('portfolio.show');

@@ -1,6 +1,12 @@
 <?php
 
 return [
+    'photos' => [
+        'disk' => 'public',
+        'max_size_kb' => 2048,
+        'max_dimension' => 3000,
+    ],
+
     'covers' => [
         'disk' => 'public',
         'max_size_kb' => 2048,

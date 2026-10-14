@@ -30,3 +30,18 @@ Quando houver navegador disponível, conferir em desktop e em largura de celular
 4. Confirmar paginação e menu mobile.
 5. Tentar abrir a edição de um projeto da outra conta.
 6. Enviar uma capa, substituir, remover e excluir o projeto; conferir a imagem por `/storage/...`.
+
+## Apresentação e vitrine pública
+
+- Suíte: 111 testes, 527 assertions. Os 34 novos testes verificam apresentação, foto, publicação, páginas públicas, isolamento, HTML escapado, tema/cor e paginação.
+- Migration incremental aplicada no MySQL local. Snapshot privado criado antes em `storage/app/private/backups/before-presentation-20261014-233238.json` (ignorado pelo Git).
+- Comparação posterior: os campos anteriores do usuário, portfólio e projeto foram preservados; as contagens seguem 1/1/1. O portfólio existente permanece como rascunho.
+- A publicação e a despublicação foram verificadas em testes HTTP com SQLite, sem publicar a conta local automaticamente.
+- A revisão visual ficou com o usuário, conforme combinado. Roteiro sugerido:
+
+1. Em **Portfólio**, preencher nome, título, biografia, contatos e foto; salvar e conferir os valores após recarregar.
+2. Publicar e abrir o link mostrado no painel, tanto no tema claro quanto no escuro.
+3. Conferir desktop e larguras de 320, 390, 768 e 1280 px: navegação, quebra de nomes/URLs longos, retrato, cards e botões.
+4. Abrir um projeto e conferir descrição completa, capa, links externos e retorno para a listagem.
+5. Despublicar e recarregar os dois links em janela anônima: ambos devem retornar 404.
+6. Repetir com outra conta e conferir que a combinação do slug de uma com o ID de projeto da outra retorna 404.
