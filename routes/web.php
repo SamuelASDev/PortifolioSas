@@ -1,12 +1,11 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use Illuminate\Support\Facades\Route;
-
-// Importação dos nossos Controladores modulares
 use App\Http\Controllers\Admin\PortfolioController;
 use App\Http\Controllers\Admin\ProjectController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicPortfolioController;
+use App\Http\Middleware\EnsureUserHasPortfolio;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
@@ -22,14 +21,14 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // --- PAINEL DE ADMINISTRAÇÃO (SaaS) ---
-    Route::prefix('admin')->name('admin.')->group(function () {
-        
+    Route::prefix('admin')->name('admin.')->middleware(EnsureUserHasPortfolio::class)->group(function () {
+
         // Configurações do Portfólio (Slug, Cores, Tema)
         Route::get('/portfolio', [PortfolioController::class, 'edit'])->name('portfolio.edit');
-        Route::post('/portfolio', [PortfolioController::class, 'update'])->name('portfolio.update');
+        Route::patch('/portfolio', [PortfolioController::class, 'update'])->name('portfolio.update');
 
         // CRUD de Projetos
-        Route::resource('projects', ProjectController::class);
+        Route::resource('projects', ProjectController::class)->except('show');
     });
 });
 

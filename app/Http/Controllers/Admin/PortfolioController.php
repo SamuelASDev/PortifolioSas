@@ -3,43 +3,21 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\UpdatePortfolioRequest;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
+use Illuminate\View\View;
 
 class PortfolioController extends Controller
 {
-    public function edit()
+    public function edit(Request $request): View
     {
-        $user = auth()->user();
-        
-        // Busca o portfólio do usuário. Se não existir, cria um base.
-        $portfolio = $user->portfolio()->firstOrCreate(
-            [], // Critério de busca (vazio porque a relação já amarra ao user_id)
-            [   // Dados de criação padrão
-                'slug' => Str::slug($user->name) . '-' . $user->id,
-                'theme' => 'dark',
-                'primary_color' => '#6366f1'
-            ]
-        );
-
-        return view('admin.portfolio.edit', compact('portfolio'));
+        return view('admin.portfolio.edit', ['portfolio' => $request->user()->portfolio]);
     }
 
-    public function update(Request $request)
+    public function update(UpdatePortfolioRequest $request): RedirectResponse
     {
-        $portfolio = auth()->user()->portfolio;
-
-        $request->validate([
-            'slug' => 'required|string|alpha_dash|max:255|unique:portfolios,slug,' . $portfolio->id,
-            'theme' => 'required|in:dark,light',
-            'primary_color' => 'required|string|max:7',
-        ]);
-
-        $portfolio->update([
-            'slug' => Str::slug($request->slug),
-            'theme' => $request->theme,
-            'primary_color' => $request->primary_color,
-        ]);
+        $request->user()->portfolio->update($request->validated());
 
         return back()->with('status', 'Portfólio atualizado com sucesso!');
     }
