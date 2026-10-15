@@ -25,6 +25,7 @@ class UpdatePortfolioRequest extends FormRequest
         return [
             'slug' => ['required', 'string', 'max:255', 'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/', Rule::notIn(config('portfolio.reserved_slugs')), Rule::unique('portfolios', 'slug')->ignore($this->user()->portfolio)],
             'theme' => ['required', Rule::in(['dark', 'light'])],
+            'show_featured_carousel' => ['sometimes', 'boolean'],
             'primary_color' => ['required', 'string', 'regex:/^#[0-9a-fA-F]{6}$/'],
             'professional_name' => ['nullable', 'string', 'max:255'],
             'headline' => ['nullable', 'string', 'max:160'],

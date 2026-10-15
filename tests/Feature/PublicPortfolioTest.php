@@ -55,7 +55,7 @@ class PublicPortfolioTest extends TestCase
 
         $this->get(route('portfolio.show', $portfolio->slug))->assertOk()
             ->assertSee('Nome profissional')->assertSee('Desenvolvedor Laravel')->assertSee('Minha apresentação.')
-            ->assertSee('mailto:publico@example.com')->assertSee('https://github.com/example')
+            ->assertSee($portfolio->gmail_compose_url)->assertSee('https://github.com/example')
             ->assertSee('https://linkedin.com/in/example')->assertSee('https://example.com')
             ->assertSee($portfolio->photo_url)
             ->assertDontSee($portfolio->user->email)->assertDontSee('Nome privado da conta')

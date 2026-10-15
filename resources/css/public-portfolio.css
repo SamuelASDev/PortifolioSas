@@ -52,6 +52,24 @@
 .pf-contacts { display: flex; flex-wrap: wrap; gap: .9rem 1.4rem; font-size: .9rem; }
 .pf-contacts a { display: inline-flex; align-items: center; gap: .3rem; min-height: 2.75rem; }
 .pf-projects { padding-block: 2.5rem 5rem; border-top: 1px solid var(--line); scroll-margin-top: 1.5rem; }
+.pf-carousel { padding-block: 2.5rem 4rem; border-top: 1px solid var(--line); }
+.pf-carousel [hidden] { display: none !important; }
+.pf-carousel-frame { background: var(--surface); border: 1px solid var(--line); border-top: 3px solid var(--accent); border-radius: 1.25rem; overflow: hidden; }
+.pf-carousel-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; overscroll-behavior-x: contain; scrollbar-width: thin; }
+.pf-carousel-slide { flex: 0 0 100%; min-width: 0; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 2.5rem; padding: 2.5rem; scroll-snap-align: start; align-items: center; }
+.pf-carousel-cover { width: 100%; aspect-ratio: 8 / 5; border-radius: .85rem; background: var(--surface-raised); overflow: hidden; }
+.pf-carousel-cover img { width: 100%; height: 100%; object-fit: cover; }
+.pf-carousel-copy { min-width: 0; display: flex; flex-direction: column; align-items: start; gap: 1rem; }
+.pf-carousel-copy h3 { font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 700; line-height: 1.25; letter-spacing: -.02em; }
+.pf-carousel-copy > p { font-size: .95rem; }
+.pf-carousel-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; margin-top: .5rem; }
+.pf-carousel-controls { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: .5rem 1rem; border-top: 1px solid var(--line); padding: .75rem 1.5rem; }
+.pf-carousel-arrow, .pf-carousel-toggle { min-width: 2.75rem; min-height: 2.75rem; border-radius: .5rem; border: 1px solid var(--line); padding: .5rem .75rem; font-size: .85rem; }
+.pf-carousel-arrow:hover, .pf-carousel-toggle:hover { background: var(--surface-raised); }
+.pf-carousel-dots { display: flex; flex-wrap: wrap; justify-content: center; }
+.pf-carousel-dot { display: grid; place-items: center; width: 2.75rem; height: 2.75rem; }
+.pf-carousel-dot::after { content: ''; width: .6rem; height: .6rem; background: var(--muted); border-radius: 50%; }
+.pf-carousel-dot[aria-pressed="true"]::after { background: var(--accent); outline: 1px solid var(--ink); outline-offset: 3px; }
 .pf-section-heading { display: flex; align-items: end; justify-content: space-between; gap: 1rem; margin-bottom: 2rem; }
 .pf-site h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 700; letter-spacing: -.025em; line-height: 1.25; margin-top: .65rem; }
 .pf-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem; }
@@ -99,4 +117,8 @@
     .pf-hero-actions { align-items: start; flex-direction: column; }
     .pf-project-actions .pf-button { width: 100%; }
     .pf-footer-inner { flex-direction: column; align-items: start; }
+    .pf-carousel-slide { grid-template-columns: minmax(0, 1fr); gap: 1.5rem; padding: 1.25rem; }
+    .pf-carousel-controls { padding-inline: .5rem; gap: .25rem; }
+    .pf-carousel-toggle { flex-basis: 100%; }
+    .pf-carousel-actions .pf-button { width: 100%; }
 }

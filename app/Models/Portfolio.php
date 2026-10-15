@@ -17,12 +17,12 @@ class Portfolio extends Model
     protected $fillable = [
         'user_id', 'slug', 'theme', 'primary_color', 'professional_name', 'headline',
         'bio', 'photo_path', 'contact_email', 'github_url', 'linkedin_url', 'website_url',
-        'is_published',
+        'is_published', 'show_featured_carousel',
     ];
 
     protected function casts(): array
     {
-        return ['is_published' => 'boolean'];
+        return ['is_published' => 'boolean', 'show_featured_carousel' => 'boolean'];
     }
 
     public function scopePublished(Builder $query): Builder
@@ -33,6 +33,15 @@ class Portfolio extends Model
     protected function photoUrl(): Attribute
     {
         return Attribute::get(fn () => app(PortfolioPhotoStorage::class)->url($this->photo_path));
+    }
+
+    protected function gmailComposeUrl(): Attribute
+    {
+        return Attribute::get(fn () => $this->contact_email
+            ? 'https://mail.google.com/mail/?'.http_build_query([
+                'view' => 'cm', 'fs' => '1', 'to' => $this->contact_email,
+            ], '', '&', PHP_QUERY_RFC3986)
+            : null);
     }
 
     public function user(): BelongsTo

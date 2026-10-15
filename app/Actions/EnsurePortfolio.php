@@ -28,7 +28,7 @@ class EnsurePortfolio
 
             return $owner->portfolio()->create([
                 'slug' => $slug, 'theme' => 'dark', 'primary_color' => '#6366f1',
-                'professional_name' => $owner->name, 'is_published' => false,
+                'professional_name' => $owner->name, 'is_published' => false, 'show_featured_carousel' => false,
             ]);
         });
     }

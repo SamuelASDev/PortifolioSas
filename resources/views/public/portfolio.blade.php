@@ -18,6 +18,9 @@
             <img class="pf-portrait" src="{{ $portfolio->photo_url }}" alt="Foto de {{ $portfolio->professional_name }}" width="320" height="320" fetchpriority="high">
         @endif
     </section>
+    @if ($featuredProjects->isNotEmpty())
+        <x-featured-project-carousel :portfolio="$portfolio" :projects="$featuredProjects" />
+    @endif
     <section id="projetos" class="pf-projects" aria-labelledby="projects-title">
         <div class="pf-section-heading">
             <div><p class="pf-eyebrow">Trabalhos e experiências</p><h2 id="projects-title">Meus projetos</h2></div>

@@ -60,3 +60,11 @@ Quando houver navegador disponível, conferir em desktop e em largura de celular
 - Migration `create_project_media_table` aplicada no MySQL local. As contagens e hashes completos de `users`, `portfolios` e `projects` foram comparados antes/depois e permaneceram iguais (1/1/1). A tabela nova começou vazia.
 - `public/storage` continua conectado a `storage/app/public`. A tarefa diária `project-media:prune` aparece em `php artisan schedule:list`.
 - Revisão visual com o responsável: inserir uma imagem entre dois parágrafos e um vídeo por link; salvar/reabrir; conferir a página pública no celular; excluir um bloco e salvar; confirmar que uma edição cancelada não apaga a imagem já salva. Testar um vídeo público com incorporação permitida pelo provedor.
+
+## Carrossel opcional e Gmail
+
+- Referência visual consultada: `C:\Users\samue\Desktop\Programação\Portifolio\index.html`. O arquivo de referência foi apenas lido.
+- Suíte PHP: 175 testes, 803 assertions. JavaScript: 16 testes, incluindo navegação, autoplay, pausa, teclado, scroll, resize, movimento reduzido e limpeza de timers.
+- Migration aplicada no MySQL. Hashes dos campos anteriores de usuários, portfólios e projetos permaneceram iguais antes/depois; a nova configuração começa desativada.
+- Build Vite e Pint passaram. O novo módulo público é carregado apenas quando há mais de um slide.
+- Revisão visual com o responsável: ativar a opção no portfólio e marcar dois projetos como destaque; conferir posição acima da lista, capa, links, temas e layout no celular; navegar e pausar a rotação; desativar a opção e confirmar que a seção desaparece. Clicar em E-mail deve abrir o Gmail com o destinatário configurado, sem enviar a mensagem.

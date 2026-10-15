@@ -53,6 +53,14 @@ Depois de publicado, alterações salvas na apresentação e nos projetos ficam 
 
 O layout público tem CSS próprio (`resources/css/public-portfolio.css`), componentes Blade compartilhados, tema explícito claro/escuro, cor de destaque validada e contraste calculado para o texto dos botões. As regras para telas pequenas alteram a grade de três para duas e uma coluna, reorganizam a apresentação e permitem quebra de textos longos. A preferência de tema do sistema não substitui o tema salvo. O build Vite inclui a nova entrada CSS.
 
+### Carrossel opcional e e-mail
+
+Em **Portfólio → Endereço e aparência**, a opção **Exibir carrossel de projetos em destaque** controla a seção anterior à lista completa. Fica desligada por padrão, inclusive para portfólios existentes. O carrossel usa somente projetos do próprio portfólio marcados como destaque, ordenados por `display_order` e ID, limitado a dez (`config/portfolio.php`). A seleção é independente da paginação; não retira os projetos da lista completa. Sem destaques, a seção não aparece. Com um destaque, a apresentação é estática.
+
+O componente Blade combina capa, resumo e links com as cores/tema atuais. O JavaScript público separado usa scroll-snap nativo, sem dependências/CDN adicionais. Com mais de um slide, oferece setas, indicadores, teclado e rotação a cada cinco segundos com botão de pausa. Pausa ao interagir/focar, suspende ao passar o mouse ou ocultar a página, e começa pausado quando há preferência por movimento reduzido. Sem JavaScript, os slides continuam disponíveis por rolagem horizontal.
+
+O link **E-mail**, compartilhado pela apresentação e pelo rodapé, abre a composição do Gmail em nova aba com o destinatário definido em `contact_email`. A query é codificada para preservar endereços com `+` e outros caracteres válidos. Não usa o e-mail privado da conta nem envia mensagens automaticamente.
+
 A listagem administrativa exibe dez projetos por página, ordenados por `display_order` crescente e depois por ID. O destaque é uma marca independente da ordem. A descrição aceita texto simples legado ou HTML limitado do editor rico. Os resumos são sempre texto escapado. Links aceitam apenas HTTP e HTTPS.
 
 ## Capas dos projetos
