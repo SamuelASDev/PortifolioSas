@@ -11,11 +11,13 @@
             @endif
             <div class="pf-hero-actions">
                 <a class="pf-button" href="#projetos">Conheça meus projetos <span aria-hidden="true">↓</span></a>
-                <x-public-contact-links :portfolio="$portfolio" />
+                <div class="pf-hero-links">
+                    <x-public-contact-links :portfolio="$portfolio" />
+                    @if (!($preview ?? false))
+                        <x-share-actions :metadata="app(\App\Support\SharingMetadata::class)->forPortfolio($portfolio)" variant="link" :show-copy="false" />
+                    @endif
+                </div>
             </div>
-            @if (!($preview ?? false))
-                <x-share-actions :metadata="app(\App\Support\SharingMetadata::class)->forPortfolio($portfolio)" />
-            @endif
         </div>
         @if ($portfolio->photo_url)
             <img class="pf-portrait" src="{{ $portfolio->photo_url }}" alt="Foto de {{ $portfolio->professional_name }}" width="320" height="320" fetchpriority="high">

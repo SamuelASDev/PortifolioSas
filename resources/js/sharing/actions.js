@@ -3,6 +3,7 @@ export function initializeShareActions(root) {
     const metadata = JSON.parse(root.querySelector('[data-share-payload]').textContent);
     const copy = root.querySelector('[data-copy-link]');
     const share = root.querySelector('[data-share-link]');
+    const buttons = [copy, share].filter(Boolean);
     const manual = root.querySelector('[data-share-manual]');
     const input = root.querySelector('[data-share-url]');
     const status = root.querySelector('[data-share-status]');
@@ -22,12 +23,12 @@ export function initializeShareActions(root) {
     };
     const run = async (action) => {
         if (busy) return;
-        busy = true; copy.disabled = true; share.disabled = true;
+        busy = true; buttons.forEach((button) => { button.disabled = true; });
         status.textContent = '';
         try { await action(); }
-        finally { busy = false; copy.disabled = false; share.disabled = false; }
+        finally { busy = false; buttons.forEach((button) => { button.disabled = false; }); }
     };
-    copy.addEventListener('click', () => run(copyLink));
+    copy?.addEventListener('click', () => run(copyLink));
     share.addEventListener('click', () => run(async () => {
         const payload = { title: metadata.title, text: metadata.description, url: metadata.url };
         try {
@@ -42,6 +43,6 @@ export function initializeShareActions(root) {
         }
     }));
     input.addEventListener('focus', () => input.select());
-    manual.hidden = true; copy.disabled = false; share.disabled = false;
+    manual.hidden = true; buttons.forEach((button) => { button.disabled = false; });
     root.dataset.shareReady = 'true';
 }

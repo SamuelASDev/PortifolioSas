@@ -90,3 +90,21 @@ test('initialization and rapid clicks cannot open multiple native dialogs', asyn
     complete(); await new Promise(setImmediate);
     assert.equal(document.querySelector('[data-copy-link]').disabled, false);
 });
+
+test('share-only controls still support native sharing and clipboard fallback', async () => {
+    const original = document.querySelector('[data-share-actions]');
+    const root = original.cloneNode(true);
+    delete root.dataset.shareReady;
+    root.querySelector('[data-copy-link]').remove();
+    original.replaceWith(root);
+    initializeShareActions(root);
+    let calls = 0;
+    window.navigator.share = async () => { calls++; };
+    await click('[data-share-link]');
+    assert.equal(calls, 1);
+    delete window.navigator.share;
+    window.navigator.clipboard = { writeText: async (value) => { assert.equal(value, metadata.url); calls++; } };
+    await click('[data-share-link]');
+    assert.equal(calls, 2);
+    assert.equal(document.querySelector('[data-share-link]').disabled, false);
+});

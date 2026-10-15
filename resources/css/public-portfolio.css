@@ -69,6 +69,10 @@
 .pf-share-manual { display: block; max-width: 42rem; margin-top: .75rem; }
 .pf-share-url { width: 100%; border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: .5rem; padding: .75rem; font-size: .85rem; }
 .pf-share-status { font-size: .85rem; margin-top: .5rem; }
+.pf-hero-links { display: flex; flex-wrap: wrap; align-items: center; gap: .9rem 1.4rem; min-width: 0; }
+.pf-share-actions-inline { margin-top: 0; min-width: 0; max-width: 100%; }
+.pf-share-link { display: inline-flex; align-items: center; gap: .3rem; min-height: 2.75rem; font-size: .9rem; }
+.pf-share-status:empty { display: none; }
 .pf-carousel-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; margin-top: .5rem; }
 .pf-carousel-controls { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: .5rem 1rem; border-top: 1px solid var(--line); padding: .75rem 1.5rem; }
 .pf-carousel-arrow { min-width: 2.75rem; min-height: 2.75rem; border-radius: .5rem; border: 1px solid var(--line); padding: .5rem .75rem; font-size: .85rem; }

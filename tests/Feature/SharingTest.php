@@ -193,8 +193,13 @@ class SharingTest extends TestCase
         $portfolio->update(['is_published' => true, 'share_title' => 'Meu cartão salvo']);
         $project = $portfolio->projects()->create(['title' => 'Projeto', 'share_title' => 'Cartão do projeto']);
         foreach ([route('portfolio.show', $portfolio->slug), route('portfolio.projects.show', [$portfolio->slug, $project->id])] as $url) {
-            $this->get($url.'?tracking=ignored')->assertOk()->assertSee('data-copy-link', false)
+            $response = $this->get($url.'?tracking=ignored')->assertOk()
                 ->assertSee('data-share-link', false)->assertSee('value="'.$url.'"', false);
+            if ($url === route('portfolio.show', $portfolio->slug)) {
+                $response->assertDontSee('data-copy-link', false)->assertSee('pf-link pf-share-link', false);
+            } else {
+                $response->assertSee('data-copy-link', false);
+            }
         }
         $this->actingAs($portfolio->user)->get(route('admin.portfolio.edit'))->assertOk()
             ->assertSee('data-share-actions', false)->assertSee('Meu cartão salvo');
