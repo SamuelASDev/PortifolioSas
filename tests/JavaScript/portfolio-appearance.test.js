@@ -123,3 +123,17 @@ test('failed saves show an error, retain editable draft and leave saved state un
     click('[data-appearance-close]'); click('[data-open-appearance]');
     assert.equal(document.querySelector('[data-appearance-theme]').value, 'dark');
 });
+
+test('layout normalization whitelists values and live preview applies every selected dataset', () => {
+    const extended = { ...schema, options: {
+        hero: { default: 'split', values: { split: 'Split', centered: 'Centered' } },
+        grid: { default: 'three', values: { three: 'Three', list: 'List' } },
+    } };
+    const settings = applySettings(document, { ...initial, appearance: { ...initial.appearance, hero: 'centered', grid: 'list' } }, extended);
+    assert.equal(settings.appearance.hero, 'centered');
+    assert.equal(document.body.dataset.hero, 'centered');
+    assert.equal(document.body.dataset.grid, 'list');
+    applySettings(document, { ...initial, appearance: { ...initial.appearance, hero: 'url(evil)', grid: '__proto__' } }, extended);
+    assert.equal(document.body.dataset.hero, 'split');
+    assert.equal(document.body.dataset.grid, 'three');
+});

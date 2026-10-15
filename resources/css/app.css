@@ -1,4 +1,5 @@
 @import './project-prose.css';
+@import './studio.css';
 
 @tailwind base;
 @tailwind components;

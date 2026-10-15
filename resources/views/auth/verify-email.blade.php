@@ -1,4 +1,6 @@
 <x-guest-layout>
+    <p class="studio-eyebrow">QUASE TUDO PRONTO</p>
+    <h1 class="studio-auth-title">Seu espaço espera<br>por você.</h1>
     <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
         Confirme seu e-mail pelo link enviado para acessar o painel. Se você já tinha uma conta e ainda não confirmou o endereço, use o botão abaixo para receber um novo link.
     </div>

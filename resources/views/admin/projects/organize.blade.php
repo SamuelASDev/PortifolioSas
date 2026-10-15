@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header"><h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200">Organizar projetos e destaques</h2></x-slot>
     <div class="py-12"><div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <form data-project-organization data-revision="{{ $revision }}" action="{{ route('admin.projects.organize.update') }}" class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm space-y-6 text-gray-900 dark:text-gray-100">
+        <form data-project-organization data-revision="{{ $revision }}" action="{{ route('admin.projects.organize.update') }}" class="studio-panel space-y-6 text-gray-900 dark:text-gray-100">
             <div class="space-y-2"><h3 class="text-lg font-semibold">Sua seleção, na sua ordem</h3><p class="text-sm text-gray-500 dark:text-gray-400">Arraste pela alça ou use os botões Subir e Descer. Todos os projetos estão nesta lista. A ordem será usada na vitrine e no carrossel, que exibe até {{ config('portfolio.carousel.max_projects') }} destaques.</p><p class="text-sm text-gray-500 dark:text-gray-400">As alterações só entram em vigor ao salvar. Se o portfólio estiver publicado, serão exibidas imediatamente.</p></div>
             <ol data-project-list class="project-organization-list space-y-3" aria-label="Ordem dos projetos">
                 @foreach ($projects as $project)

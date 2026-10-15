@@ -4,11 +4,12 @@
     </x-slot>
     <div class="py-12">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+            <nav class="studio-section-tabs" aria-label="Seções do portfólio"><a href="#publication-heading">Publicação</a><a href="#presentation-heading">Apresentação</a><a href="#contacts-heading">Contatos</a><a href="#appearance-heading">Aparência</a><a href="#sharing-heading">Compartilhamento</a></nav>
             @if (session('status'))
                 <div role="status" class="p-4 bg-green-900 border border-green-500 text-white rounded-lg">{{ session('status') }}</div>
             @endif
             @include('admin.portfolio.partials.publication')
-            <form method="POST" enctype="multipart/form-data" action="{{ route('admin.portfolio.update') }}" class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm space-y-6 text-gray-900 dark:text-gray-100">
+            <form method="POST" enctype="multipart/form-data" action="{{ route('admin.portfolio.update') }}" class="studio-panel space-y-6 text-gray-900 dark:text-gray-100">
                 @csrf
                 @method('PATCH')
                 @include('admin.portfolio.partials.presentation')

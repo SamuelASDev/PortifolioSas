@@ -3,7 +3,7 @@
     $public = $variant === 'public';
     $inputClass = $public ? 'pf-filter-input' : 'mt-1 w-full rounded-md border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 text-sm';
 @endphp
-<form method="GET" action="{{ $action }}{{ $public ? '#projetos' : '' }}" class="{{ $public ? 'pf-project-filters' : 'p-5 bg-white dark:bg-gray-800 rounded-lg text-gray-900 dark:text-gray-100 space-y-4' }}" aria-label="Filtrar projetos">
+<form method="GET" action="{{ $action }}{{ $public ? '#projetos' : '' }}" class="{{ $public ? 'pf-project-filters' : 'studio-panel studio-project-filters space-y-4' }}" aria-label="Filtrar projetos">
     <div class="{{ $public ? 'pf-filter-fields' : 'grid gap-4 sm:grid-cols-2 lg:grid-cols-4' }}">
         <label class="{{ $public ? 'pf-filter-label' : 'block text-sm' }}"><span><x-public-icon name="search" /> Buscar por título</span><input type="search" name="q" value="{{ $filters['q'] ?? '' }}" maxlength="100" placeholder="Nome do projeto" class="{{ $inputClass }}"></label>
         <label class="{{ $public ? 'pf-filter-label' : 'block text-sm' }}"><span><x-public-icon name="tag" /> Categoria</span><select name="category" class="{{ $inputClass }}"><option value="">Todas as categorias</option>@foreach ($categories as $key => $category)<option value="{{ $key }}" @selected(($filters['category'] ?? '') === $key)>{{ $category['label'] }}</option>@endforeach</select></label>

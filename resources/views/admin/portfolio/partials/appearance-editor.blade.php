@@ -21,6 +21,18 @@
                     @endforeach
                 </select>
                 <button type="button" data-appearance-reset class="appearance-control w-full">Restaurar tema selecionado</button>
+                <details class="appearance-layout-options" open>
+                    <summary class="font-semibold">Layout e acabamento</summary>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Combine as opções e confira o resultado no computador e no celular.</p>
+                    @foreach (config('portfolio-appearance.options') as $key => $option)
+                        <label class="block text-sm" for="appearance-{{ $key }}">{{ $option['label'] }}</label>
+                        <select id="appearance-{{ $key }}" data-appearance-field="{{ $key }}" class="appearance-input">
+                            @foreach ($option['values'] as $value => $label)
+                                <option value="{{ $value }}">{{ $label }}</option>
+                            @endforeach
+                        </select>
+                    @endforeach
+                </details>
                 <fieldset class="space-y-3 border-t border-gray-300 dark:border-gray-700 pt-4">
                     <legend class="font-semibold pt-4">Tipografia</legend>
                     <label class="block text-sm" for="appearance-font">Fonte geral</label>

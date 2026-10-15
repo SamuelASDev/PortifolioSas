@@ -10,6 +10,7 @@ export function normalizeSettings(input, schema) {
             font: Object.hasOwn(schema.fonts, appearance.font) ? appearance.font : 'system',
             base_size: [14, 16, 18].includes(Number(appearance.base_size)) ? Number(appearance.base_size) : 16,
             title_scale: [90, 100, 110].includes(Number(appearance.title_scale)) ? Number(appearance.title_scale) : 100,
+            ...Object.fromEntries(Object.entries(schema.options ?? {}).map(([key, option]) => [key, Object.hasOwn(option.values, appearance[key]) ? appearance[key] : option.default])),
             colors,
         },
     };
@@ -45,6 +46,7 @@ export function applySettings(doc, input, schema) {
     };
     Object.entries(styles).forEach(([key, value]) => doc.body.style.setProperty(`--${key}`, value));
     doc.body.dataset.theme = settings.theme;
+    Object.keys(schema.options ?? {}).forEach((key) => { doc.body.dataset[key] = settings.appearance[key]; });
     doc.documentElement.style.fontSize = `${settings.appearance.base_size}px`;
     doc.querySelector('meta[name="theme-color"]')?.setAttribute('content', accent);
     return settings;

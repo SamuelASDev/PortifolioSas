@@ -1,7 +1,7 @@
-<section class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm space-y-4 text-gray-900 dark:text-gray-100" aria-labelledby="publication-heading">
+<section class="studio-panel space-y-4 text-gray-900 dark:text-gray-100" aria-labelledby="publication-heading">
     <div class="flex flex-wrap items-center justify-between gap-3">
         <h3 id="publication-heading" class="text-lg font-semibold">Publicação</h3>
-        <span class="text-sm font-semibold">{{ $portfolio->is_published ? 'Publicado' : 'Rascunho' }}</span>
+        <span @class(['studio-status', 'is-live' => $portfolio->is_published])>{{ $portfolio->is_published ? 'Publicado' : 'Rascunho' }}</span>
     </div>
     <x-upload-privacy-note />
     @if ($portfolio->is_published)

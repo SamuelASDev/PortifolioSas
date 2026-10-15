@@ -127,6 +127,31 @@ class PortfolioAppearanceTest extends TestCase
         $this->get(route('admin.portfolio.preview'))->assertOk()->assertSee('--page: #fafaf8;', false);
     }
 
+    public function test_layout_options_are_saved_rendered_and_preserved_by_legacy_updates(): void
+    {
+        $portfolio = $this->portfolio();
+        $project = $portfolio->projects()->create(['title' => 'Layout project']);
+        $data = $this->settings();
+        foreach (config('portfolio-appearance.options') as $key => $option) {
+            $data['appearance'][$key] = array_key_last($option['values']);
+        }
+        $this->actingAs($portfolio->user)->patchJson(route('admin.portfolio.appearance.update'), $data)->assertOk();
+        foreach ([route('admin.portfolio.preview'), route('admin.portfolio.preview.project', $project->id)] as $url) {
+            $response = $this->get($url)->assertOk();
+            foreach (config('portfolio-appearance.options') as $key => $option) {
+                $response->assertSee('data-'.$key.'="'.array_key_last($option['values']).'"', false);
+            }
+        }
+        $this->patchJson(route('admin.portfolio.appearance.update'), $this->settings())->assertOk();
+        $this->assertSame('list', $portfolio->fresh()->appearance['grid']);
+        foreach (array_keys(config('portfolio-appearance.options')) as $key) {
+            $invalid = $this->settings();
+            $invalid['appearance'][$key] = 'invalid-value';
+            $this->patchJson(route('admin.portfolio.appearance.update'), $invalid)->assertUnprocessable();
+            $this->assertSame('list', $portfolio->fresh()->appearance['grid']);
+        }
+    }
+
     private function portfolio(): Portfolio
     {
         return app(EnsurePortfolio::class)->handle(User::factory()->create());

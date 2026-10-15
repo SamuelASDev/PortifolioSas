@@ -17,6 +17,7 @@ class PortfolioAppearance
                 'font' => array_key_exists($values['font'] ?? '', config('portfolio-appearance.fonts')) ? $values['font'] : 'system',
                 'base_size' => in_array($values['base_size'] ?? null, [14, 16, 18], true) ? $values['base_size'] : 16,
                 'title_scale' => in_array($values['title_scale'] ?? null, [90, 100, 110], true) ? $values['title_scale'] : 100,
+                ...collect(config('portfolio-appearance.options'))->mapWithKeys(fn ($option, $key) => [$key => array_key_exists($values[$key] ?? '', $option['values']) ? $values[$key] : $option['default']])->all(),
                 'colors' => array_filter(array_intersect_key($values['colors'] ?? [], config('portfolio-appearance.colors')), fn ($color) => is_string($color) && preg_match('/^#[0-9a-fA-F]{6}$/', $color)),
             ],
         ];

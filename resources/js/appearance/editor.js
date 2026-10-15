@@ -57,7 +57,7 @@ export function initializeAppearanceEditor(dialog) {
     const applyPreset = () => {
         const selected = schema.presets[preset.value];
         if (!selected) return;
-        draft = normalizeSettings({ theme: selected.theme, primary_color: selected.primary_color, appearance: { font: selected.font, base_size: 16, title_scale: 100, colors: selected.colors } }, schema);
+        draft = normalizeSettings({ theme: selected.theme, primary_color: selected.primary_color, appearance: { ...selected.appearance, font: selected.font, base_size: 16, title_scale: 100, colors: selected.colors } }, schema);
         sync();
     };
     preset.addEventListener('change', applyPreset);

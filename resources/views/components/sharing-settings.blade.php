@@ -5,7 +5,7 @@
     $metadata = $project ? $service->forProject($portfolio, $project) : $service->forPortfolio($portfolio);
     $sharingErrors = $errors->getBag('sharing');
 @endphp
-<section data-sharing-settings class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm space-y-6 text-gray-900 dark:text-gray-100" aria-labelledby="sharing-heading">
+<section data-sharing-settings class="studio-panel space-y-6 text-gray-900 dark:text-gray-100" aria-labelledby="sharing-heading">
     <h3 id="sharing-heading" class="text-lg font-semibold">Compartilhamento</h3>
     <p class="text-sm text-gray-500 dark:text-gray-400">Personalize o cartão que representa este {{ $project ? 'projeto' : 'portfólio' }} ao compartilhar o link. Campos vazios usam o conteúdo original. Salvar não publica rascunhos.</p>
     @if ($portfolio->is_published)

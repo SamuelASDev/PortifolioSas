@@ -1,1 +1,1 @@
-<p {{ $attributes->class(['text-sm text-gray-500 dark:text-gray-400']) }}>Envie apenas imagens destinadas à divulgação. Os arquivos têm links públicos mesmo em rascunhos; despublicar oculta as páginas, mas não revoga esses links.</p>
+<p {{ $attributes->class(['studio-upload-note text-sm text-gray-500 dark:text-gray-400']) }}>Envie apenas imagens destinadas à divulgação. Os arquivos têm links públicos mesmo em rascunhos; despublicar oculta as páginas, mas não revoga esses links.</p>

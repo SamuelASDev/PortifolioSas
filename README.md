@@ -1,6 +1,6 @@
-# Portfólio
+# Vértice
 
-Aplicação Laravel para criar e publicar portfólios profissionais. Cada conta tem sua apresentação, projetos, tecnologias e aparência, com isolamento entre usuários.
+Seu trabalho, em perspectiva. Aplicação Laravel para criar e publicar portfólios profissionais. Cada conta tem sua apresentação, projetos, tecnologias e aparência, com isolamento entre usuários.
 
 ## Funcionalidades
 
@@ -86,5 +86,6 @@ A CI valida PHP, JavaScript, build e Pint. A execução remota só ocorre depois
 - `docs/validation.md`: histórico de validação.
 - `docs/review-2026-10-15.md`: diagnóstico que originou a rodada de consolidação.
 - `docs/consolidation-2026-10-15.md`: mudanças implementadas e resultados de validação.
+- `docs/vertice-design.md`: identidade visual, componentes e diretrizes da interface.
 
 Antes de integrar `dev` em `main`, valide o painel em desktop/celular, os fluxos de duas contas, o e-mail real e o scheduler no ambiente de homologação.

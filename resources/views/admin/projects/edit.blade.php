@@ -7,7 +7,7 @@
             @if (session('status'))
                 <div role="status" class="p-4 bg-green-900 border border-green-500 text-white rounded-lg">{{ session('status') }}</div>
             @endif
-            <form method="POST" enctype="multipart/form-data" action="{{ route('admin.projects.update', $project) }}" class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm space-y-6">
+            <form method="POST" enctype="multipart/form-data" action="{{ route('admin.projects.update', $project) }}" class="studio-panel space-y-6">
                 @method('PUT')
                 @include('admin.projects.partials.form')
             </form>
