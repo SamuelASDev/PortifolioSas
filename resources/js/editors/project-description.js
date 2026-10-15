@@ -1,5 +1,6 @@
 import { Editor } from '@tiptap/core';
 import StarterKit from '@tiptap/starter-kit';
+import { initializeMediaControls, ProjectImage, ProjectVideo } from './project-media.js';
 
 export function plainTextDocument(text) {
     return {
@@ -62,7 +63,7 @@ export function initializeDescriptionEditor(root) {
     const editor = new Editor({
         element: root.querySelector('[data-editor-content]'),
         content: source.dataset.initialFormat === 'html' ? source.value : plainTextDocument(source.value),
-        extensions: [StarterKit.configure({
+        extensions: [ProjectImage, ProjectVideo, StarterKit.configure({
             heading: { levels: [2, 3] },
             strike: false, underline: false, horizontalRule: false,
             link: {
@@ -104,7 +105,9 @@ export function initializeDescriptionEditor(root) {
     for (const button of buttons) {
         button.addEventListener('mousedown', (event) => event.preventDefault());
         button.addEventListener('click', () => {
+            if (root.dataset.mediaBusy === 'true') return;
             const command = button.dataset.editorCommand;
+            if (command === 'image' || command === 'video') { closePanel(); return; }
             if (command === 'link') {
                 panel.hidden = false;
                 button.setAttribute('aria-expanded', 'true');
@@ -165,6 +168,7 @@ export function initializeDescriptionEditor(root) {
     label.htmlFor = 'description-visual';
     label.addEventListener('click', (event) => { event.preventDefault(); editor.commands.focus(); });
     root.dataset.editorReady = 'true';
+    initializeMediaControls(root, editor);
 
     return editor;
 }

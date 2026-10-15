@@ -20,14 +20,17 @@ globalThis.innerWidth = 1024;
 dom.window.Range.prototype.getClientRects = () => [];
 dom.window.Range.prototype.getBoundingClientRect = () => ({ top: 0, left: 0, bottom: 0, right: 0, width: 0, height: 0 });
 const editors = [];
+const originalFetch = globalThis.fetch;
+globalThis.FormData = dom.window.FormData;
 
 beforeEach(() => { document.body.innerHTML = ''; });
-afterEach(() => { editors.splice(0).forEach((editor) => editor.destroy()); });
+afterEach(() => { editors.splice(0).forEach((editor) => editor.destroy()); globalThis.fetch = originalFetch; });
 
 function mount(value, format = 'text') {
     document.body.innerHTML = `<form><div data-description-editor>
         <label id="description-label" for="description">Descrição</label>
         <input data-description-format name="description_format" type="hidden">
+        <input data-media-token name="media_token" type="hidden" value="11111111-1111-4111-8111-111111111111">
         <div data-editor-ui hidden>
             <div data-editor-toolbar>
                 <button type="button" data-editor-command="bold">Negrito</button>
@@ -36,16 +39,23 @@ function mount(value, format = 'text') {
                 <button type="button" data-editor-command="unlink">Remover link</button>
                 <button type="button" data-editor-command="undo">Desfazer</button>
                 <button type="button" data-editor-command="redo">Refazer</button>
+                <button type="button" data-editor-command="image">Imagem</button>
+                <button type="button" data-editor-command="video">Vídeo</button>
             </div>
             <div data-link-panel hidden><input data-link-input><p data-link-error hidden></p>
                 <button type="button" data-link-apply>Aplicar</button><button type="button" data-link-cancel>Cancelar</button>
             </div>
+            <div data-image-panel hidden><input type="file" data-image-input><input data-image-alt><input data-image-caption>
+                <button type="button" data-image-insert>Inserir</button><button type="button" data-media-cancel>Cancelar</button></div>
+            <div data-video-panel hidden><input data-video-input><button type="button" data-video-insert>Inserir</button><button type="button" data-media-cancel>Cancelar</button></div>
             <div data-editor-content></div>
         </div>
         <textarea id="description" data-description-source name="description" maxlength="50000"></textarea>
         <p data-editor-status hidden></p>
     </div></form>`;
     const root = document.querySelector('[data-description-editor]');
+    root.dataset.uploadUrl = '/admin/project-media';
+    root.dataset.videoUrl = '/admin/project-media/video';
     const source = root.querySelector('textarea');
     source.value = value;
     source.dataset.initialFormat = format;
@@ -131,4 +141,66 @@ test('URL validation accepts only explicit HTTP(S) addresses', () => {
     for (const value of ['javascript:alert(1)', 'data:text/html,evil', '//example.com', '/path', 'mailto:x@example.com', 'https://', 'https://example.com/\npath']) {
         assert.equal(isHttpUrl(value), false, value);
     }
+});
+
+test('managed images with captions and approved videos round-trip between paragraphs', () => {
+    const html = '<p>Antes</p><figure><img src="http://portfolio.test/storage/portfolios/1/attachments/example.png" data-media-id="11111111-1111-4111-8111-111111111111" alt="Exemplo"><figcaption>Minha legenda</figcaption></figure>'
+        +'<iframe src="https://www.youtube-nocookie.com/embed/abcdefghijk" title="Vídeo"></iframe><p>Depois</p>';
+    const { editor, source } = mount(html, 'html');
+    const types = editor.getJSON().content.map((node) => node.type);
+    assert.deepEqual(types.slice(0, 4), ['paragraph', 'projectImage', 'projectVideo', 'paragraph']);
+    assert.match(source.value, /<figcaption>Minha legenda<\/figcaption>/);
+    assert.match(source.value, /data-media-id="11111111-1111-4111-8111-111111111111"/);
+    assert.match(source.value, /youtube-nocookie.com\/embed\/abcdefghijk/);
+});
+
+test('external pasted images and unknown iframe providers are not editor nodes', () => {
+    const { editor, source } = mount('<p>Texto</p><img src="https://evil.example/x.png" data-media-id="11111111-1111-4111-8111-111111111111"><iframe src="https://evil.example/embed"></iframe>', 'html');
+    assert.equal(editor.getJSON().content.some((node) => ['projectImage', 'projectVideo'].includes(node.type)), false);
+    assert.doesNotMatch(source.value, /evil.example/);
+});
+
+test('image upload blocks submit until complete and inserts at the saved cursor', async () => {
+    const { root, editor, source, form } = mount('<p>Antes</p><p>Depois</p>', 'html');
+    editor.commands.setTextSelection(8);
+    root.querySelector('[data-editor-command="image"]').click();
+    Object.defineProperty(root.querySelector('[data-image-input]'), 'files', { value: [new dom.window.File(['image'], 'test.png', { type: 'image/png' })] });
+    root.querySelector('[data-image-alt]').value = 'Descrição acessível';
+    root.querySelector('[data-image-caption]').value = 'Uma legenda';
+    let finish;
+    globalThis.fetch = (url, options) => {
+        assert.equal(url, '/admin/project-media');
+        assert.equal(options.body.get('upload_token'), '11111111-1111-4111-8111-111111111111');
+        return new Promise((resolve) => { finish = resolve; });
+    };
+    root.querySelector('[data-image-insert]').click();
+    const submit = new dom.window.Event('submit', { cancelable: true });
+    form.dispatchEvent(submit);
+    assert.equal(submit.defaultPrevented, true);
+    finish({ ok: true, json: async () => ({ id: '22222222-2222-4222-8222-222222222222', url: 'http://portfolio.test/storage/portfolios/1/attachments/new.png' }) });
+    await tick();
+    assert.match(source.value, /Descrição acessível/);
+    assert.match(source.value, /Uma legenda/);
+    assert.ok(source.value.indexOf('Antes') < source.value.indexOf('<figure'));
+    assert.ok(source.value.indexOf('<figure') < source.value.indexOf('Depois'));
+    assert.equal(editor.isEditable, true);
+});
+
+test('video resolution inserts the canonical player and reports validation failures without losing text', async () => {
+    const { root, source } = mount('Texto existente');
+    root.querySelector('[data-editor-command="video"]').click();
+    root.querySelector('[data-video-input]').value = 'https://vimeo.com/123456789';
+    globalThis.fetch = async () => ({ ok: true, json: async () => ({ src: 'https://player.vimeo.com/video/123456789', title: 'Vídeo do Vimeo' }) });
+    root.querySelector('[data-video-insert]').click();
+    await tick();
+    assert.match(source.value, /player.vimeo.com\/video\/123456789/);
+    assert.match(source.value, /Texto existente/);
+    const before = source.value;
+    root.querySelector('[data-editor-command="video"]').click();
+    root.querySelector('[data-video-input]').value = 'https://evil.example/embed';
+    globalThis.fetch = async () => ({ ok: false, status: 422, json: async () => ({ errors: { url: ['Link não permitido.'] } }) });
+    root.querySelector('[data-video-insert]').click();
+    await tick();
+    assert.equal(source.value, before);
+    assert.equal(root.querySelector('[data-editor-status]').textContent, 'Link não permitido.');
 });

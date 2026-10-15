@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\PortfolioController;
 use App\Http\Controllers\Admin\PortfolioPublicationController;
 use App\Http\Controllers\Admin\ProjectController;
+use App\Http\Controllers\Admin\ProjectMediaController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicPortfolioController;
 use App\Http\Middleware\EnsureUserHasPortfolio;
@@ -30,6 +31,8 @@ Route::middleware('auth')->group(function () {
         Route::patch('/portfolio/publication', [PortfolioPublicationController::class, 'update'])->name('portfolio.publication.update');
 
         // CRUD de Projetos
+        Route::post('project-media', [ProjectMediaController::class, 'store'])->middleware('throttle:30,1')->name('project-media.store');
+        Route::post('project-media/video', [ProjectMediaController::class, 'video'])->middleware('throttle:30,1')->name('project-media.video');
         Route::resource('projects', ProjectController::class)->except('show');
     });
 });

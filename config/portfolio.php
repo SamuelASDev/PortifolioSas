@@ -1,6 +1,10 @@
 <?php
 
 return [
+    'attachments' => [
+        'disk' => 'public', 'max_size_kb' => 2048, 'max_per_project' => 20,
+        'max_portfolio_bytes' => 104857600, 'max_portfolio_files' => 100, 'pending_hours' => 24,
+    ],
     'photos' => [
         'disk' => 'public',
         'max_size_kb' => 2048,

@@ -26,6 +26,8 @@ O banco local deve estar configurado no `.env`. A migration incremental adiciona
 - `Controllers/PublicPortfolioController`: resolve somente portfólios publicados e busca cada projeto pela relação do portfólio solicitado.
 - `Services/ProjectDescription`: sanitização de HTML e geração das versões segura e de texto da descrição.
 - `resources/js/editors/project-description.js`: editor Tiptap, barra de formatação, links e sincronização com o formulário.
+- `ProjectMedia`, `UploadProjectImage` e `ProjectMediaManager`: registro de anexos, limites e seleção de imagens permitidas por projeto e sessão de edição.
+- `Services/VideoEmbed`: valida links e gera URLs canônicas do YouTube/Vimeo, sem buscar conteúdo externo.
 - `views/admin/projects`: listagem paginada e formulário compartilhado entre criação e edição.
 
 ## Comportamento
@@ -71,9 +73,21 @@ O formulário usa Tiptap, carregado sob demanda apenas nas telas com editor. Ofe
 
 A migration adiciona `description_format` com padrão `text`, sem reescrever descrições existentes. Isso preserva quebras de linha, entidades e exemplos com tags literais. Ao abrir um registro antigo, o editor recebe nós de texto, nunca interpreta a string antiga como HTML. A conversão para HTML acontece ao salvar pelo editor. Requisições sem marcador de formato continuam tratando a descrição enviada como texto simples.
 
-`SaveProject` sanitiza HTML com `ezyang/htmlpurifier` antes de salvar. `ProjectDescription` aplica a mesma política novamente ao renderizar. A lista permitida é restrita a parágrafos, títulos 2/3, negrito/itálico, listas, citações, links e código. Scripts, eventos, estilos, iframes, imagens e atributos não permitidos são removidos. Só links com esquema HTTP/HTTPS explícito são preservados. A versão HTML segura é exposta por `description_html`; cards, painel e metadados usam `description_text`, escapado pelo Blade.
+`SaveProject` sanitiza HTML com `ezyang/htmlpurifier` antes de salvar. `ProjectDescription` aplica a mesma política novamente ao renderizar. A lista permitida é restrita à formatação suportada e às mídias autorizadas descritas abaixo. Scripts, eventos, estilos, imagens externas, players desconhecidos e atributos não permitidos são removidos. Só links com esquema HTTP/HTTPS explícito são preservados. A versão HTML segura é exposta por `description_html`; cards, painel e metadados usam `description_text`, escapado pelo Blade.
 
-Imagens e vídeos no corpo da descrição ficam para uma entrega posterior. Os uploads de foto profissional e capa continuam independentes do editor.
+### Imagens e vídeos entre os textos
+
+Os botões **Imagem** e **Vídeo** inserem blocos na posição do cursor. A imagem recebe descrição alternativa e legenda opcional. Os blocos podem ser selecionados e removidos no editor; as imagens são responsivas e os players mantêm proporção 16:9. Foto profissional e capa continuam independentes.
+
+O upload usa `POST /admin/project-media`, com arquivo, UUID da sessão de edição e ID opcional de projeto. Aceita JPEG/PNG/WebP de até 2 MB e 6000 × 6000 pixels. Os limites configuráveis são 20 anexos por projeto, 100 arquivos e 100 MB por portfólio. O servidor define o proprietário e os nomes dos arquivos em `storage/app/public/portfolios/{portfolio_id}/attachments`, usando o `storage:link` existente.
+
+Uploads novos ficam temporários. Salvar a descrição vincula apenas os IDs autorizados daquele projeto ou daquela sessão. O servidor reconstrói cada `src` com o caminho registrado; não confia na URL enviada pelo cliente. Não é permitido reutilizar imagens de outra conta ou de outro projeto. O HTML de exemplos de código não é tratado como referência de anexo.
+
+Uma imagem removida do texto só tem registro e arquivo excluídos depois de salvar com sucesso. Erros de validação preservam uploads e texto para nova tentativa. Uploads temporários de outras abas não são apagados pelo salvamento atual. Excluir projeto ou conta também remove os anexos; falhas de exclusão física seguem registradas em log.
+
+`POST /admin/project-media/video` aceita links públicos do YouTube (watch, shorts, youtu.be) e Vimeo. Gera somente URLs HTTPS de `www.youtube-nocookie.com/embed/{id}` ou `player.vimeo.com/video/{id}`. Players são reconstruídos sem `srcdoc`, eventos, autoplay ou permissões arbitrárias; o HTML Purifier também verifica os hosts. Não há upload direto de vídeo. A reprodução depende da disponibilidade e permissão de incorporação no provedor.
+
+Uploads temporários abandonados há 24 horas são removidos por `php artisan project-media:prune`. A tarefa está agendada diariamente em `routes/console.php`; em produção, o scheduler do Laravel precisa estar ativo. Durante o desenvolvimento pode executar o comando manualmente. Anexos já vinculados não expiram, mesmo em portfólios em rascunho. Os arquivos do disco público continuam acessíveis por seus links diretos, conforme a política já usada para capas e fotos.
 
 Referências: [Tiptap com JavaScript](https://tiptap.dev/docs/editor/getting-started/install/vanilla-javascript), [configuração do HTML Purifier](https://htmlpurifier.org/live/configdoc/plain.html).
 

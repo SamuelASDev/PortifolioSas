@@ -21,8 +21,9 @@
         @endif
         <section class="pf-project-description" aria-labelledby="description-title">
             <h2 id="description-title">Sobre o projeto</h2>
-            @if ($project->description_text)
-                <div class="project-prose">{!! $project->description_html !!}</div>
+            @php($descriptionHtml = $project->description_html)
+            @if ($descriptionHtml)
+                <div class="project-prose">{!! $descriptionHtml !!}</div>
             @else
                 <p class="pf-muted">A descrição deste projeto será adicionada em breve.</p>
             @endif

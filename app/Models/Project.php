@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Project extends Model
 {
@@ -35,7 +36,15 @@ class Project extends Model
 
     protected function descriptionHtml(): Attribute
     {
-        return Attribute::get(fn () => app(ProjectDescription::class)->html($this->description, $this->description_format));
+        return Attribute::get(fn () => app(ProjectDescription::class)->html(
+            $this->description, $this->description_format,
+            $this->description_format === 'html' ? $this->attachments->whereNotNull('attached_at') : [],
+        ));
+    }
+
+    public function attachments(): HasMany
+    {
+        return $this->hasMany(ProjectMedia::class);
     }
 
     protected function descriptionText(): Attribute

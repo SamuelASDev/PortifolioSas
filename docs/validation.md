@@ -52,3 +52,11 @@ Quando houver navegador disponível, conferir em desktop e em largura de celular
 - Testes JavaScript: 7 testes com Node/JSDOM verificam a importação literal do texto antigo, marcação existente, sincronização do formulário, negrito, links, limite de tamanho e conteúdo vazio. Esses testes de documento/eventos não substituem revisão visual.
 - Migration incremental aplicada no MySQL local, com snapshot privado anterior em `storage/app/private/backups/before-richtext-20261014-235024.json`. Campos anteriores e contagens 1/1/1 preservados; o projeto existente recebeu formato `text`.
 - Roteiro visual para o responsável: abrir uma descrição antiga, conferir texto e quebras de linha; aplicar títulos/listas/citações/links/código; salvar e reabrir; conferir a página pública e os resumos; provocar erro de validação em outro campo e conferir que o texto continua disponível. No celular, verificar quebra da barra de ferramentas e uso do painel de links.
+
+## Mídia no corpo da descrição
+
+- Suíte PHP: 169 testes, 766 assertions; JavaScript: 11 testes. Incluem vinculação ao criar/salvar, preservação após falhas, exclusão após confirmação, uploads de outras abas, limites, isolamento entre contas/projetos e limpeza de temporários.
+- Verificados players canônicos, rejeição de hosts e atributos perigosos, inserção no cursor, legendas, persistência dos nós no editor e bloqueio de envio enquanto o upload está em andamento.
+- Migration `create_project_media_table` aplicada no MySQL local. As contagens e hashes completos de `users`, `portfolios` e `projects` foram comparados antes/depois e permaneceram iguais (1/1/1). A tabela nova começou vazia.
+- `public/storage` continua conectado a `storage/app/public`. A tarefa diária `project-media:prune` aparece em `php artisan schedule:list`.
+- Revisão visual com o responsável: inserir uma imagem entre dois parágrafos e um vídeo por link; salvar/reabrir; conferir a página pública no celular; excluir um bloco e salvar; confirmar que uma edição cancelada não apaga a imagem já salva. Testar um vídeo público com incorporação permitida pelo provedor.

@@ -19,7 +19,7 @@ class PublicPortfolioController extends Controller
     public function project(string $slug, string $project): Response
     {
         $portfolio = Portfolio::published()->where('slug', $slug)->firstOrFail();
-        $project = $portfolio->projects()->findOrFail($project);
+        $project = $portfolio->projects()->with('attachments')->findOrFail($project);
 
         return response()->view('public.project', compact('portfolio', 'project'))
             ->header('Cache-Control', 'no-store');
