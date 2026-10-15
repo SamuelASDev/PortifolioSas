@@ -18,7 +18,10 @@
                         <span class="pf-badge">Em destaque</span>
                         <h3>{{ $project->title }}</h3>
                         @if ($project->description_text)
-                            <p class="pf-muted">{{ \Illuminate\Support\Str::limit($project->description_text, 280) }}</p>
+                            <p class="pf-muted">
+                                <span class="pf-carousel-summary-desktop">{{ \Illuminate\Support\Str::limit($project->description_text, 280) }}</span>
+                                <span class="pf-carousel-summary-mobile">{{ \Illuminate\Support\Str::limit($project->description_text, 110) }}</span>
+                            </p>
                         @endif
                         <div class="pf-carousel-actions">
                             <a class="pf-button" href="{{ $preview ? route('admin.portfolio.preview.project', $project->id) : route('portfolio.projects.show', [$portfolio->slug, $project->id]) }}">Ver detalhes <span class="sr-only">de {{ $project->title }}</span> <x-public-icon name="details" /></a>
@@ -26,7 +29,7 @@
                                 <a class="pf-button pf-button-secondary" href="{{ $project->link_demo }}" target="_blank" rel="noopener noreferrer">Acessar site <x-public-icon name="globe" /></a>
                             @endif
                             @if (is_string($project->link_github) && preg_match('#^https?://#i', $project->link_github))
-                                <a class="pf-link" href="{{ $project->link_github }}" target="_blank" rel="noopener noreferrer">Código <x-public-icon name="github" /></a>
+                                <a class="pf-button pf-button-secondary" href="{{ $project->link_github }}" target="_blank" rel="noopener noreferrer">Código <x-public-icon name="github" /></a>
                             @endif
                         </div>
                     </div>
