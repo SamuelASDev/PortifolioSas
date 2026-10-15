@@ -17,7 +17,7 @@ class Portfolio extends Model
     protected $fillable = [
         'user_id', 'slug', 'theme', 'primary_color', 'professional_name', 'headline',
         'bio', 'photo_path', 'contact_email', 'github_url', 'linkedin_url', 'website_url',
-        'is_published', 'show_featured_carousel', 'appearance',
+        'is_published', 'show_featured_carousel', 'appearance', 'share_title', 'share_description', 'share_image_path',
     ];
 
     protected function casts(): array

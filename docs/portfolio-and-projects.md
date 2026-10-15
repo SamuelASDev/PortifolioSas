@@ -122,4 +122,18 @@ O módulo `appearance/editor.js` mantém um estado temporário, separado do esta
 
 “Salvar aparência” chama `PATCH /admin/portfolio/appearance`, com Form Request específico e Action transacional. Apenas aparência, tema e cor de destaque são atualizados; publicação, apresentação e projetos permanecem sob seus fluxos próprios. Cancelar/Escape descartam os ajustes posteriores ao último salvamento. Salvar um rascunho não publica; salvar um portfólio já publicado atualiza sua aparência imediatamente. A janela avisa sobre esse comportamento. Não há uma segunda versão publicada do conteúdo.
 
-Os valores são limitados a cores hexadecimais e fontes/tamanhos do catálogo. O editor alerta sobre contraste baixo e calcula automaticamente o texto dos botões sobre a cor de destaque. A ordenação por arrastar e a edição de metadados de compartilhamento ficam para as etapas seguintes.
+Os valores são limitados a cores hexadecimais e fontes/tamanhos do catálogo. O editor alerta sobre contraste baixo e calcula automaticamente o texto dos botões sobre a cor de destaque.
+
+## Organização visual de projetos
+
+Em Meus projetos, “Organizar projetos e destaques” abre `GET /admin/projects/organize` com todos os projetos da conta, sem a limitação da paginação. Há arrastar pela alça com Pointer Events, botões Subir/Descer e navegação por setas quando a alça tem foco. A lista permite alterar os destaques no mesmo fluxo. A janela de aparência também tem um atalho; após salvar a ordem, Início recarrega a prévia.
+
+O módulo `projects/organization.js` mantém as mudanças no DOM até “Salvar ordem e destaques”. `PATCH /admin/projects/organize` recebe a lista completa de IDs, flags e uma revisão. O Form Request valida formato e propriedade de cada ID. A Action bloqueia o portfólio durante a transação, exige a lista exata dos projetos existentes e verifica a revisão; listas antigas retornam 409, sem escrita parcial. A revisão cobre IDs, ordem, destaque e updated_at. A ordem é normalizada para 0..N-1, compartilhada pela vitrine e pelo carrossel. Nenhum conteúdo ou arquivo é alterado nesse fluxo.
+
+## Compartilhamento de portfólio e projetos
+
+As telas Meu portfólio e Editar projeto possuem um formulário independente de Compartilhamento, com título (100 caracteres), descrição (300) e imagem opcionais. O componente compartilhado mostra uma simulação que acompanha o texto e a seleção local da imagem. As plataformas podem recortar imagens e usar cache; a simulação não pretende reproduzir exatamente um serviço específico.
+
+`PATCH /admin/portfolio/sharing` e `/admin/projects/{project}/sharing` usam `UpdateSharingRequest` (erros no bag sharing), Policy para projetos e `SaveSharing`. Uploads JPEG/PNG/WebP têm limite de 2 MB e 6000 × 6000; recomenda-se 1200 × 630. `SharingImageStorage` reutiliza o armazenamento central, salvando em `portfolios/{id}/sharing` no disco public, servido pelo link `public/storage`. A imagem antiga é excluída após salvar; falhas na transação descartam a nova. Remoção de projeto/conta limpa suas imagens e preserva arquivos de outras contas.
+
+`SharingMetadata` centraliza título, descrição, imagem e URL canônica para HTML, Open Graph e Twitter Cards, com escaping no Blade. Campos vazios usam nome/título e resumo original. A imagem usa primeiro a personalizada do registro; projetos sem imagem própria usam capa, imagem personalizada do portfólio ou foto de apresentação, nessa ordem. Portfólios sem imagem personalizada usam a foto. Sem imagem, o card é summary. Canonicals apontam para a URL pública sem parâmetros, inclusive na prévia privada, que mantém noindex/nofollow. A configuração não publica rascunhos nem altera o texto visível dos projetos.

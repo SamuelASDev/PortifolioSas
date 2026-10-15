@@ -1,4 +1,4 @@
-<x-public-layout :preview="$preview ?? false" :portfolio="$portfolio" :page-title="$project->title.' — '.$portfolio->professional_name" :description="$project->description_text" :image="$project->cover_url">
+<x-public-layout :preview="$preview ?? false" :portfolio="$portfolio" :metadata="app(\App\Support\SharingMetadata::class)->forProject($portfolio, $project)">
     <article class="pf-project-detail">
         <a class="pf-link pf-back" href="{{ ($preview ?? false) ? route('admin.portfolio.preview') : route('portfolio.show', $portfolio->slug) }}#projetos">← Voltar para os projetos</a>
         <header class="pf-project-heading">

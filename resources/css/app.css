@@ -8,6 +8,11 @@
 
 .appearance-dialog { width: min(96vw, 96rem); height: 92dvh; max-width: none; max-height: 96dvh; padding: 0; border: 1px solid #64748b; border-radius: 1rem; }
 .appearance-dialog::backdrop { background: #000b; }
+.project-organization-list { max-height: 65dvh; overflow-y: auto; overscroll-behavior: contain; padding: .25rem; }
+.project-drag-handle { touch-action: none; cursor: grab; user-select: none; font-size: 1.5rem; }
+.project-organization-row.is-dragging { outline: 2px solid #818cf8; background: #6366f122; }
+.project-organization-row.is-dragging .project-drag-handle { cursor: grabbing; }
+[data-sharing-settings] [hidden] { display: none !important; }
 .appearance-dialog [hidden] { display: none !important; }
 .appearance-editor { height: 100%; display: flex; flex-direction: column; }
 .appearance-editor-header, .appearance-editor-footer { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem 1.25rem; flex-shrink: 0; }

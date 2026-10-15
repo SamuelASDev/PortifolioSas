@@ -18,6 +18,7 @@
                 </div>
             </form>
             @include('admin.portfolio.partials.appearance-editor')
+            <x-sharing-settings :portfolio="$portfolio" />
         </div>
     </div>
 </x-app-layout>

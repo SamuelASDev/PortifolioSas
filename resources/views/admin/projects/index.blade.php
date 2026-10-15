@@ -2,6 +2,7 @@
     <x-slot name="header">
         <div class="flex flex-wrap items-center justify-between gap-4">
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200">Meus projetos</h2>
+            <a href="{{ route('admin.projects.organize') }}" class="px-4 py-2 border border-indigo-500 text-indigo-700 dark:text-indigo-300 rounded-md text-sm font-semibold">Organizar projetos e destaques</a>
             <a href="{{ route('admin.projects.create') }}" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md text-sm font-semibold">Novo projeto</a>
         </div>
     </x-slot>

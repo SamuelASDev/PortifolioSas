@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'sharing' => ['disk' => 'public', 'max_size_kb' => 2048, 'max_dimension' => 6000],
     'carousel' => ['max_projects' => 10],
     'attachments' => [
         'disk' => 'public', 'max_size_kb' => 2048, 'max_per_project' => 20,

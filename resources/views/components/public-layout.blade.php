@@ -1,9 +1,10 @@
-@props(['portfolio', 'pageTitle' => null, 'description' => null, 'image' => null, 'preview' => false])
+@props(['portfolio', 'metadata' => null, 'preview' => false])
 @php
     $appearance = app(\App\Support\PortfolioAppearance::class);
     $accent = $appearance->color($portfolio->primary_color);
-    $title = $pageTitle ?? $portfolio->professional_name.' — Portfólio';
-    $summary = \Illuminate\Support\Str::limit($description ?? $portfolio->bio ?? 'Conheça meus projetos e minha trajetória profissional.', 160);
+    $metadata ??= app(\App\Support\SharingMetadata::class)->forPortfolio($portfolio);
+    $title = $metadata['title'];
+    $summary = $metadata['description'];
 @endphp
 <!DOCTYPE html>
 <html lang="pt-BR" style="font-size: {{ $appearance->settings($portfolio)['appearance']['base_size'] }}px">
@@ -20,12 +21,18 @@
     <meta name="theme-color" content="{{ $accent }}">
     <meta property="og:title" content="{{ $title }}">
     <meta property="og:description" content="{{ $summary }}">
-    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:url" content="{{ $metadata['url'] }}">
     <meta property="og:type" content="website">
-    @if ($image ?? $portfolio->photo_url)
-        <meta property="og:image" content="{{ $image ?? $portfolio->photo_url }}">
+    <meta name="twitter:card" content="{{ $metadata['image'] ? 'summary_large_image' : 'summary' }}">
+    <meta name="twitter:title" content="{{ $title }}">
+    <meta name="twitter:description" content="{{ $summary }}">
+    @if ($metadata['image'])
+        <meta property="og:image" content="{{ $metadata['image'] }}">
+        <meta property="og:image:alt" content="{{ $title }}">
+        <meta name="twitter:image" content="{{ $metadata['image'] }}">
+        <meta name="twitter:image:alt" content="{{ $title }}">
     @endif
-    <link rel="canonical" href="{{ url()->current() }}">
+    <link rel="canonical" href="{{ $metadata['url'] }}">
     @vite('resources/css/public-portfolio.css')
 </head>
 <body class="pf-site" data-theme="{{ $portfolio->theme === 'light' ? 'light' : 'dark' }}" style="{{ $appearance->styles($portfolio) }}">

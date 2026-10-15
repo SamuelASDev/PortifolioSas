@@ -11,6 +11,8 @@
         </nav>
         <div class="appearance-editor-body" data-pane="settings">
             <aside class="appearance-settings" aria-label="Configurações de aparência">
+                <a href="{{ route('admin.projects.organize') }}" target="_blank" rel="noopener" class="appearance-control">Organizar projetos e destaques</a>
+                <p class="text-xs text-gray-500 dark:text-gray-400">Depois de salvar a organização, use Início para atualizar a prévia.</p>
                 <label class="block text-sm font-medium" for="appearance-preset">Temas prontos</label>
                 <select id="appearance-preset" data-appearance-preset class="appearance-input">
                     <option value="">Personalizado</option>
