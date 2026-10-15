@@ -1,9 +1,9 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "laravel/laravel",
+    "name": "samuelasdev/vertice",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
-    "keywords": ["laravel", "framework"],
+    "description": "Plataforma para criar, personalizar e publicar portfolios profissionais.",
+    "keywords": ["laravel", "portfolio", "vertice"],
     "license": "MIT",
     "require": {
         "php": "^8.2",
