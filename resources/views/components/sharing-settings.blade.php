@@ -8,6 +8,12 @@
 <section data-sharing-settings class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm space-y-6 text-gray-900 dark:text-gray-100" aria-labelledby="sharing-heading">
     <h3 id="sharing-heading" class="text-lg font-semibold">Compartilhamento</h3>
     <p class="text-sm text-gray-500 dark:text-gray-400">Personalize o cartão que representa este {{ $project ? 'projeto' : 'portfólio' }} ao compartilhar o link. Campos vazios usam o conteúdo original. Salvar não publica rascunhos.</p>
+    @if ($portfolio->is_published)
+        <x-share-actions :metadata="$metadata" variant="admin" />
+        <p class="text-xs text-gray-500 dark:text-gray-400">O link usa as configurações salvas. Salve seus ajustes antes de compartilhar.</p>
+    @else
+        <p class="text-sm text-gray-500 dark:text-gray-400">Publique o portfólio para compartilhar seus links públicos.</p>
+    @endif
     <form method="POST" enctype="multipart/form-data" action="{{ $project ? route('admin.projects.sharing.update', $project) : route('admin.portfolio.sharing.update') }}" class="space-y-5">
         @csrf
         @method('PATCH')

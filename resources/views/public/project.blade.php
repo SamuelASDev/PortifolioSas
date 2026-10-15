@@ -15,6 +15,9 @@
                     @endif
                 </nav>
             @endif
+            @if (!($preview ?? false))
+                <x-share-actions :metadata="app(\App\Support\SharingMetadata::class)->forProject($portfolio, $project)" />
+            @endif
         </header>
         @if ($project->cover_url)
             <img class="pf-project-cover" src="{{ $project->cover_url }}" alt="Capa de {{ $project->title }}" width="1200" height="750" fetchpriority="high">

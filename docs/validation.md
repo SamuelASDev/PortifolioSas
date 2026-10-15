@@ -82,3 +82,9 @@ Quando houver navegador disponível, conferir em desktop e em largura de celular
 - JavaScript: 28 testes. Os sete novos casos verificam botões/teclado, Pointer Events e cancelamento, payload e revisão após salvar, conflito sem perda da ordem local, texto seguro, imagem local e restauração do fallback.
 - Build Vite, Pint e git diff --check aprovados. Migration `2026_10_15_040000_add_sharing_fields_to_portfolios_and_projects` aplicada ao MySQL; hashes dos campos anteriores de 1 usuário, 1 portfólio e 2 projetos permaneceram iguais. O Junction `public/storage` aponta para storage/app/public.
 - Conferência visual com o responsável: arrastar pela alça no computador e celular, usar Subir/Descer e teclado, mudar destaques e salvar; conferir lista pública e carrossel. Em duas abas, salvar numa delas e confirmar que a lista antiga é recusada na outra. Em Compartilhamento, testar título/descrição/imagem, cancelar seleção e remover imagem personalizada; salvar e inspecionar as tags do HTML. Confirmar em duas contas que os projetos e imagens alheios não são alterados. Testes reais de cartões em redes sociais precisam de uma URL pública acessível; o ambiente local não é acessível aos robôs dessas plataformas.
+
+## Botões de copiar e compartilhar
+
+- Suíte PHP: 201 testes, 1041 assertions. Dois novos testes verificam os controles no painel e nas páginas públicas, a URL canônica e sua ausência em rascunhos/prévias privadas. Build, Pint e git diff --check aprovados.
+- JavaScript: 36 testes no total. Os oito casos novos cobrem cópia da URL pública, payload do menu nativo, cancelamento, falta de suporte, falha/permissão negada, campo manual e bloqueio de cliques duplicados.
+- Conferência visual com o responsável: copiar no painel e na página pública, colar e conferir o endereço; no celular, abrir/cancelar o menu nativo. Se houver bloqueio da área de transferência, conferir seleção do campo manual. O navegador decide se oferece compartilhamento nativo.

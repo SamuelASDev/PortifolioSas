@@ -63,6 +63,12 @@
 .pf-carousel-copy h3 { font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 700; line-height: 1.25; letter-spacing: -.02em; }
 .pf-carousel-copy > p { font-size: .95rem; }
 .pf-carousel-summary-mobile { display: none; }
+.pf-share-actions { margin-top: 1.5rem; }
+.pf-share-actions [hidden] { display: none !important; }
+.pf-share-buttons { display: flex; flex-wrap: wrap; gap: .75rem; }
+.pf-share-manual { display: block; max-width: 42rem; margin-top: .75rem; }
+.pf-share-url { width: 100%; border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: .5rem; padding: .75rem; font-size: .85rem; }
+.pf-share-status { font-size: .85rem; margin-top: .5rem; }
 .pf-carousel-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; margin-top: .5rem; }
 .pf-carousel-controls { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: .5rem 1rem; border-top: 1px solid var(--line); padding: .75rem 1.5rem; }
 .pf-carousel-arrow { min-width: 2.75rem; min-height: 2.75rem; border-radius: .5rem; border: 1px solid var(--line); padding: .5rem .75rem; font-size: .85rem; }

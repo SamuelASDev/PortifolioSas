@@ -132,6 +132,10 @@ O módulo `projects/organization.js` mantém as mudanças no DOM até “Salvar 
 
 ## Compartilhamento de portfólio e projetos
 
+“Copiar link” e “Compartilhar” aparecem nos formulários de compartilhamento de portfólios publicados e nas páginas públicas do portfólio/projeto. O componente `share-actions` usa os metadados salvos e a URL pública canônica, sem parâmetros de navegação ou endereços administrativos. As prévias privadas não exibem esses controles; rascunhos mostram no painel a orientação de publicar primeiro.
+
+`sharing/actions.js` tenta o menu nativo via Web Share API quando disponível; sem suporte ou em caso de falha, tenta copiar o link. Cancelar o menu não copia nada. Quando a área de transferência não está disponível ou é negada, um campo readonly é revelado, focado e selecionado para cópia manual. Sem JavaScript, esse campo permanece visível. A ação envia o link e o texto ao menu do dispositivo, sem anexar o arquivo da imagem: as plataformas obtêm o cartão pelas tags da página pública. O módulo `share-links.js` é carregado uma única vez por página.
+
 As telas Meu portfólio e Editar projeto possuem um formulário independente de Compartilhamento, com título (100 caracteres), descrição (300) e imagem opcionais. O componente compartilhado mostra uma simulação que acompanha o texto e a seleção local da imagem. As plataformas podem recortar imagens e usar cache; a simulação não pretende reproduzir exatamente um serviço específico.
 
 `PATCH /admin/portfolio/sharing` e `/admin/projects/{project}/sharing` usam `UpdateSharingRequest` (erros no bag sharing), Policy para projetos e `SaveSharing`. Uploads JPEG/PNG/WebP têm limite de 2 MB e 6000 × 6000; recomenda-se 1200 × 630. `SharingImageStorage` reutiliza o armazenamento central, salvando em `portfolios/{id}/sharing` no disco public, servido pelo link `public/storage`. A imagem antiga é excluída após salvar; falhas na transação descartam a nova. Remoção de projeto/conta limpa suas imagens e preserva arquivos de outras contas.

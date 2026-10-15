@@ -187,6 +187,34 @@ class SharingTest extends TestCase
         $this->patchJson(route('admin.projects.sharing.update', $project), ['share_title' => 'No'])->assertUnauthorized();
     }
 
+    public function test_public_portfolio_and_project_offer_sharing_their_canonical_links(): void
+    {
+        $portfolio = $this->portfolio();
+        $portfolio->update(['is_published' => true, 'share_title' => 'Meu cartão salvo']);
+        $project = $portfolio->projects()->create(['title' => 'Projeto', 'share_title' => 'Cartão do projeto']);
+        foreach ([route('portfolio.show', $portfolio->slug), route('portfolio.projects.show', [$portfolio->slug, $project->id])] as $url) {
+            $this->get($url.'?tracking=ignored')->assertOk()->assertSee('data-copy-link', false)
+                ->assertSee('data-share-link', false)->assertSee('value="'.$url.'"', false);
+        }
+        $this->actingAs($portfolio->user)->get(route('admin.portfolio.edit'))->assertOk()
+            ->assertSee('data-share-actions', false)->assertSee('Meu cartão salvo');
+        $this->get(route('admin.projects.edit', $project))->assertOk()
+            ->assertSee('data-share-actions', false)->assertSee('Cartão do projeto');
+    }
+
+    public function test_drafts_and_private_previews_do_not_offer_sharing_controls(): void
+    {
+        $portfolio = $this->portfolio();
+        $project = $portfolio->projects()->create(['title' => 'Projeto em rascunho']);
+        $this->actingAs($portfolio->user)->get(route('admin.portfolio.edit'))->assertOk()
+            ->assertDontSee('data-share-actions', false)->assertSee('Publique o portfólio para compartilhar seus links públicos.');
+        $this->get(route('admin.projects.edit', $project))->assertOk()->assertDontSee('data-share-actions', false);
+        $this->get(route('admin.portfolio.preview'))->assertOk()->assertDontSee('data-share-actions', false);
+        $this->get(route('admin.portfolio.preview.project', $project))->assertOk()->assertDontSee('data-share-actions', false);
+        $portfolio->update(['is_published' => true]);
+        $this->get(route('admin.portfolio.preview'))->assertOk()->assertDontSee('data-share-actions', false);
+    }
+
     private function portfolio(): Portfolio
     {
         return app(EnsurePortfolio::class)->handle(User::factory()->create());
