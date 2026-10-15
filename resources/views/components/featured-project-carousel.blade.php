@@ -21,12 +21,12 @@
                             <p class="pf-muted">{{ \Illuminate\Support\Str::limit($project->description_text, 280) }}</p>
                         @endif
                         <div class="pf-carousel-actions">
-                            <a class="pf-button" href="{{ route('portfolio.projects.show', [$portfolio->slug, $project->id]) }}">Ver detalhes <span class="sr-only">de {{ $project->title }}</span> <span aria-hidden="true">→</span></a>
+                            <a class="pf-button" href="{{ route('portfolio.projects.show', [$portfolio->slug, $project->id]) }}">Ver detalhes <span class="sr-only">de {{ $project->title }}</span> <x-public-icon name="details" /></a>
                             @if (is_string($project->link_demo) && preg_match('#^https?://#i', $project->link_demo))
-                                <a class="pf-button pf-button-secondary" href="{{ $project->link_demo }}" target="_blank" rel="noopener noreferrer">Acessar site <span aria-hidden="true">↗</span></a>
+                                <a class="pf-button pf-button-secondary" href="{{ $project->link_demo }}" target="_blank" rel="noopener noreferrer">Acessar site <x-public-icon name="globe" /></a>
                             @endif
                             @if (is_string($project->link_github) && preg_match('#^https?://#i', $project->link_github))
-                                <a class="pf-link" href="{{ $project->link_github }}" target="_blank" rel="noopener noreferrer">Código <span aria-hidden="true">↗</span></a>
+                                <a class="pf-link" href="{{ $project->link_github }}" target="_blank" rel="noopener noreferrer">Código <x-public-icon name="github" /></a>
                             @endif
                         </div>
                     </div>
@@ -35,14 +35,13 @@
         </div>
         @if ($projects->count() > 1)
             <div data-carousel-controls class="pf-carousel-controls" hidden>
-                <button data-carousel-prev type="button" class="pf-carousel-arrow" aria-label="Projeto anterior" aria-controls="featured-track">←</button>
+                <button data-carousel-prev type="button" class="pf-carousel-arrow" aria-label="Projeto anterior" aria-controls="featured-track"><x-public-icon name="chevron-left" /></button>
                 <div class="pf-carousel-dots" role="group" aria-label="Escolher projeto em destaque">
                     @foreach ($projects as $project)
                         <button data-carousel-dot="{{ $loop->index }}" type="button" class="pf-carousel-dot" aria-label="Ir para o projeto {{ $loop->iteration }}: {{ $project->title }}" aria-pressed="{{ $loop->first ? 'true' : 'false' }}" aria-controls="featured-track"></button>
                     @endforeach
                 </div>
-                <button data-carousel-next type="button" class="pf-carousel-arrow" aria-label="Próximo projeto" aria-controls="featured-track">→</button>
-                <button data-carousel-toggle type="button" class="pf-carousel-toggle" aria-controls="featured-track">Iniciar rotação</button>
+                <button data-carousel-next type="button" class="pf-carousel-arrow" aria-label="Próximo projeto" aria-controls="featured-track"><x-public-icon name="chevron-right" /></button>
             </div>
             <p data-carousel-status class="sr-only" role="status" aria-live="polite" aria-atomic="true"></p>
         @endif

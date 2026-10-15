@@ -33,7 +33,7 @@ class FeaturedCarouselTest extends TestCase
 
         $this->get(route('portfolio.show', $portfolio->slug))->assertOk()
             ->assertSeeInOrder(['data-featured-carousel', 'Primeiro destaque', 'id="projetos"'], false)
-            ->assertSee($first->cover_url)->assertSee('data-carousel-toggle', false)->assertSee('Sem destaque')
+            ->assertSee($first->cover_url)->assertSee('data-carousel-next', false)->assertDontSee('data-carousel-toggle', false)->assertSee('Sem destaque')
             ->assertDontSee('Projeto alheio')
             ->assertViewHas('featuredProjects', fn ($projects) => $projects->modelKeys() === [$first->id, $later->id]);
     }

@@ -15,6 +15,6 @@
         @if ($project->description_text)
             <p class="pf-muted pf-excerpt">{{ \Illuminate\Support\Str::limit($project->description_text, 180) }}</p>
         @endif
-        <a class="pf-link pf-card-more" href="{{ route('portfolio.projects.show', [$portfolio->slug, $project->id]) }}">Conhecer projeto <span aria-hidden="true">→</span><span class="sr-only">: {{ $project->title }}</span></a>
+        <a class="pf-link pf-card-more" href="{{ route('portfolio.projects.show', [$portfolio->slug, $project->id]) }}">Conhecer projeto <x-public-icon name="details" /><span class="sr-only">: {{ $project->title }}</span></a>
     </div>
 </article>

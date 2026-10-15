@@ -8,10 +8,10 @@
             @if ($project->link_demo || $project->link_github)
                 <nav class="pf-project-actions" aria-label="Links do projeto">
                     @if (is_string($project->link_demo) && preg_match('#^https?://#i', $project->link_demo))
-                        <a class="pf-button" href="{{ $project->link_demo }}" target="_blank" rel="noopener noreferrer">Ver demonstração <span aria-hidden="true">↗</span><span class="sr-only"> (abre em nova aba)</span></a>
+                        <a class="pf-button" href="{{ $project->link_demo }}" target="_blank" rel="noopener noreferrer">Ver demonstração <x-public-icon name="globe" /><span class="sr-only"> (abre em nova aba)</span></a>
                     @endif
                     @if (is_string($project->link_github) && preg_match('#^https?://#i', $project->link_github))
-                        <a class="pf-button pf-button-secondary" href="{{ $project->link_github }}" target="_blank" rel="noopener noreferrer">Ver repositório <span aria-hidden="true">↗</span><span class="sr-only"> (abre em nova aba)</span></a>
+                        <a class="pf-button pf-button-secondary" href="{{ $project->link_github }}" target="_blank" rel="noopener noreferrer">Ver repositório <x-public-icon name="github" /><span class="sr-only"> (abre em nova aba)</span></a>
                     @endif
                 </nav>
             @endif

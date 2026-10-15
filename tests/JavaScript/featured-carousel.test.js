@@ -24,7 +24,7 @@ afterEach(() => { carousel?.destroy(); carousel = null; dom.window.close(); });
 function mount(count = 3) {
     document.body.innerHTML = `<section data-featured-carousel tabindex="0"><div data-carousel-track>${Array.from({ length: count }, (_, index) => `<article data-carousel-slide aria-label="${index + 1} de ${count}"><a href="#">Projeto</a></article>`).join('')}</div>
         <div data-carousel-controls hidden><button data-carousel-prev>Anterior</button>${Array.from({ length: count }, (_, index) => `<button data-carousel-dot="${index}">${index + 1}</button>`).join('')}
-        <button data-carousel-next>Próximo</button><button data-carousel-toggle></button></div><p data-carousel-status></p></section>`;
+        <button data-carousel-next>Próximo</button></div><p data-carousel-status></p></section>`;
     const root = document.querySelector('section');
     const track = root.querySelector('[data-carousel-track]');
     Object.defineProperty(track, 'clientWidth', { value: 800, configurable: true });
@@ -33,14 +33,14 @@ function mount(count = 3) {
     return { root, track, slides: [...root.querySelectorAll('[data-carousel-slide]')] };
 }
 
-test('next, previous and dots navigate with wrapping and stop autoplay', () => {
+test('next, previous and dots navigate with wrapping and keep autoplay', () => {
     const { root, track, slides } = mount();
     assert.equal(root.querySelector('[data-carousel-controls]').hidden, false);
     assert.equal(slides[1].inert, true);
     root.querySelector('[data-carousel-next]').click();
     assert.equal(track.scrollLeft, 800);
     assert.equal(slides[1].inert, false);
-    assert.equal(tick, null);
+    assert.equal(typeof tick, 'function');
     root.querySelector('[data-carousel-prev]').click();
     root.querySelector('[data-carousel-prev]').click();
     assert.equal(track.scrollLeft, 1600);
@@ -63,15 +63,11 @@ test('keyboard navigation, native scrolling and resize keep selection in sync', 
     assert.equal(track.scrollLeft, 390);
 });
 
-test('autoplay advances and can be paused and resumed explicitly', () => {
+test('autoplay advances and resumes after hover', () => {
     const { root, track } = mount();
     assert.equal(typeof tick, 'function');
     tick();
     assert.equal(track.scrollLeft, 800);
-    root.querySelector('[data-carousel-toggle]').click();
-    assert.equal(tick, null);
-    root.querySelector('[data-carousel-toggle]').click();
-    assert.equal(typeof tick, 'function');
     root.dispatchEvent(new window.Event('mouseenter'));
     assert.equal(tick, null);
     root.dispatchEvent(new window.Event('mouseleave'));
@@ -82,14 +78,14 @@ test('focus and interaction stop rotation and reduced motion starts paused', () 
     const { root, track } = mount();
     root.querySelector('a').focus();
     assert.equal(tick, null);
-    root.querySelector('[data-carousel-toggle]').click();
+    root.querySelector('a').blur();
+    assert.equal(typeof tick, 'function');
     track.dispatchEvent(new window.Event('pointerdown'));
     assert.equal(tick, null);
     carousel.destroy();
     motion.matches = true;
     const second = mount();
     assert.equal(tick, null);
-    assert.equal(second.root.querySelector('[data-carousel-toggle]').textContent, 'Iniciar rotação');
 });
 
 test('single slide stays static and destruction removes timers and handlers', () => {
