@@ -198,7 +198,7 @@ class SharingTest extends TestCase
             if ($url === route('portfolio.show', $portfolio->slug)) {
                 $response->assertDontSee('data-copy-link', false)->assertSee('pf-link pf-share-link', false);
             } else {
-                $response->assertSee('data-copy-link', false);
+                $response->assertDontSee('data-copy-link', false)->assertSee('pf-share-actions-inline', false);
             }
         }
         $this->actingAs($portfolio->user)->get(route('admin.portfolio.edit'))->assertOk()

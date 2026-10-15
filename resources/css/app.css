@@ -14,6 +14,9 @@
 .project-organization-row.is-dragging .project-drag-handle { cursor: grabbing; }
 [data-sharing-settings] [hidden] { display: none !important; }
 .pf-icon { display: inline-block; width: 1.15em; height: 1.15em; flex-shrink: 0; vertical-align: middle; }
+@media (max-width: 640px) {
+    .project-taxonomy .pf-icon { width: 1.15rem; height: 1.15rem; }
+}
 .appearance-dialog [hidden] { display: none !important; }
 .appearance-editor { height: 100%; display: flex; flex-direction: column; }
 .appearance-editor-header, .appearance-editor-footer { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem 1.25rem; flex-shrink: 0; }

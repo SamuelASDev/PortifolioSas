@@ -6,7 +6,7 @@
             <h1>{{ $project->title }}</h1>
             <p class="pf-muted">Um projeto de {{ $portfolio->professional_name }}</p>
             <x-project-taxonomy :project="$project" />
-            @if ($project->link_demo || $project->link_github)
+            @if ($project->link_demo || $project->link_github || !($preview ?? false))
                 <nav class="pf-project-actions" aria-label="Links do projeto">
                     @if (is_string($project->link_demo) && preg_match('#^https?://#i', $project->link_demo))
                         <a class="pf-button" href="{{ $project->link_demo }}" target="_blank" rel="noopener noreferrer">Ver demonstração <x-public-icon name="globe" /><span class="sr-only"> (abre em nova aba)</span></a>
@@ -14,10 +14,10 @@
                     @if (is_string($project->link_github) && preg_match('#^https?://#i', $project->link_github))
                         <a class="pf-button pf-button-secondary" href="{{ $project->link_github }}" target="_blank" rel="noopener noreferrer">Ver repositório <x-public-icon name="github" /><span class="sr-only"> (abre em nova aba)</span></a>
                     @endif
+                    @if (!($preview ?? false))
+                        <x-share-actions :metadata="app(\App\Support\SharingMetadata::class)->forProject($portfolio, $project)" variant="compact" :show-copy="false" />
+                    @endif
                 </nav>
-            @endif
-            @if (!($preview ?? false))
-                <x-share-actions :metadata="app(\App\Support\SharingMetadata::class)->forProject($portfolio, $project)" />
             @endif
         </header>
         @if ($project->cover_url)

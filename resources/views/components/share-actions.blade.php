@@ -1,6 +1,6 @@
 @props(['metadata', 'variant' => 'public', 'showCopy' => true])
 @php($public = $variant !== 'admin')
-<div data-share-actions class="{{ $public ? 'pf-share-actions'.($variant === 'link' ? ' pf-share-actions-inline' : '') : 'space-y-3' }}">
+<div data-share-actions class="{{ $public ? 'pf-share-actions'.(in_array($variant, ['link', 'compact'], true) ? ' pf-share-actions-inline' : '') : 'space-y-3' }}">
     <script type="application/json" data-share-payload>{!! \Illuminate\Support\Js::encode(\Illuminate\Support\Arr::only($metadata, ['title', 'description', 'url'])) !!}</script>
     <div class="{{ $public ? 'pf-share-buttons' : 'flex flex-wrap gap-3' }}" role="group" aria-label="Compartilhar link público">
         @if ($showCopy)

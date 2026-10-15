@@ -10,6 +10,8 @@ Em Novo/Editar projeto, a categoria é opcional e vem do catálogo `config/proje
 
 O componente `project-taxonomy` mostra categoria e tecnologias no painel, nos cartões, no carrossel e no detalhe do projeto. Ícones SVG locais são definidos em `public-icon`; tecnologias conhecidas usam símbolos associados e tags livres usam o ícone de etiqueta. A referência `C:\Users\samue\Desktop\Programação\Portifolio\index.html` foi apenas lida, especificamente a apresentação das tecnologias.
 
+Até 640 pixels de largura, as etiquetas mostram apenas os ícones, com os nomes preservados para leitores de tela e no atributo title. Em telas maiores, mostram ícone e nome.
+
 ## Filtros
 
 `FilterProjectsRequest` valida os parâmetros GET: `q` (título, até 100 caracteres), `category`, `tag` (ID) e `featured` (`1` ou `0`). `Project::scopeFilter` centraliza a consulta e combina os filtros com AND. A busca usa parâmetros vinculados e trata %, _ e ! como caracteres literais. O formulário compartilhado funciona sem JavaScript, oferece limpar filtros e preserva os parâmetros validados na paginação.
