@@ -12,6 +12,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
     @if ($preview)
         <meta name="robots" content="noindex, nofollow">
         <script type="application/json" data-preview-schema>{!! \Illuminate\Support\Js::encode(config('portfolio-appearance')) !!}</script>
@@ -49,8 +50,22 @@
     <main id="conteudo" class="pf-container" tabindex="-1">{{ $slot }}</main>
     <footer class="pf-footer">
         <div class="pf-container pf-footer-inner">
-            <p>© {{ date('Y') }} {{ $portfolio->professional_name }}</p>
-            <x-public-contact-links :portfolio="$portfolio" />
+            <p class="pf-footer-owner">© {{ date('Y') }} {{ $portfolio->professional_name }}</p>
+            <div class="pf-footer-signature">
+                <div class="pf-footer-credit">
+                    <a class="pf-footer-brand" href="{{ url('/') }}" aria-label="Conheça o {{ config('brand.name') }}">
+                        <img src="{{ asset('favicon.svg') }}" alt="" width="28" height="28" loading="lazy">
+                        <span>© {{ date('Y') }} {{ config('brand.name') }}</span>
+                    </a>
+                    <p class="pf-footer-byline">Desenvolvido por {{ config('brand.creator.name') }}</p>
+                </div>
+                <nav class="pf-creator-links" aria-label="Contatos do desenvolvedor do Vértice">
+                    <a class="pf-creator-link" href="mailto:{{ config('brand.creator.email') }}" aria-label="Enviar e-mail ao desenvolvedor" title="E-mail de Samuel"><x-public-icon name="email" /></a>
+                    <a class="pf-creator-link" href="{{ config('brand.creator.github_url') }}" target="_blank" rel="noopener noreferrer" aria-label="GitHub do desenvolvedor (abre em nova aba)" title="GitHub de Samuel"><x-public-icon name="github" /></a>
+                    <a class="pf-creator-link" href="{{ config('brand.creator.linkedin_url') }}" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn do desenvolvedor (abre em nova aba)" title="LinkedIn de Samuel"><x-public-icon name="linkedin" /></a>
+                    <a class="pf-creator-link" href="{{ config('brand.creator.portfolio_url') }}" target="_blank" rel="noopener noreferrer" aria-label="Portfólio do desenvolvedor (abre em nova aba)" title="Portfólio de Samuel"><x-public-icon name="globe" /></a>
+                </nav>
+            </div>
         </div>
     </footer>
 </body>
