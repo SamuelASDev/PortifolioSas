@@ -17,6 +17,7 @@
                     <div class="pf-carousel-copy">
                         <span class="pf-badge">Em destaque</span>
                         <h3>{{ $project->title }}</h3>
+                        <x-project-taxonomy :project="$project" />
                         @if ($project->description_text)
                             <p class="pf-muted">
                                 <span class="pf-carousel-summary-desktop">{{ \Illuminate\Support\Str::limit($project->description_text, 280) }}</span>

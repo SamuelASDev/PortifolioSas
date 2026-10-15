@@ -13,6 +13,7 @@
             <span class="pf-badge">Em destaque</span>
         @endif
         <h3><a class="pf-title-link" href="{{ $projectUrl }}">{{ $project->title }}</a></h3>
+        <x-project-taxonomy :project="$project" />
         @if ($project->description_text)
             <p class="pf-muted pf-excerpt">{{ \Illuminate\Support\Str::limit($project->description_text, 180) }}</p>
         @endif

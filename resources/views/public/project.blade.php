@@ -5,6 +5,7 @@
             @if ($project->is_featured)<span class="pf-badge">Em destaque</span>@endif
             <h1>{{ $project->title }}</h1>
             <p class="pf-muted">Um projeto de {{ $portfolio->professional_name }}</p>
+            <x-project-taxonomy :project="$project" />
             @if ($project->link_demo || $project->link_github)
                 <nav class="pf-project-actions" aria-label="Links do projeto">
                     @if (is_string($project->link_demo) && preg_match('#^https?://#i', $project->link_demo))

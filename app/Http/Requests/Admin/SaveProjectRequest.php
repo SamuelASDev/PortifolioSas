@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Admin;
 
 use App\Models\Project;
+use App\Rules\ProjectTagList;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -20,6 +21,8 @@ class SaveProjectRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'category' => ['nullable', Rule::in(array_keys(config('projects.categories')))],
+            'tags' => ['sometimes', 'nullable', 'string', 'max:500', new ProjectTagList],
             'title' => ['required', 'string', 'max:255'],
             'description' => ['present_with:description_format', 'nullable', 'string', 'max:50000'],
             'description_format' => ['sometimes', 'required', Rule::in(['text', 'html'])],

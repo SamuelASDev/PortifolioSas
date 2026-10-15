@@ -19,6 +19,7 @@
     <x-input-error :messages="$errors->get('title')" class="mt-2" />
 </div>
 <x-project-description-editor :project="$project" />
+@include('admin.projects.partials.taxonomy')
 <div>
     <x-input-label for="link_demo" value="Link da demonstração (opcional)" />
     <x-text-input id="link_demo" name="link_demo" type="url" class="block mt-1 w-full" :value="old('link_demo', $project->link_demo)" maxlength="255" placeholder="https://" />

@@ -53,4 +53,9 @@ class Portfolio extends Model
     {
         return $this->hasMany(Project::class);
     }
+
+    public function tags(): HasMany
+    {
+        return $this->hasMany(Tag::class);
+    }
 }

@@ -9,6 +9,7 @@ use App\Services\ProjectAttachmentStorage;
 use App\Services\ProjectCoverStorage;
 use App\Services\ProjectDescription;
 use App\Services\ProjectMediaManager;
+use App\Support\ProjectTags;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
@@ -21,11 +22,15 @@ class SaveProject
         private ProjectDescription $descriptions,
         private ProjectMediaManager $media,
         private ProjectAttachmentStorage $attachments,
+        private ProjectTags $tags,
     ) {}
 
     public function handle(Portfolio $portfolio, array $attributes, ?Project $project = null, ?UploadedFile $cover = null, bool $removeCover = false): Project
     {
         $token = $attributes['media_token'] ?? null;
+        $changesTags = array_key_exists('tags', $attributes);
+        $tagText = $attributes['tags'] ?? null;
+        unset($attributes['tags']);
         unset($attributes['media_token']);
         $changesDescription = array_key_exists('description', $attributes);
         if (! $changesDescription) {
@@ -36,7 +41,7 @@ class SaveProject
         $removed = collect();
 
         try {
-            $saved = DB::transaction(function () use ($portfolio, $attributes, $project, $newPath, $removeCover, $token, $changesDescription, &$oldPath, &$removed) {
+            $saved = DB::transaction(function () use ($portfolio, $attributes, $project, $newPath, $removeCover, $token, $changesDescription, $changesTags, $tagText, &$oldPath, &$removed) {
                 Portfolio::query()->lockForUpdate()->findOrFail($portfolio->id);
                 $record = $project
                     ? $portfolio->projects()->lockForUpdate()->findOrFail($project->id)
@@ -61,6 +66,9 @@ class SaveProject
                     $record->cover_image = $newPath;
                 }
                 $record->save();
+                if ($changesTags) {
+                    $this->tags->sync($portfolio, $record, $tagText);
+                }
 
                 if ($changesDescription) {
                     if ($ids) {

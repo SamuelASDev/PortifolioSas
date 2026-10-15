@@ -20,6 +20,7 @@ class DeleteProject
             $record = Project::query()->lockForUpdate()->findOrFail($project->id);
             $media = $record->attachments()->get();
             $record->delete();
+            $record->portfolio->tags()->doesntHave('projects')->delete();
 
             return [$record, $media];
         });

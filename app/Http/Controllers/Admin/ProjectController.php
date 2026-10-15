@@ -6,21 +6,25 @@ use App\Actions\DeleteProject;
 use App\Actions\SaveProject;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\SaveProjectRequest;
+use App\Http\Requests\FilterProjectsRequest;
 use App\Models\Project;
+use App\Support\ProjectFilterOptions;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 
 class ProjectController extends Controller
 {
-    public function index(Request $request): View
+    public function index(FilterProjectsRequest $request, ProjectFilterOptions $options): View
     {
         Gate::authorize('viewAny', Project::class);
-        $projects = $request->user()->portfolio->projects()
-            ->orderBy('display_order')->orderBy('id')->paginate(10);
+        $portfolio = $request->user()->portfolio;
+        $filters = $request->validated();
+        $projects = $portfolio->projects()->with('tags')->filter($filters)
+            ->orderBy('display_order')->orderBy('id')->paginate(10)->appends($filters);
+        $projectCount = $portfolio->projects()->count();
 
-        return view('admin.projects.index', compact('projects'));
+        return view('admin.projects.index', compact('projects', 'filters', 'projectCount') + $options->forPortfolio($portfolio));
     }
 
     public function create(): View

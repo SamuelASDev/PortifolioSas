@@ -31,11 +31,14 @@
             <div><p class="pf-eyebrow">Trabalhos e experiências</p><h2 id="projects-title">Meus projetos</h2></div>
             <p class="pf-muted">{{ $projects->total() }} {{ $projects->total() === 1 ? 'projeto' : 'projetos' }}</p>
         </div>
+        @if ($projectCount > 0)
+            <x-project-filters :filters="$filters" :tags="$filterTags" :categories="$filterCategories" :action="($preview ?? false) ? route('admin.portfolio.preview') : route('portfolio.show', $portfolio->slug)" />
+        @endif
         <div class="pf-grid">
             @forelse ($projects as $project)
                 <x-public-project-card :portfolio="$portfolio" :project="$project" :preview="$preview ?? false" />
             @empty
-                <p class="pf-empty pf-muted">Novos projetos serão apresentados aqui em breve.</p>
+                <p class="pf-empty pf-muted">{{ $projectCount ? 'Nenhum projeto encontrado com esses filtros.' : 'Novos projetos serão apresentados aqui em breve.' }}</p>
             @endforelse
         </div>
         @if ($projects->hasPages())

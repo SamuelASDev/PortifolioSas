@@ -73,6 +73,15 @@
 .pf-share-actions-inline { margin-top: 0; min-width: 0; max-width: 100%; }
 .pf-share-link { display: inline-flex; align-items: center; gap: .3rem; min-height: 2.75rem; font-size: .9rem; }
 .pf-share-status:empty { display: none; }
+.pf-project-tags { display: flex; flex-wrap: wrap; gap: .45rem; list-style: none; padding: 0; margin-block: .5rem; }
+.pf-project-tag { display: inline-flex; align-items: center; gap: .35rem; font-size: .75rem; padding: .3rem .6rem; background: var(--surface-raised); color: var(--ink); border: 1px solid var(--line); border-radius: .5rem; }
+.pf-project-category { border-color: var(--accent); }
+.pf-project-filters { margin-bottom: 2rem; padding: 1.25rem; background: var(--surface); border: 1px solid var(--line); border-radius: 1rem; }
+.pf-filter-fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr)); gap: 1rem; }
+.pf-filter-label { display: block; min-width: 0; font-size: .85rem; }
+.pf-filter-label > span { display: inline-flex; align-items: center; gap: .4rem; }
+.pf-filter-input { display: block; width: 100%; min-height: 2.75rem; margin-top: .5rem; padding: .6rem .75rem; color: var(--ink); background: var(--page); border: 1px solid var(--line); border-radius: .5rem; font-size: .85rem; }
+.pf-filter-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 1rem; margin-top: 1rem; }
 .pf-carousel-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; margin-top: .5rem; }
 .pf-carousel-controls { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: .5rem 1rem; border-top: 1px solid var(--line); padding: .75rem 1.5rem; }
 .pf-carousel-arrow { min-width: 2.75rem; min-height: 2.75rem; border-radius: .5rem; border: 1px solid var(--line); padding: .5rem .75rem; font-size: .85rem; }
