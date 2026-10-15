@@ -1,5 +1,9 @@
 # Validação local
 
+## Consolidação de 15/10/2026
+
+Os resultados mais recentes e a revisão visual administrativa estão em [consolidation-2026-10-15.md](consolidation-2026-10-15.md). As seções abaixo preservam o histórico das entregas anteriores.
+
 ## Base do portfólio e CRUD
 
 - Branch: `dev`.

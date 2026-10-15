@@ -27,7 +27,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // --- PAINEL DE ADMINISTRAÇÃO (SaaS) ---
-    Route::prefix('admin')->name('admin.')->middleware(EnsureUserHasPortfolio::class)->group(function () {
+    Route::prefix('admin')->name('admin.')->middleware(['verified', EnsureUserHasPortfolio::class])->group(function () {
 
         // Configurações do Portfólio (Slug, Cores, Tema)
         Route::get('/portfolio', [PortfolioController::class, 'edit'])->name('portfolio.edit');

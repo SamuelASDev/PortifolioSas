@@ -33,7 +33,7 @@ class UpdateSharingRequest extends FormRequest
     {
         return [
             'share_image.mimes' => 'A imagem deve ser JPEG, PNG ou WebP.',
-            'share_image.max' => 'A imagem deve ter no máximo 2 MB.',
+            'share_image.max' => 'A imagem deve ter no máximo 10 MB.',
             'share_image.dimensions' => 'A imagem deve ter no máximo 6000 × 6000 pixels.',
             'share_image.prohibited' => 'Escolha entre enviar uma imagem ou remover a atual.',
         ];

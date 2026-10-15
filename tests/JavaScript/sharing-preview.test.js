@@ -28,7 +28,9 @@ test('text updates are escaped and clearing fields restores original metadata', 
 
 test('image selection previews a local blob and removal restores the fallback and revokes it', () => {
     const input = document.querySelector('[data-share-image]');
-    Object.defineProperty(input, 'files', { value: [new window.File(['png'], 'image.png', { type: 'image/png' })] });
+    const file = new window.File(['png'], 'image.png', { type: 'image/png' });
+    Object.defineProperty(file, 'size', { value: 10 * 1024 * 1024 });
+    Object.defineProperty(input, 'files', { value: [file] });
     input.dispatchEvent(new window.Event('change'));
     const image = document.querySelector('img');
     assert.equal(image.src, 'blob:preview');

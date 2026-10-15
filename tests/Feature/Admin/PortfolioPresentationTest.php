@@ -130,7 +130,7 @@ class PortfolioPresentationTest extends TestCase
     {
         $owner = User::factory()->create();
         $this->actingAs($owner)->post(route('admin.portfolio.update'), $this->data([
-            '_method' => 'PATCH', 'photo' => $this->image(),
+            '_method' => 'PATCH', 'photo' => $this->image()->size(10240),
         ]))->assertSessionHasNoErrors();
         $portfolio = $owner->portfolio()->sole();
         $first = $portfolio->photo_path;
@@ -160,7 +160,7 @@ class PortfolioPresentationTest extends TestCase
         $path = $portfolio->photo_path;
 
         $uploads = [
-            $this->image()->size(2049),
+            $this->image()->size(10241),
             UploadedFile::fake()->createWithContent('photo.svg', '<svg xmlns="http://www.w3.org/2000/svg"></svg>'),
             UploadedFile::fake()->createWithContent('photo.png', 'not an image'),
             'portfolios/999/photos/stolen.png',

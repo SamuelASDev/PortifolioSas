@@ -12,7 +12,7 @@ export function initializeSharingPreview(root) {
         if (objectUrl) URL.revokeObjectURL(objectUrl);
         objectUrl = null;
         const selected = file.files?.[0];
-        if (selected && ['image/jpeg', 'image/png', 'image/webp'].includes(selected.type) && selected.size <= 2048 * 1024 && !remove?.checked) {
+        if (selected && ['image/jpeg', 'image/png', 'image/webp'].includes(selected.type) && selected.size <= 10240 * 1024 && !remove?.checked) {
             objectUrl = URL.createObjectURL(selected);
         }
         const source = objectUrl || (remove?.checked ? defaults.fallback_image : defaults.image);

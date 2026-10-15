@@ -29,7 +29,7 @@ class ProjectCoverTest extends TestCase
     {
         $user = User::factory()->create();
         $this->actingAs($user)->post(route('admin.projects.store'), $this->data([
-            'cover_image' => $this->image('original-name.png'),
+            'cover_image' => $this->image('original-name.png')->size(10240),
         ]))->assertSessionHasNoErrors()->assertRedirect(route('admin.projects.index'));
 
         $project = Project::query()->sole();
@@ -117,7 +117,7 @@ class ProjectCoverTest extends TestCase
         [$owner, $project] = $this->projectWithCover();
         $path = $project->cover_image;
         $upload = match ($kind) {
-            'oversized' => $this->image()->size(2049),
+            'oversized' => $this->image()->size(10241),
             'svg' => UploadedFile::fake()->createWithContent('cover.svg', '<svg xmlns="http://www.w3.org/2000/svg"><script>alert(1)</script></svg>'),
             'spoofed' => UploadedFile::fake()->createWithContent('cover.png', '<?php echo "not an image";'),
             'path' => 'portfolios/999/covers/stolen.png',

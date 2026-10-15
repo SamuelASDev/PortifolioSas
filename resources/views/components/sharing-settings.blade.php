@@ -29,8 +29,9 @@
         </div>
         <div>
             <x-input-label for="share_image" value="Imagem de compartilhamento (opcional)" />
+            <x-upload-privacy-note class="mt-2" />
             <input id="share_image" name="share_image" data-share-image type="file" accept="image/jpeg,image/png,image/webp" class="mt-2 block w-full text-sm" aria-describedby="share-image-help">
-            <p id="share-image-help" class="mt-2 text-sm text-gray-500 dark:text-gray-400">JPEG, PNG ou WebP, até 2 MB e 6000 × 6000 pixels. Recomendado: 1200 × 630 pixels. Após erro de validação, selecione o arquivo novamente.</p>
+            <p id="share-image-help" class="mt-2 text-sm text-gray-500 dark:text-gray-400">JPEG, PNG ou WebP, até 10 MB e 6000 × 6000 pixels. Recomendado: 1200 × 630 pixels. Após erro de validação, selecione o arquivo novamente.</p>
             @if ($record->share_image_path)
                 <label class="mt-3 flex gap-2 items-center text-sm"><input type="checkbox" name="remove_share_image" data-share-remove value="1" @checked(old('remove_share_image', false)) class="rounded dark:bg-gray-900">Remover imagem personalizada e usar a {{ $project ? 'capa ou foto disponível' : 'foto de apresentação' }}</label>
             @endif

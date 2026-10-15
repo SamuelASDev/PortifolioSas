@@ -1,59 +1,90 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Portfólio
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Aplicação Laravel para criar e publicar portfólios profissionais. Cada conta tem sua apresentação, projetos, tecnologias e aparência, com isolamento entre usuários.
 
-## About Laravel
+## Funcionalidades
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- Cadastro, login, recuperação de senha e verificação obrigatória de e-mail no painel.
+- Apresentação, foto, contatos, endereço personalizado e publicação/despublicação.
+- Projetos com capas, editor rico, imagens gerenciadas e vídeos de YouTube/Vimeo.
+- Categorias, tags, filtros, destaques e organização por mouse, toque ou teclado.
+- Temas, cores e fontes com prévia privada; metadados e ações de compartilhamento.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Requisitos e instalação
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+PHP 8.2+ com PDO, SQLite/MySQL, DOM, mbstring e suporte a imagens; Composer; Node.js 22. O frontend usa Vite, Tailwind, Alpine e Tiptap.
 
-## Learning Laravel
+```sh
+composer install
+cp .env.example .env
+php artisan key:generate
+```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+Configure o banco e `APP_URL` em `.env`. Para SQLite, crie o arquivo `database/database.sqlite`; para MySQL, crie um banco vazio e configure suas credenciais. Depois:
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+```sh
+php artisan migrate
+php artisan storage:link
+npm ci
+npm run build
+php artisan serve
+```
 
-## Laravel Sponsors
+No PowerShell, `Copy-Item .env.example .env` substitui `cp`. Em desenvolvimento, `npm run dev` habilita atualização do frontend. Faça backup antes de aplicar migrations em instalações existentes.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## E-mail e publicação
 
-### Premium Partners
+O dashboard e todas as rotas `/admin` exigem e-mail verificado. Perfil, logout e reenvio de verificação continuam acessíveis. A atualização do e-mail exige nova verificação. Contas existentes não são marcadas como verificadas automaticamente.
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+Em desenvolvimento, `MAIL_MAILER=log` grava o e-mail em `storage/logs/laravel.log`; abra o link de verificação nessa mensagem. Em produção, configure um transporte real e valide o envio antes da implantação. Não exponha logs, links de verificação ou credenciais.
 
-## Contributing
+## Privacidade das imagens
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+**Os uploads são públicos, inclusive em rascunhos.** A prévia e as páginas de rascunhos exigem autorização, mas fotos, capas, anexos e imagens de compartilhamento usam URLs públicas. Despublicar oculta as páginas, sem revogar URLs de arquivos já compartilhadas. Envie apenas imagens destinadas à divulgação. Cópias e caches externos não são revogados ao remover arquivos.
 
-## Code of Conduct
+Essa política aparece junto aos uploads no painel. Um produto que precise guardar documentos confidenciais deve adotar armazenamento privado e entrega autorizada antes de receber esses arquivos.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Tarefas agendadas e recuperação de arquivos
 
-## Security Vulnerabilities
+```sh
+php artisan schedule:work
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Em produção, execute `php artisan schedule:run` a cada minuto pelo agendador do servidor. A aplicação declara:
 
-## License
+- `project-media:prune`: diariamente, remove uploads temporários abandonados há mais de 24 horas.
+- `images:retry-deletions`: a cada cinco minutos, repete exclusões que falharam, com espera crescente até 60 minutos.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+As exclusões tentadas são registradas em `pending_image_deletions` antes do acesso ao disco. Sucesso remove a pendência; falha preserva caminho, tentativas e último erro. A tabela não tem vínculo em cascata com a conta, permitindo tentar novamente após sua exclusão. O comando retorna falha se alguma exclusão tentada continuar pendente. Monitore essa tabela e os logs. O mecanismo não descobre automaticamente arquivos órfãos anteriores à sua instalação ou falhas de processo anteriores ao registro da pendência.
+
+Se o banco estiver indisponível, a aplicação ainda tenta excluir o arquivo diretamente. Sem persistir a pendência, não é possível garantir uma nova tentativa automática.
+
+## Validação
+
+```sh
+php artisan test --compact
+npm run test:js
+npm run build
+php vendor/bin/pint --test
+git diff --check
+```
+
+Por padrão, os testes exigem `testing` e SQLite em memória, sem usar o banco local. O GitHub Actions executa também a suíte em MySQL 8.4 isolado. `phpunit.mysql.xml` é destrutivo para o banco de teste e só é aceito com opt-in `PORTFOLIO_MYSQL_TESTS=1`, banco `portfolio_ci_test`, usuário `portfolio_test` e host `127.0.0.1`. Nunca adapte esse arquivo para um banco real.
+
+A CI valida PHP, JavaScript, build e Pint. A execução remota só ocorre depois de enviar a branch ao GitHub.
+
+## Organização
+
+- `app/Actions`: operações de escrita, transações e integração com arquivos.
+- `app/Http/Requests`: validação e autorização de entrada.
+- `app/Policies`: isolamento de projetos.
+- `app/Services`: descrições, mídia, armazenamento e exclusões pendentes.
+- `app/Support`: aparência, metadados, filtros, tags e primeiros passos.
+- `resources/views` e `resources/js`: painel, vitrine e interações.
+- `docs/portfolio-and-projects.md`: fluxos e decisões de implementação.
+- `docs/project-tags-and-onboarding.md`: categorias, filtros e dashboard.
+- `docs/validation.md`: histórico de validação.
+- `docs/review-2026-10-15.md`: diagnóstico que originou a rodada de consolidação.
+- `docs/consolidation-2026-10-15.md`: mudanças implementadas e resultados de validação.
+
+Antes de integrar `dev` em `main`, valide o painel em desktop/celular, os fluxos de duas contas, o e-mail real e o scheduler no ambiente de homologação.

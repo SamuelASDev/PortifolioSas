@@ -1,6 +1,7 @@
 @csrf
 <div>
     <x-input-label for="cover_image" value="Capa do projeto (opcional)" />
+    <x-upload-privacy-note class="mt-2" />
     @if ($project->cover_url)
         <img src="{{ $project->cover_url }}" alt="Capa atual de {{ $project->title }}" class="mt-2 w-full max-w-sm h-48 object-cover rounded-lg">
         <label for="remove_cover" class="mt-3 flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
@@ -9,7 +10,7 @@
         </label>
     @endif
     <input id="cover_image" name="cover_image" type="file" accept="image/jpeg,image/png,image/webp" aria-describedby="cover_help" class="mt-3 block w-full text-sm text-gray-700 dark:text-gray-300 file:mr-4 file:rounded-md file:border-0 file:bg-indigo-600 file:px-4 file:py-2 file:text-white">
-    <p id="cover_help" class="mt-2 text-sm text-gray-500 dark:text-gray-400">JPEG, PNG ou WebP. Até 2 MB e 6000 × 6000 pixels. Após um erro de validação, selecione o arquivo novamente.</p>
+    <p id="cover_help" class="mt-2 text-sm text-gray-500 dark:text-gray-400">JPEG, PNG ou WebP. Até 10 MB e 6000 × 6000 pixels. Após um erro de validação, selecione o arquivo novamente.</p>
     <x-input-error :messages="$errors->get('cover_image')" class="mt-2" />
     <x-input-error :messages="$errors->get('remove_cover')" class="mt-2" />
 </div>

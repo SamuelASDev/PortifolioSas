@@ -38,7 +38,7 @@ As configurações são atualizadas com `PATCH /admin/portfolio`. Os projetos us
 
 O painel do portfólio permite editar nome profissional, título, biografia de até 1000 caracteres, foto e contatos públicos: e-mail, GitHub, LinkedIn e site pessoal. O e-mail de login não é utilizado como contato público. Os links aceitam HTTP e HTTPS; os textos continuam sendo exibidos com escape HTML.
 
-A foto aceita JPEG, PNG e WebP até 2 MB e 3000 × 3000 pixels. Fica em `storage/app/public/portfolios/{portfolio_id}/photos`, usando o mesmo `storage:link` das capas. Substituição, remoção, falhas de gravação e exclusão da conta tratam a limpeza física. Fotos e capas no disco público são arquivos públicos; o estado de rascunho protege as páginas, não transforma esses arquivos em privados.
+A foto aceita JPEG, PNG e WebP até 10 MB e 3000 × 3000 pixels. Fica em `storage/app/public/portfolios/{portfolio_id}/photos`, usando o mesmo `storage:link` das capas. Substituição, remoção, falhas de gravação e exclusão da conta tratam a limpeza física. Fotos e capas no disco público são arquivos públicos; o estado de rascunho protege as páginas, não transforma esses arquivos em privados.
 
 Portfólios novos e existentes começam como rascunho. A migration preenche o nome profissional inicial com o nome da conta e preserva os demais dados. A publicação é uma operação separada: `PATCH /admin/portfolio/publication`, com `is_published` booleano. Ela sempre usa o portfólio do usuário autenticado e exige um nome profissional salvo. Não é permitido apagar esse nome enquanto o portfólio estiver publicado.
 
@@ -65,7 +65,7 @@ A listagem administrativa exibe dez projetos por página, ordenados por `display
 
 ## Capas dos projetos
 
-As capas são opcionais. JPEG, PNG e WebP são aceitos, até 2 MB e 6000 × 6000 pixels. A validação confere o conteúdo da imagem; um caminho de arquivo enviado como texto não é aceito. Os limites e o disco estão em `config/portfolio.php`.
+As capas são opcionais. JPEG, PNG e WebP são aceitos, até 10 MB e 6000 × 6000 pixels. A validação confere o conteúdo da imagem; um caminho de arquivo enviado como texto não é aceito. Os limites e o disco estão em `config/portfolio.php`.
 
 Os arquivos recebem nomes gerados pelo servidor e ficam em `storage/app/public/portfolios/{portfolio_id}/covers`. Os formulários usam POST multipart; a edição usa method spoofing para PUT. A imagem atual aparece na edição e na listagem. A remoção é explícita e não pode ser solicitada junto com um novo upload.
 
@@ -87,7 +87,7 @@ A migration adiciona `description_format` com padrão `text`, sem reescrever des
 
 Os botões **Imagem** e **Vídeo** inserem blocos na posição do cursor. A imagem recebe descrição alternativa e legenda opcional. Os blocos podem ser selecionados e removidos no editor; as imagens são responsivas e os players mantêm proporção 16:9. Foto profissional e capa continuam independentes.
 
-O upload usa `POST /admin/project-media`, com arquivo, UUID da sessão de edição e ID opcional de projeto. Aceita JPEG/PNG/WebP de até 2 MB e 6000 × 6000 pixels. Os limites configuráveis são 20 anexos por projeto, 100 arquivos e 100 MB por portfólio. O servidor define o proprietário e os nomes dos arquivos em `storage/app/public/portfolios/{portfolio_id}/attachments`, usando o `storage:link` existente.
+O upload usa `POST /admin/project-media`, com arquivo, UUID da sessão de edição e ID opcional de projeto. Aceita JPEG/PNG/WebP de até 10 MB e 6000 × 6000 pixels. Os limites configuráveis são 20 anexos por projeto, 100 arquivos e 100 MB por portfólio. O servidor define o proprietário e os nomes dos arquivos em `storage/app/public/portfolios/{portfolio_id}/attachments`, usando o `storage:link` existente.
 
 Uploads novos ficam temporários. Salvar a descrição vincula apenas os IDs autorizados daquele projeto ou daquela sessão. O servidor reconstrói cada `src` com o caminho registrado; não confia na URL enviada pelo cliente. Não é permitido reutilizar imagens de outra conta ou de outro projeto. O HTML de exemplos de código não é tratado como referência de anexo.
 
@@ -138,6 +138,6 @@ O módulo `projects/organization.js` mantém as mudanças no DOM até “Salvar 
 
 As telas Meu portfólio e Editar projeto possuem um formulário independente de Compartilhamento, com título (100 caracteres), descrição (300) e imagem opcionais. O componente compartilhado mostra uma simulação que acompanha o texto e a seleção local da imagem. As plataformas podem recortar imagens e usar cache; a simulação não pretende reproduzir exatamente um serviço específico.
 
-`PATCH /admin/portfolio/sharing` e `/admin/projects/{project}/sharing` usam `UpdateSharingRequest` (erros no bag sharing), Policy para projetos e `SaveSharing`. Uploads JPEG/PNG/WebP têm limite de 2 MB e 6000 × 6000; recomenda-se 1200 × 630. `SharingImageStorage` reutiliza o armazenamento central, salvando em `portfolios/{id}/sharing` no disco public, servido pelo link `public/storage`. A imagem antiga é excluída após salvar; falhas na transação descartam a nova. Remoção de projeto/conta limpa suas imagens e preserva arquivos de outras contas.
+`PATCH /admin/portfolio/sharing` e `/admin/projects/{project}/sharing` usam `UpdateSharingRequest` (erros no bag sharing), Policy para projetos e `SaveSharing`. Uploads JPEG/PNG/WebP têm limite de 10 MB e 6000 × 6000; recomenda-se 1200 × 630. `SharingImageStorage` reutiliza o armazenamento central, salvando em `portfolios/{id}/sharing` no disco public, servido pelo link `public/storage`. A imagem antiga é excluída após salvar; falhas na transação descartam a nova. Remoção de projeto/conta limpa suas imagens e preserva arquivos de outras contas.
 
 `SharingMetadata` centraliza título, descrição, imagem e URL canônica para HTML, Open Graph e Twitter Cards, com escaping no Blade. Campos vazios usam nome/título e resumo original. A imagem usa primeiro a personalizada do registro; projetos sem imagem própria usam capa, imagem personalizada do portfólio ou foto de apresentação, nessa ordem. Portfólios sem imagem personalizada usam a foto. Sem imagem, o card é summary. Canonicals apontam para a URL pública sem parâmetros, inclusive na prévia privada, que mantém noindex/nofollow. A configuração não publica rascunhos nem altera o texto visível dos projetos.

@@ -29,7 +29,7 @@ class SharingTest extends TestCase
         $portfolio = $this->portfolio();
         $this->actingAs($portfolio->user)->patch(route('admin.portfolio.sharing.update'), [
             'share_title' => 'Meu cartão personalizado', 'share_description' => 'Resumo para compartilhar.',
-            'share_image' => $this->image(), 'is_published' => true, 'professional_name' => 'Injected',
+            'share_image' => $this->image()->size(10240), 'is_published' => true, 'professional_name' => 'Injected',
         ])->assertSessionHasNoErrors();
         $portfolio->refresh();
         $this->assertFalse($portfolio->is_published);
@@ -131,7 +131,7 @@ class SharingTest extends TestCase
         foreach ([
             ['share_title' => str_repeat('x', 101)], ['share_description' => str_repeat('x', 301)],
             ['share_image' => UploadedFile::fake()->create('fake.svg', 1, 'image/svg+xml')],
-            ['share_image' => UploadedFile::fake()->create('large.png', 2049, 'image/png')],
+            ['share_image' => UploadedFile::fake()->create('large.png', 10241, 'image/png')],
             ['share_image' => $this->image(), 'remove_share_image' => true],
         ] as $data) {
             $this->patch(route('admin.portfolio.sharing.update'), $data)->assertSessionHasErrorsIn('sharing');

@@ -4,6 +4,7 @@ namespace Tests\Feature\Admin;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\URL;
 use Tests\TestCase;
 
 class AccountWorkflowTest extends TestCase
@@ -62,7 +63,12 @@ class AccountWorkflowTest extends TestCase
         $this->assertAuthenticatedAs($user);
         $this->assertNotNull($user->portfolio);
 
-        return $user;
+        $this->get(route('admin.portfolio.edit'))->assertRedirect(route('verification.notice'));
+        $this->get(URL::temporarySignedRoute('verification.verify', now()->addMinutes(60), [
+            'id' => $user->id, 'hash' => sha1($user->email),
+        ]))->assertRedirect();
+
+        return $user->refresh();
     }
 
     private function projectData(string $title): array

@@ -21,6 +21,7 @@
     </div>
     <div>
         <x-input-label for="photo" value="Foto profissional (opcional)" />
+        <x-upload-privacy-note class="mt-2" />
         @if ($portfolio->photo_url)
             <img src="{{ $portfolio->photo_url }}" alt="Sua foto profissional atual" class="mt-3 h-24 w-24 rounded-full object-cover">
             <label for="remove_photo" class="mt-3 flex items-center gap-2 text-sm">
@@ -29,7 +30,7 @@
             </label>
         @endif
         <input type="file" id="photo" name="photo" accept="image/jpeg,image/png,image/webp" aria-describedby="photo-help" class="mt-3 block w-full text-sm file:mr-4 file:rounded-md file:border-0 file:bg-indigo-600 file:px-4 file:py-2 file:text-white">
-        <p id="photo-help" class="mt-2 text-sm text-gray-500 dark:text-gray-400">JPEG, PNG ou WebP. Até 2 MB e 3000 × 3000 pixels. Se houver um erro no formulário, selecione a foto novamente.</p>
+        <p id="photo-help" class="mt-2 text-sm text-gray-500 dark:text-gray-400">JPEG, PNG ou WebP. Até 10 MB e 3000 × 3000 pixels. Se houver um erro no formulário, selecione a foto novamente.</p>
         <x-input-error :messages="$errors->get('photo')" class="mt-2" />
         <x-input-error :messages="$errors->get('remove_photo')" class="mt-2" />
     </div>

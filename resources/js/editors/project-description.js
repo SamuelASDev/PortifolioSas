@@ -63,7 +63,7 @@ export function initializeDescriptionEditor(root) {
     const editor = new Editor({
         element: root.querySelector('[data-editor-content]'),
         content: source.dataset.initialFormat === 'html' ? source.value : plainTextDocument(source.value),
-        extensions: [ProjectImage, ProjectVideo, StarterKit.configure({
+        extensions: [ProjectImage.configure({ baseUrl: root.dataset.mediaBaseUrl ?? null }), ProjectVideo, StarterKit.configure({
             heading: { levels: [2, 3] },
             strike: false, underline: false, horizontalRule: false,
             link: {

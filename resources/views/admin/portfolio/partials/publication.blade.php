@@ -3,6 +3,7 @@
         <h3 id="publication-heading" class="text-lg font-semibold">Publicação</h3>
         <span class="text-sm font-semibold">{{ $portfolio->is_published ? 'Publicado' : 'Rascunho' }}</span>
     </div>
+    <x-upload-privacy-note />
     @if ($portfolio->is_published)
         <p class="text-sm text-gray-600 dark:text-gray-300">Seu portfólio está público. Alterações salvas aparecem imediatamente.</p>
         <a href="{{ route('portfolio.show', $portfolio->slug) }}" target="_blank" rel="noopener noreferrer" class="block text-sm text-indigo-600 dark:text-indigo-400 underline break-all">{{ route('portfolio.show', $portfolio->slug) }}</a>

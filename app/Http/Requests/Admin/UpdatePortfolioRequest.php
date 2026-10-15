@@ -52,7 +52,7 @@ class UpdatePortfolioRequest extends FormRequest
             'primary_color.regex' => 'Informe uma cor hexadecimal no formato #RRGGBB.',
             'photo.image' => 'Selecione uma foto válida.',
             'photo.mimes' => 'A foto deve ser JPEG, PNG ou WebP.',
-            'photo.max' => 'A foto deve ter no máximo 2 MB.',
+            'photo.max' => 'A foto deve ter no máximo 10 MB.',
             'photo.dimensions' => 'A foto deve ter no máximo 3000 × 3000 pixels.',
             'photo.prohibited' => 'Escolha entre enviar uma nova foto ou remover a atual.',
         ];

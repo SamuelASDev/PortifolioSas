@@ -47,7 +47,7 @@ class SaveProjectRequest extends FormRequest
         return [
             'cover_image.image' => 'Selecione uma imagem válida.',
             'cover_image.mimes' => 'A capa deve ser JPEG, PNG ou WebP.',
-            'cover_image.max' => 'A capa deve ter no máximo 2 MB.',
+            'cover_image.max' => 'A capa deve ter no máximo 10 MB.',
             'cover_image.dimensions' => 'A capa deve ter no máximo 6000 × 6000 pixels.',
             'cover_image.prohibited' => 'Escolha entre enviar uma nova capa ou remover a atual.',
         ];

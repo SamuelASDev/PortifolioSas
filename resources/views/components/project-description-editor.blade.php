@@ -10,7 +10,7 @@
         $value = app(\App\Services\ProjectDescription::class)->sanitize($value, $media);
     }
 @endphp
-<div data-description-editor data-upload-url="{{ route('admin.project-media.store') }}" data-video-url="{{ route('admin.project-media.video') }}" data-project-id="{{ $project->id }}" class="description-editor">
+<div data-description-editor data-media-base-url="{{ app(\App\Services\ProjectAttachmentStorage::class)->url('portfolios/'.auth()->user()->portfolio->id.'/attachments/') }}" data-upload-url="{{ route('admin.project-media.store') }}" data-video-url="{{ route('admin.project-media.video') }}" data-project-id="{{ $project->id }}" class="description-editor">
     <x-input-label id="description-label" for="description" value="Descrição" />
     <input type="hidden" name="description_format" value="{{ $format }}" data-description-format>
     <input type="hidden" name="media_token" value="{{ $mediaToken }}" data-media-token>
@@ -30,7 +30,8 @@
         </div>
         <div id="description-image-panel" data-image-panel hidden class="description-editor-link-panel">
             <p class="text-sm font-medium">Inserir imagem na descrição</p>
-            <label for="description-image" class="text-sm">Arquivo JPEG, PNG ou WebP (até 2 MB)</label>
+            <x-upload-privacy-note />
+            <label for="description-image" class="text-sm">Arquivo JPEG, PNG ou WebP (até 10 MB)</label>
             <input id="description-image" type="file" data-image-input accept="image/jpeg,image/png,image/webp" class="block w-full text-sm">
             <label for="description-image-alt" class="block text-sm">Descrição da imagem (texto alternativo)</label>
             <input id="description-image-alt" data-image-alt type="text" maxlength="255" class="w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100">

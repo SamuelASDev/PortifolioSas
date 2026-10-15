@@ -25,6 +25,6 @@ class UploadProjectMediaRequest extends FormRequest
 
     public function messages(): array
     {
-        return ['image.max' => 'A imagem deve ter no máximo 2 MB.', 'image.mimes' => 'Use uma imagem JPEG, PNG ou WebP.'];
+        return ['image.max' => 'A imagem deve ter no máximo 10 MB.', 'image.mimes' => 'Use uma imagem JPEG, PNG ou WebP.'];
     }
 }

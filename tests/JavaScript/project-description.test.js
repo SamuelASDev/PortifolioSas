@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { afterEach, beforeEach, test } from 'node:test';
 import { JSDOM } from 'jsdom';
 import { initializeDescriptionEditor, isHttpUrl } from '../../resources/js/editors/project-description.js';
+import { isManagedImageSource } from '../../resources/js/editors/project-media.js';
 
 const dom = new JSDOM('<!doctype html><html><body></body></html>', {
     url: 'http://portfolio.test', pretendToBeVisual: true,
@@ -26,7 +27,7 @@ globalThis.FormData = dom.window.FormData;
 beforeEach(() => { document.body.innerHTML = ''; });
 afterEach(() => { editors.splice(0).forEach((editor) => editor.destroy()); globalThis.fetch = originalFetch; });
 
-function mount(value, format = 'text') {
+function mount(value, format = 'text', baseUrl = null) {
     document.body.innerHTML = `<form><div data-description-editor>
         <label id="description-label" for="description">Descrição</label>
         <input data-description-format name="description_format" type="hidden">
@@ -54,6 +55,7 @@ function mount(value, format = 'text') {
         <p data-editor-status hidden></p>
     </div></form>`;
     const root = document.querySelector('[data-description-editor]');
+    if (baseUrl) root.dataset.mediaBaseUrl = baseUrl;
     root.dataset.uploadUrl = '/admin/project-media';
     root.dataset.videoUrl = '/admin/project-media/video';
     const source = root.querySelector('textarea');
@@ -66,6 +68,34 @@ function mount(value, format = 'text') {
 }
 
 const tick = () => new Promise((resolve) => setTimeout(resolve, 30));
+
+test('configured remote attachment URLs survive editing while other origins and portfolios are rejected', () => {
+    const base = 'https://cdn.example.com/bucket/portfolios/123/attachments/';
+    const url = `${base}image.png`;
+    assert.equal(isManagedImageSource(url, base), true);
+    for (const bad of [
+        'https://evil.example.com/bucket/portfolios/123/attachments/image.png',
+        'https://cdn.example.com/bucket/portfolios/456/attachments/image.png',
+        `${base}../covers/image.png`, `${base}image.svg`,
+        'https://user:password@cdn.example.com/bucket/portfolios/123/attachments/image.png',
+    ]) assert.equal(isManagedImageSource(bad, base), false, bad);
+    const html = `<figure><img src="${url}" data-media-id="11111111-1111-4111-8111-111111111111" alt="Imagem"><figcaption>Legenda</figcaption></figure>`;
+    const { source, editor } = mount(html, 'html', base);
+    assert.equal(editor.getJSON().content[0].type, 'projectImage');
+    assert.match(source.value, /cdn.example.com/);
+    assert.match(source.value, /Legenda/);
+});
+
+test('attachment bases without a trailing slash accept files and preserve saved images', () => {
+    const base = 'http://portfolio.test/storage/portfolios/123/attachments';
+    const url = `${base}/image.png`;
+    assert.equal(isManagedImageSource(url, base), true);
+    assert.equal(isManagedImageSource(`${base}-other/image.png`, base), false);
+    assert.equal(isManagedImageSource(`${base}/nested/image.png`, base), false);
+    const { source, editor } = mount(`<figure><img src="${url}" data-media-id="11111111-1111-4111-8111-111111111111" alt="Imagem salva"></figure>`, 'html', base);
+    assert.equal(editor.getJSON().content[0].type, 'projectImage');
+    assert.match(source.value, /image.png/);
+});
 
 test('legacy text with literal HTML and blank lines is imported as text nodes', () => {
     const { editor, source, root } = mount('Exemplo <strong>literal</strong>\n\nSegunda linha & texto.');
@@ -161,10 +191,12 @@ test('external pasted images and unknown iframe providers are not editor nodes',
 });
 
 test('image upload blocks submit until complete and inserts at the saved cursor', async () => {
-    const { root, editor, source, form } = mount('<p>Antes</p><p>Depois</p>', 'html');
+    const { root, editor, source, form } = mount('<p>Antes</p><p>Depois</p>', 'html', 'http://portfolio.test/storage/portfolios/1/attachments');
     editor.commands.setTextSelection(8);
     root.querySelector('[data-editor-command="image"]').click();
-    Object.defineProperty(root.querySelector('[data-image-input]'), 'files', { value: [new dom.window.File(['image'], 'test.png', { type: 'image/png' })] });
+    const file = new dom.window.File(['image'], 'test.png', { type: 'image/png' });
+    Object.defineProperty(file, 'size', { value: 10 * 1024 * 1024 });
+    Object.defineProperty(root.querySelector('[data-image-input]'), 'files', { value: [file] });
     root.querySelector('[data-image-alt]').value = 'Descrição acessível';
     root.querySelector('[data-image-caption]').value = 'Uma legenda';
     let finish;

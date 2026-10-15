@@ -27,7 +27,7 @@ class ProjectMediaTest extends TestCase
     {
         $owner = User::factory()->create();
         $token = (string) Str::uuid();
-        $media = $this->upload($owner, $token);
+        $media = $this->upload($owner, $token, image: $this->image()->size(10240));
         $this->assertNull($media->project_id);
         $this->assertNull($media->attached_at);
         Storage::disk('public')->assertExists($media->path);
@@ -137,7 +137,7 @@ class ProjectMediaTest extends TestCase
     {
         $owner = User::factory()->create();
         $this->actingAs($owner);
-        foreach ([$this->image()->size(2049), UploadedFile::fake()->createWithContent('bad.png', 'not an image'),
+        foreach ([$this->image()->size(10241), UploadedFile::fake()->createWithContent('bad.png', 'not an image'),
             UploadedFile::fake()->createWithContent('image.svg', '<svg xmlns="http://www.w3.org/2000/svg"></svg>')] as $image) {
             $this->postJson(route('admin.project-media.store'), ['image' => $image, 'upload_token' => (string) Str::uuid()])->assertUnprocessable()->assertJsonValidationErrors('image');
         }
@@ -242,10 +242,10 @@ class ProjectMediaTest extends TestCase
         Storage::disk('public')->assertExists([$first->path, $second->path]);
     }
 
-    private function upload(User $owner, string $token, ?Project $project = null): ProjectMedia
+    private function upload(User $owner, string $token, ?Project $project = null, ?UploadedFile $image = null): ProjectMedia
     {
         $response = $this->actingAs($owner)->postJson(route('admin.project-media.store'), [
-            'image' => $this->image(), 'upload_token' => $token, 'project_id' => $project?->id,
+            'image' => $image ?? $this->image(), 'upload_token' => $token, 'project_id' => $project?->id,
         ])->assertCreated();
 
         return ProjectMedia::findOrFail($response->json('id'));

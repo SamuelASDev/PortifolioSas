@@ -7,17 +7,24 @@ export function canonicalVideo(src) {
     return vimeo ? { src, title: 'Vídeo do Vimeo' } : null;
 }
 
-export function isManagedImageSource(src) {
+export function isManagedImageSource(src, baseUrl = null) {
     try {
         const url = new URL(src, window.location.href);
+        if (baseUrl) {
+            const base = new URL(baseUrl, window.location.href);
+            const directory = `${base.pathname.replace(/\/+$/, '')}/`;
+            return ['http:', 'https:'].includes(url.protocol) && !url.username && !url.password
+                && url.origin === base.origin && url.pathname.startsWith(directory)
+                && /^[a-zA-Z0-9_-]+\.(?:jpg|jpeg|png|webp)$/.test(url.pathname.slice(directory.length));
+        }
         return url.origin === window.location.origin && /\/storage\/portfolios\/\d+\/attachments\/[a-zA-Z0-9_-]+\.(?:jpg|jpeg|png|webp)$/.test(url.pathname);
     } catch { return false; }
 }
 
-function imageAttributes(element) {
+function imageAttributes(element, baseUrl) {
     const image = element.tagName === 'IMG' ? element : element.querySelector('img[data-media-id]');
     if (!image || !/^[a-f0-9-]{36}$/i.test(image.getAttribute('data-media-id') ?? '')) return false;
-    if (!isManagedImageSource(image.getAttribute('src'))) return false;
+    if (!isManagedImageSource(image.getAttribute('src'), baseUrl)) return false;
     return {
         src: image.getAttribute('src'), mediaId: image.getAttribute('data-media-id'),
         alt: image.getAttribute('alt') ?? '', caption: element.querySelector('figcaption')?.textContent ?? '',
@@ -26,11 +33,14 @@ function imageAttributes(element) {
 
 export const ProjectImage = Node.create({
     name: 'projectImage', group: 'block', atom: true, draggable: true,
+    addOptions: () => ({ baseUrl: null }),
     addAttributes: () => ({ src: { default: null }, mediaId: { default: null }, alt: { default: '' }, caption: { default: '' } }),
-    parseHTML: () => [
-        { tag: 'figure', getAttrs: imageAttributes },
-        { tag: 'img[data-media-id]', getAttrs: imageAttributes },
-    ],
+    parseHTML() {
+        return [
+            { tag: 'figure', getAttrs: (element) => imageAttributes(element, this.options.baseUrl) },
+            { tag: 'img[data-media-id]', getAttrs: (element) => imageAttributes(element, this.options.baseUrl) },
+        ];
+    },
     renderHTML({ node }) {
         const children = [['img', { src: node.attrs.src, alt: node.attrs.alt, 'data-media-id': node.attrs.mediaId, loading: 'lazy' }]];
         if (node.attrs.caption) children.push(['figcaption', {}, node.attrs.caption]);
@@ -125,13 +135,13 @@ export function initializeMediaControls(root, editor) {
         const file = imagePanel.querySelector('[data-image-input]').files[0];
         const alt = imagePanel.querySelector('[data-image-alt]').value.trim();
         const caption = imagePanel.querySelector('[data-image-caption]').value.trim();
-        if (!file || file.size > 2097152 || !alt) { show('Selecione uma imagem de até 2 MB e informe uma descrição para ela.'); return; }
+        if (!file || file.size > 10485760 || !alt) { show('Selecione uma imagem de até 10 MB e informe uma descrição para ela.'); return; }
         run(async () => {
             const body = new FormData();
             body.append('image', file); body.append('upload_token', token.value);
             if (root.dataset.projectId) body.append('project_id', root.dataset.projectId);
             const result = await postMedia(root.dataset.uploadUrl, body);
-            if (!/^[a-f0-9-]{36}$/i.test(result.id ?? '') || !isManagedImageSource(result.url)) throw new Error('A resposta do upload foi inválida. Tente novamente.');
+            if (!/^[a-f0-9-]{36}$/i.test(result.id ?? '') || !isManagedImageSource(result.url, root.dataset.mediaBaseUrl)) throw new Error('A resposta do upload foi inválida. Tente novamente.');
             editor.chain().focus().insertContent({ type: 'projectImage', attrs: { src: result.url, mediaId: result.id, alt, caption } }).run();
             imagePanel.querySelector('[data-image-input]').value = '';
         }, 'Imagem inserida. Salve o projeto para confirmar.');

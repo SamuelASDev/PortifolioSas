@@ -1,21 +1,21 @@
 <?php
 
 return [
-    'sharing' => ['disk' => 'public', 'max_size_kb' => 2048, 'max_dimension' => 6000],
+    'sharing' => ['disk' => 'public', 'max_size_kb' => 10240, 'max_dimension' => 6000],
     'carousel' => ['max_projects' => 10],
     'attachments' => [
-        'disk' => 'public', 'max_size_kb' => 2048, 'max_per_project' => 20,
+        'disk' => 'public', 'max_size_kb' => 10240, 'max_per_project' => 20,
         'max_portfolio_bytes' => 104857600, 'max_portfolio_files' => 100, 'pending_hours' => 24,
     ],
     'photos' => [
         'disk' => 'public',
-        'max_size_kb' => 2048,
+        'max_size_kb' => 10240,
         'max_dimension' => 3000,
     ],
 
     'covers' => [
         'disk' => 'public',
-        'max_size_kb' => 2048,
+        'max_size_kb' => 10240,
         'max_dimension' => 6000,
     ],
 

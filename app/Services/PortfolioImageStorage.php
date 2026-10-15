@@ -6,7 +6,6 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use RuntimeException;
-use Throwable;
 
 abstract class PortfolioImageStorage
 {
@@ -47,15 +46,7 @@ abstract class PortfolioImageStorage
             return;
         }
 
-        try {
-            if (Storage::disk($this->disk())->delete($path)) {
-                return;
-            }
-        } catch (Throwable $exception) {
-            report($exception);
-        }
-
-        Log::warning('Não foi possível excluir uma imagem do disco.', ['portfolio_id' => $portfolioId, 'path' => $path]);
+        app(ImageDeletionQueue::class)->delete($this->disk(), $path);
     }
 
     abstract protected function collection(): string;

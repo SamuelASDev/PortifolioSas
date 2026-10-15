@@ -16,6 +16,8 @@ class Project extends Model
 {
     use HasFactory;
 
+    private ?array $descriptionTextMemo = null;
+
     protected $fillable = [
         'portfolio_id', 'title', 'description', 'description_format', 'cover_image',
         'link_demo', 'link_github', 'is_featured', 'display_order', 'share_title', 'share_description', 'share_image_path', 'category',
@@ -75,6 +77,13 @@ class Project extends Model
 
     protected function descriptionText(): Attribute
     {
-        return Attribute::get(fn () => app(ProjectDescription::class)->text($this->description, $this->description_format));
+        return Attribute::get(function () {
+            $source = [$this->description, $this->description_format];
+            if ($this->descriptionTextMemo === null || $this->descriptionTextMemo[0] !== $source) {
+                $this->descriptionTextMemo = [$source, app(ProjectDescription::class)->text(...$source)];
+            }
+
+            return $this->descriptionTextMemo[1];
+        });
     }
 }
