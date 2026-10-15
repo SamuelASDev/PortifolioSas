@@ -17,6 +17,7 @@
                     <x-primary-button>Salvar alterações</x-primary-button>
                 </div>
             </form>
+            @include('admin.portfolio.partials.appearance-editor')
         </div>
     </div>
 </x-app-layout>

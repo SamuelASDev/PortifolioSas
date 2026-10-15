@@ -1,4 +1,4 @@
-<x-public-layout :portfolio="$portfolio">
+<x-public-layout :portfolio="$portfolio" :preview="$preview ?? false">
     <section class="pf-hero" aria-labelledby="presentation-title">
         <div class="pf-hero-copy">
             <p class="pf-eyebrow">Portfólio profissional</p>
@@ -19,7 +19,7 @@
         @endif
     </section>
     @if ($featuredProjects->isNotEmpty())
-        <x-featured-project-carousel :portfolio="$portfolio" :projects="$featuredProjects" />
+        <x-featured-project-carousel :portfolio="$portfolio" :projects="$featuredProjects" :preview="$preview ?? false" />
     @endif
     <section id="projetos" class="pf-projects" aria-labelledby="projects-title">
         <div class="pf-section-heading">
@@ -28,7 +28,7 @@
         </div>
         <div class="pf-grid">
             @forelse ($projects as $project)
-                <x-public-project-card :portfolio="$portfolio" :project="$project" />
+                <x-public-project-card :portfolio="$portfolio" :project="$project" :preview="$preview ?? false" />
             @empty
                 <p class="pf-empty pf-muted">Novos projetos serão apresentados aqui em breve.</p>
             @endforelse

@@ -14,7 +14,7 @@
     color-scheme: dark;
     background: var(--page);
     color: var(--ink);
-    font-family: ui-sans-serif, system-ui, sans-serif;
+    font-family: var(--font, ui-sans-serif, system-ui, sans-serif);
     line-height: 1.65;
     overflow-wrap: anywhere;
 }
@@ -31,7 +31,7 @@
 .pf-site :focus-visible { outline: 3px solid var(--ink); outline-offset: 5px; }
 .pf-site img { max-width: 100%; }
 .pf-container { width: min(100% - 3rem, 72rem); margin-inline: auto; }
-.pf-header { border-bottom: 1px solid var(--line); }
+.pf-header { border-bottom: 1px solid var(--line); background: var(--header, var(--page)); }
 .pf-header-inner { min-height: 5.5rem; display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; padding-block: 1.25rem; }
 .pf-brand { font-weight: 750; font-size: 1.1rem; max-width: 75%; line-height: 1.35; }
 .pf-header nav .pf-link { display: inline-flex; align-items: center; min-height: 2.75rem; }
@@ -73,7 +73,7 @@
 .pf-section-heading { display: flex; align-items: end; justify-content: space-between; gap: 1rem; margin-bottom: 2rem; }
 .pf-site h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 700; letter-spacing: -.025em; line-height: 1.25; margin-top: .65rem; }
 .pf-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem; }
-.pf-card { min-width: 0; display: flex; flex-direction: column; background: var(--surface); border: 1px solid var(--line); border-radius: 1rem; overflow: hidden; }
+.pf-card { min-width: 0; display: flex; flex-direction: column; background: var(--card, var(--surface)); border: 1px solid var(--line); border-radius: 1rem; overflow: hidden; }
 .pf-card-featured { border-top: 3px solid var(--accent); }
 .pf-card-image { display: block; aspect-ratio: 8 / 5; background: var(--surface-raised); overflow: hidden; }
 .pf-card-image img { width: 100%; height: 100%; object-fit: cover; }
@@ -87,7 +87,7 @@
 .pf-empty { grid-column: 1 / -1; padding: 3rem 1.5rem; border: 1px dashed var(--line); border-radius: 1rem; text-align: center; }
 .pf-pagination { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 1.5rem; padding-top: 2.5rem; font-size: .9rem; }
 .pf-pagination a { padding-block: .6rem; }
-.pf-footer { border-top: 1px solid var(--line); padding-block: 2rem; color: var(--muted); font-size: .85rem; }
+.pf-footer { border-top: 1px solid var(--line); padding-block: 2rem; color: var(--muted); font-size: .85rem; background: var(--footer, var(--page)); }
 .pf-footer-inner { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem 2rem; }
 .pf-project-detail { max-width: 60rem; margin-inline: auto; padding-block: 2.5rem 5rem; }
 .pf-back { display: inline-block; padding-block: .75rem; font-size: .9rem; }
@@ -127,3 +127,10 @@
 .pf-carousel-arrow { position: absolute; top: 50%; transform: translateY(-50%); z-index: 1; display: grid; place-items: center; background: var(--surface); box-shadow: 0 2px 8px #0002; }
 .pf-carousel-arrow[data-carousel-prev] { left: .5rem; }
 .pf-carousel-arrow[data-carousel-next] { right: .5rem; }
+
+.pf-site h1, .pf-site h2, .pf-site h3 { color: var(--title, var(--ink)); }
+.pf-site h1 { font-size: clamp(calc(2.4rem * var(--title-scale, 1)), calc(6vw * var(--title-scale, 1)), calc(4.8rem * var(--title-scale, 1))); }
+.pf-site h2 { font-size: clamp(calc(1.6rem * var(--title-scale, 1)), calc(3vw * var(--title-scale, 1)), calc(2.2rem * var(--title-scale, 1))); }
+.pf-card h3 { font-size: calc(1.2rem * var(--title-scale, 1)); }
+.pf-carousel-copy h3 { font-size: clamp(calc(1.4rem * var(--title-scale, 1)), calc(3vw * var(--title-scale, 1)), calc(2rem * var(--title-scale, 1))); }
+.pf-project-heading h1 { font-size: clamp(calc(2.2rem * var(--title-scale, 1)), calc(6vw * var(--title-scale, 1)), calc(4rem * var(--title-scale, 1))); }

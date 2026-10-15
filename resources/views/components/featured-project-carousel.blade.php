@@ -1,4 +1,4 @@
-@props(['portfolio', 'projects'])
+@props(['portfolio', 'projects', 'preview' => false])
 <section id="destaques" data-featured-carousel class="pf-carousel" aria-labelledby="featured-heading" aria-roledescription="carrossel" tabindex="0">
     <div class="pf-section-heading">
         <div><p class="pf-eyebrow">Projetos em destaque</p><h2 id="featured-heading">Uma seleção do meu trabalho</h2></div>
@@ -21,7 +21,7 @@
                             <p class="pf-muted">{{ \Illuminate\Support\Str::limit($project->description_text, 280) }}</p>
                         @endif
                         <div class="pf-carousel-actions">
-                            <a class="pf-button" href="{{ route('portfolio.projects.show', [$portfolio->slug, $project->id]) }}">Ver detalhes <span class="sr-only">de {{ $project->title }}</span> <x-public-icon name="details" /></a>
+                            <a class="pf-button" href="{{ $preview ? route('admin.portfolio.preview.project', $project->id) : route('portfolio.projects.show', [$portfolio->slug, $project->id]) }}">Ver detalhes <span class="sr-only">de {{ $project->title }}</span> <x-public-icon name="details" /></a>
                             @if (is_string($project->link_demo) && preg_match('#^https?://#i', $project->link_demo))
                                 <a class="pf-button pf-button-secondary" href="{{ $project->link_demo }}" target="_blank" rel="noopener noreferrer">Acessar site <x-public-icon name="globe" /></a>
                             @endif

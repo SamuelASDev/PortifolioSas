@@ -1,4 +1,4 @@
-@props(['portfolio', 'pageTitle' => null, 'description' => null, 'image' => null])
+@props(['portfolio', 'pageTitle' => null, 'description' => null, 'image' => null, 'preview' => false])
 @php
     $appearance = app(\App\Support\PortfolioAppearance::class);
     $accent = $appearance->color($portfolio->primary_color);
@@ -6,10 +6,15 @@
     $summary = \Illuminate\Support\Str::limit($description ?? $portfolio->bio ?? 'Conheça meus projetos e minha trajetória profissional.', 160);
 @endphp
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" style="font-size: {{ $appearance->settings($portfolio)['appearance']['base_size'] }}px">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    @if ($preview)
+        <meta name="robots" content="noindex, nofollow">
+        <script type="application/json" data-preview-schema>{!! \Illuminate\Support\Js::encode(config('portfolio-appearance')) !!}</script>
+        @vite('resources/js/public-preview.js')
+    @endif
     <title>{{ $title }}</title>
     <meta name="description" content="{{ $summary }}">
     <meta name="theme-color" content="{{ $accent }}">
@@ -23,13 +28,13 @@
     <link rel="canonical" href="{{ url()->current() }}">
     @vite('resources/css/public-portfolio.css')
 </head>
-<body class="pf-site" data-theme="{{ $portfolio->theme === 'light' ? 'light' : 'dark' }}" style="--accent: {{ $accent }}; --accent-ink: {{ $appearance->foreground($accent) }};">
+<body class="pf-site" data-theme="{{ $portfolio->theme === 'light' ? 'light' : 'dark' }}" style="{{ $appearance->styles($portfolio) }}">
     <a class="pf-skip" href="#conteudo">Pular para o conteúdo</a>
     <header class="pf-header">
         <div class="pf-container pf-header-inner">
-            <a class="pf-brand" href="{{ route('portfolio.show', $portfolio->slug) }}">{{ $portfolio->professional_name }}</a>
+            <a class="pf-brand" href="{{ $preview ? route('admin.portfolio.preview') : route('portfolio.show', $portfolio->slug) }}">{{ $portfolio->professional_name }}</a>
             <nav aria-label="Navegação principal">
-                <a class="pf-link" href="{{ route('portfolio.show', $portfolio->slug) }}#projetos">Projetos</a>
+                <a class="pf-link" href="{{ $preview ? route('admin.portfolio.preview') : route('portfolio.show', $portfolio->slug) }}#projetos">Projetos</a>
             </nav>
         </div>
     </header>

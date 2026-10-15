@@ -17,12 +17,12 @@ class Portfolio extends Model
     protected $fillable = [
         'user_id', 'slug', 'theme', 'primary_color', 'professional_name', 'headline',
         'bio', 'photo_path', 'contact_email', 'github_url', 'linkedin_url', 'website_url',
-        'is_published', 'show_featured_carousel',
+        'is_published', 'show_featured_carousel', 'appearance',
     ];
 
     protected function casts(): array
     {
-        return ['is_published' => 'boolean', 'show_featured_carousel' => 'boolean'];
+        return ['is_published' => 'boolean', 'show_featured_carousel' => 'boolean', 'appearance' => 'array'];
     }
 
     public function scopePublished(Builder $query): Builder

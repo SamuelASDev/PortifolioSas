@@ -6,6 +6,12 @@ window.Alpine = Alpine;
 
 Alpine.start();
 
+if (document.querySelector('[data-appearance-editor]')) {
+    import('./appearance/editor.js').then(({ initializeAppearanceEditor }) => {
+        initializeAppearanceEditor(document.querySelector('[data-appearance-editor]'));
+    });
+}
+
 if (document.querySelector('[data-description-editor]')) {
     import('./editors/project-description.js')
         .then(({ initializeDescriptionEditors }) => initializeDescriptionEditors())

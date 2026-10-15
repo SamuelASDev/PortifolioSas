@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\Admin\PortfolioAppearanceController;
 use App\Http\Controllers\Admin\PortfolioController;
+use App\Http\Controllers\Admin\PortfolioPreviewController;
 use App\Http\Controllers\Admin\PortfolioPublicationController;
 use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\ProjectMediaController;
@@ -27,6 +29,9 @@ Route::middleware('auth')->group(function () {
 
         // Configurações do Portfólio (Slug, Cores, Tema)
         Route::get('/portfolio', [PortfolioController::class, 'edit'])->name('portfolio.edit');
+        Route::get('/portfolio/preview', [PortfolioPreviewController::class, 'show'])->name('portfolio.preview');
+        Route::get('/portfolio/preview/projects/{project}', [PortfolioPreviewController::class, 'project'])->whereNumber('project')->name('portfolio.preview.project');
+        Route::patch('/portfolio/appearance', [PortfolioAppearanceController::class, 'update'])->name('portfolio.appearance.update');
         Route::patch('/portfolio', [PortfolioController::class, 'update'])->name('portfolio.update');
         Route::patch('/portfolio/publication', [PortfolioPublicationController::class, 'update'])->name('portfolio.publication.update');
 

@@ -16,17 +16,13 @@
         <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Alterar o endereço faz o link anterior deixar de funcionar.</p>
         <x-input-error :messages="$errors->get('slug')" class="mt-2" />
     </div>
-    <div>
-        <x-input-label for="theme" value="Tema visual" />
-        <select id="theme" name="theme" class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:border-indigo-500 focus:ring-indigo-500">
-            <option value="dark" @selected(old('theme', $portfolio->theme) === 'dark')>Escuro</option>
-            <option value="light" @selected(old('theme', $portfolio->theme) === 'light')>Claro</option>
-        </select>
+    <input type="hidden" id="theme" name="theme" value="{{ old('theme', $portfolio->theme) }}">
+    <input type="hidden" id="primary_color" name="primary_color" value="{{ old('primary_color', $portfolio->primary_color) }}">
+    <div class="space-y-3">
+        <p class="text-sm text-gray-500 dark:text-gray-400">Escolha temas, fontes e cores em uma prévia privada com seus projetos salvos.</p>
+        <x-secondary-button type="button" data-open-appearance disabled>Personalizar aparência</x-secondary-button>
+        <a href="{{ route('admin.portfolio.preview') }}" target="_blank" rel="noopener" class="block text-sm underline">Abrir prévia salva em nova aba</a>
         <x-input-error :messages="$errors->get('theme')" class="mt-2" />
-    </div>
-    <div>
-        <x-input-label for="primary_color" value="Cor de destaque" />
-        <input type="color" id="primary_color" name="primary_color" value="{{ old('primary_color', $portfolio->primary_color) }}" class="mt-1 h-11 w-16 rounded border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 cursor-pointer">
         <x-input-error :messages="$errors->get('primary_color')" class="mt-2" />
     </div>
 </section>

@@ -111,3 +111,15 @@ npm run build
 O PHPUnit define o ambiente `testing` e SQLite em memória. Os testes cobrem cadastro transacional, criação para contas antigas, restrição única, normalização e reserva de slugs, cores, CRUD, paginação, ordenação, escape HTML e isolamento entre usuários.
 
 A suíte também cobre apresentação, publicação/despublicação, ciclo de vida da foto, contatos explícitos, privacidade do e-mail da conta, rascunhos inacessíveis, slugs e projetos inexistentes, escopo do projeto por slug, temas, paginação pública e descrição completa. A revisão visual no navegador/celular fica com o responsável pelo projeto.
+
+## Editor de aparência e prévia privada
+
+Em Endereço e aparência, “Personalizar aparência” abre um dialog com configurações e iframe. Há quatro combinações prontas (Escuro original, Claro essencial, Editorial e Terminal), três famílias de fontes locais, tamanhos gerais/títulos e cores por área. O catálogo fica em `config/portfolio-appearance.php`; portfólios sem personalização mantêm a aparência anterior.
+
+`GET /admin/portfolio/preview` e `/admin/portfolio/preview/projects/{project}` exigem autenticação e usam exclusivamente o portfólio da conta atual. A consulta da lista é compartilhada em `PortfolioPage`, e os componentes Blade são os mesmos da vitrine pública. A paginação e os links de detalhes permanecem nas rotas privadas. As respostas usam no-store, noindex/nofollow e frame-ancestors self. As rotas públicas continuam retornando 404 para rascunhos.
+
+O módulo `appearance/editor.js` mantém um estado temporário, separado do estado salvo, e transmite ajustes por postMessage restrito à origem e à janela do iframe. `appearance/settings.js` valida valores e aplica variáveis CSS; a renderização inicial usa `PortfolioAppearance`. Os modos computador/celular usam viewports reais de 1100/390 pixels, escalados para caber na janela. A prévia mostra o conteúdo já salvo, incluindo imagens, carrossel e projetos.
+
+“Salvar aparência” chama `PATCH /admin/portfolio/appearance`, com Form Request específico e Action transacional. Apenas aparência, tema e cor de destaque são atualizados; publicação, apresentação e projetos permanecem sob seus fluxos próprios. Cancelar/Escape descartam os ajustes posteriores ao último salvamento. Salvar um rascunho não publica; salvar um portfólio já publicado atualiza sua aparência imediatamente. A janela avisa sobre esse comportamento. Não há uma segunda versão publicada do conteúdo.
+
+Os valores são limitados a cores hexadecimais e fontes/tamanhos do catálogo. O editor alerta sobre contraste baixo e calcula automaticamente o texto dos botões sobre a cor de destaque. A ordenação por arrastar e a edição de metadados de compartilhamento ficam para as etapas seguintes.

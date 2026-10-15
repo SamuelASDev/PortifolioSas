@@ -1,6 +1,6 @@
-<x-public-layout :portfolio="$portfolio" :page-title="$project->title.' — '.$portfolio->professional_name" :description="$project->description_text" :image="$project->cover_url">
+<x-public-layout :preview="$preview ?? false" :portfolio="$portfolio" :page-title="$project->title.' — '.$portfolio->professional_name" :description="$project->description_text" :image="$project->cover_url">
     <article class="pf-project-detail">
-        <a class="pf-link pf-back" href="{{ route('portfolio.show', $portfolio->slug) }}#projetos">← Voltar para os projetos</a>
+        <a class="pf-link pf-back" href="{{ ($preview ?? false) ? route('admin.portfolio.preview') : route('portfolio.show', $portfolio->slug) }}#projetos">← Voltar para os projetos</a>
         <header class="pf-project-heading">
             @if ($project->is_featured)<span class="pf-badge">Em destaque</span>@endif
             <h1>{{ $project->title }}</h1>

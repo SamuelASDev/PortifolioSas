@@ -68,3 +68,10 @@ Quando houver navegador disponível, conferir em desktop e em largura de celular
 - Migration aplicada no MySQL. Hashes dos campos anteriores de usuários, portfólios e projetos permaneceram iguais antes/depois; a nova configuração começa desativada.
 - Build Vite e Pint passaram. O novo módulo público é carregado apenas quando há mais de um slide.
 - Revisão visual com o responsável: ativar a opção no portfólio e marcar dois projetos como destaque; conferir posição acima da lista, capa, links, temas e layout no celular; navegar e pausar a rotação; desativar a opção e confirmar que a seção desaparece. Clicar em E-mail deve abrir o Gmail com o destinatário configurado, sem enviar a mensagem.
+
+## Editor de aparência e prévia privada
+
+- PHP: 183 testes, 897 assertions. Os oito novos casos verificam autenticação, rascunhos, isolamento em duas contas, detalhes privados, paginação, ausência de escrita na prévia, validação atômica e persistência de personalizações.
+- JavaScript: 21 testes. Os cinco novos casos cobrem normalização segura, cores/fontes, cancelar/reabrir, seleção de temas, tamanho do iframe, origem/janela das mensagens, salvamento com CSRF e recuperação após erro.
+- Build e Pint aprovados. Migration `2026_10_15_030000_add_appearance_to_portfolios` aplicada no MySQL local. Comparação dos hashes confirmou a preservação dos campos anteriores em 1 usuário, 1 portfólio e 2 projetos; a nova coluna começa nula.
+- Conferência visual pendente com o responsável: abrir Personalizar aparência, testar os quatro temas, cores e fontes; alternar Computador/Celular; abrir projeto e voltar à lista; cancelar e reabrir; salvar e conferir a página pública. Em celular, alternar Configurações/Prévia e conferir rolagem/foco. Repetir em um rascunho e confirmar que o link público continua inacessível.
