@@ -1,11 +1,11 @@
 # Publicação do Vértice na Hostinger
 
-Guia operacional para este repositório. O plano, o domínio e os caminhos da conta ainda precisam ser confirmados no hPanel. A revisão não acessou a hospedagem nem realizou deploy.
+Guia operacional para este repositório. Use o plano, o domínio e os caminhos da sua conta no hPanel.
 
 ## 1. Preparar a versão
 
 1. Revise a branch `dev` e execute as validações do README.
-2. Integre a versão aprovada na branch escolhida para produção. Na revisão de 15/10/2026, a `main` local ainda não contém o aplicativo completo.
+2. Integre a versão aprovada na branch escolhida para produção.
 3. Registre o commit publicado para permitir rastreamento e retorno à versão anterior.
 4. Faça backup do banco, de `storage/app/public` e do `.env` existente antes de atualizar.
 
@@ -107,7 +107,7 @@ No hPanel, selecione a frequência nos campos do agendador e informe somente o c
 
 Confira `php artisan schedule:list` e acompanhe as primeiras execuções. Os comandos atuais cuidam de uploads temporários e exclusões pendentes; não dependem de um worker de fila.
 
-O projeto configura fila de banco, mas os fluxos atuais de e-mail usam as notificações padrão sem jobs próprios enfileirados identificados nesta revisão. Se notificações/jobs passarem a implementar processamento assíncrono, configure um worker compatível com o plano e monitore jobs falhos. Não use `composer run dev`, Vite dev server ou `artisan serve` como servidor de produção.
+O projeto configura fila de banco, mas os fluxos atuais de e-mail usam as notificações padrão sem jobs próprios enfileirados. Se notificações/jobs passarem a implementar processamento assíncrono, configure um worker compatível com o plano e monitore jobs falhos. Não use `composer run dev`, Vite dev server ou `artisan serve` como servidor de produção.
 
 ## 7. Conferência após publicar
 
@@ -125,11 +125,3 @@ O projeto configura fila de banco, mas os fluxos atuais de e-mail usam as notifi
 Registre release e migrations aplicadas. Em atualizações que exijam interrupção, planeje manutenção com `php artisan down` e retorno com `php artisan up` após os checks. Preserve `.env`, chave e uploads.
 
 Voltar apenas o código pode ser insuficiente se o esquema do banco mudou. Mantenha backup restaurável e avalie compatibilidade das migrations antes de reverter; não use `migrate:fresh` em produção.
-
-## Arquivo de ambiente preparado nesta estação
-
-Foi criado `C:/Users/samue/Desktop/Vertice-Hostinger/.env`, fora do Git, com configuração de produção e chave independente para a instalação nova. Não publique nem envie essa pasta ao GitHub. O `.env` local do projeto permanece com sua configuração original.
-
-Preencha o domínio HTTPS e o SMTP antes de colocar o aplicativo em uso. A chave já gerada deve ser preservada; se existir instalação anterior, utilize sua chave original. O teste remoto de MySQL foi recusado por autenticação (1045), sem alteração de dados. Confirme usuário, senha e permissões no hPanel. Um teste a partir do servidor ainda é necessário.
-
-O diretório público inclui `.user.ini` com upload de 10 MB e POST de 40 MB para PHP CGI/FPM. O painel/plano pode impor outros limites; confira os valores efetivos após publicar.

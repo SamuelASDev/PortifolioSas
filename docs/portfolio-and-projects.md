@@ -114,7 +114,9 @@ A suíte também cobre apresentação, publicação/despublicação, ciclo de vi
 
 ## Editor de aparência e prévia privada
 
-Em Endereço e aparência, “Personalizar aparência” abre um dialog com configurações e iframe. Há quatro combinações prontas (Escuro original, Claro essencial, Editorial e Terminal), três famílias de fontes locais, tamanhos gerais/títulos e cores por área. O catálogo fica em `config/portfolio-appearance.php`; portfólios sem personalização mantêm a aparência anterior.
+Em Endereço e aparência, “Personalizar aparência” abre um dialog com configurações e iframe. Há onze temas prontos: Estúdio Vértice, Oceano, Galeria minimalista, Escuro original, Claro essencial, Editorial, Terminal, Horizonte, Noturno, Botânico e Concreto. O seletor inclui descrições e amostras visuais. Cada tema combina tipografia, paleta e composição; o tamanho dos títulos acompanha a proposta. O catálogo fica em `config/portfolio-appearance.php`; aplicar um tema só altera o site ao salvar.
+
+As quatro opções de fonte são Manrope, sistema, serifada e monoespaçada, sem requisições externas para fontes. Todos os temas continuam editáveis. Alterar uma opção após escolher um tema marca o resultado como personalizado; cancelar preserva a configuração salva.
 
 `GET /admin/portfolio/preview` e `/admin/portfolio/preview/projects/{project}` exigem autenticação e usam exclusivamente o portfólio da conta atual. A consulta da lista é compartilhada em `PortfolioPage`, e os componentes Blade são os mesmos da vitrine pública. A paginação e os links de detalhes permanecem nas rotas privadas. As respostas usam no-store, noindex/nofollow e frame-ancestors self. As rotas públicas continuam retornando 404 para rascunhos.
 

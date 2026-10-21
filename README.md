@@ -155,7 +155,6 @@ A CI valida o código; não publica o aplicativo na Hostinger.
 ## Publicação
 
 - [Guia de publicação na Hostinger](docs/deploy-hostinger.md): ambiente, diretório público, build, banco, SMTP, cron e backups.
-- [Diagnóstico de preparação](docs/pre-deploy-review-2026-10-15.md): histórico Git, melhorias priorizadas e validação desta revisão.
 
 O deploy deve utilizar uma versão revisada, com assets de produção, banco configurado, SMTP funcional e tarefas agendadas. Credenciais ficam exclusivamente no `.env` do servidor. Consulte o guia antes da primeira instalação e preserve banco, uploads e chave da aplicação nas atualizações.
 
@@ -180,9 +179,6 @@ O deploy deve utilizar uma versão revisada, com assets de produção, banco con
 - [Portfólios e projetos](docs/portfolio-and-projects.md)
 - [Categorias, tags e primeiros passos](docs/project-tags-and-onboarding.md)
 - [Identidade visual e componentes](docs/vertice-design.md)
-- [Histórico de validação](docs/validation.md)
-- [Revisão anterior](docs/review-2026-10-15.md)
-- [Consolidação e limitações conhecidas](docs/consolidation-2026-10-15.md)
 
 ## Autoria e licenciamento
 

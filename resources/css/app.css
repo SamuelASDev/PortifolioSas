@@ -1,5 +1,6 @@
 @import './project-prose.css';
 @import './studio.css';
+@import './vertice.css';
 
 @tailwind base;
 @tailwind components;

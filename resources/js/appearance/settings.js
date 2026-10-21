@@ -33,6 +33,18 @@ export function resolvedColors(settings, schema) {
     return { ...schema.palettes[settings.theme], ...settings.appearance.colors };
 }
 
+export function presetSettings(preset, schema) {
+    return normalizeSettings({
+        theme: preset.theme,
+        primary_color: preset.primary_color,
+        appearance: {
+            ...preset.appearance, font: preset.font,
+            base_size: preset.base_size ?? 16, title_scale: preset.title_scale ?? 100,
+            colors: preset.colors,
+        },
+    }, schema);
+}
+
 export function applySettings(doc, input, schema) {
     const settings = normalizeSettings(input, schema);
     const colors = resolvedColors(settings, schema);

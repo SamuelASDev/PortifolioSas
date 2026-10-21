@@ -20,6 +20,22 @@
                         <option value="{{ $key }}">{{ $preset['label'] }}</option>
                     @endforeach
                 </select>
+                <p data-preset-description class="appearance-preset-description" aria-live="polite">Escolha um tema para combinar cores, tipografia e composição.</p>
+                <details class="appearance-preset-gallery">
+                    <summary>Explorar os {{ count(config('portfolio-appearance.presets')) }} temas</summary>
+                    <div class="appearance-preset-grid" role="group" aria-label="Amostras dos temas prontos">
+                        @foreach (config('portfolio-appearance.presets') as $key => $preset)
+                            @php($palette = array_replace(config('portfolio-appearance.palettes.'.$preset['theme']), $preset['colors']))
+                            <button type="button" class="appearance-preset-card" data-preset-choice="{{ $key }}" aria-pressed="false" aria-label="Aplicar tema {{ $preset['label'] }}">
+                                <span class="appearance-preset-art" aria-hidden="true" data-sample-layout="{{ $preset['appearance']['hero'] ?? 'split' }}" style="--sample-bg: {{ $palette['page'] }}; --sample-card: {{ $palette['surface'] }}; --sample-ink: {{ $palette['title'] }}; --sample-accent: {{ $preset['primary_color'] }}; --sample-font: {{ config('portfolio-appearance.fonts.'.$preset['font'].'.css') }}">
+                                    <span class="appearance-sample-title">Aa<span>.</span></span><span class="appearance-sample-photo"></span>
+                                    <span class="appearance-sample-projects"><i></i><i></i></span>
+                                </span>
+                                <span class="appearance-preset-name">{{ $preset['label'] }}</span>
+                            </button>
+                        @endforeach
+                    </div>
+                </details>
                 <button type="button" data-appearance-reset class="appearance-control w-full">Restaurar tema selecionado</button>
                 <details class="appearance-layout-options" open>
                     <summary class="font-semibold">Layout e acabamento</summary>

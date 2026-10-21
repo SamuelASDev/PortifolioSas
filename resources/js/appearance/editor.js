@@ -1,4 +1,4 @@
-import { contrast, normalizeSettings, resolvedColors } from './settings.js';
+import { contrast, normalizeSettings, presetSettings, resolvedColors } from './settings.js';
 
 export function initializeAppearanceEditor(dialog) {
     const { schema, initial } = JSON.parse(dialog.querySelector('[data-appearance-config]').textContent);
@@ -16,6 +16,11 @@ export function initializeAppearanceEditor(dialog) {
     const origin = window.location.origin;
 
     const notify = () => {
+        dialog.querySelectorAll('[data-preset-choice]').forEach((button) => {
+            button.setAttribute('aria-pressed', String(button.dataset.presetChoice === preset.value));
+        });
+        const description = dialog.querySelector('[data-preset-description]');
+        if (description) description.textContent = schema.presets[preset.value]?.description ?? 'Personalizado. Combine fonte, composição e cores para deixar com a sua identidade.';
         if (dialog.open) frame.contentWindow?.postMessage({ type: 'portfolio:appearance', settings: draft }, origin);
         const colors = resolvedColors(draft, schema);
         const pairs = [['ink', 'page'], ['muted', 'page'], ['title', 'page'], ['ink', 'card'], ['muted', 'card'], ['title', 'card'], ['ink', 'header'], ['ink', 'footer'], ['ink', 'surface']];
@@ -57,10 +62,14 @@ export function initializeAppearanceEditor(dialog) {
     const applyPreset = () => {
         const selected = schema.presets[preset.value];
         if (!selected) return;
-        draft = normalizeSettings({ theme: selected.theme, primary_color: selected.primary_color, appearance: { ...selected.appearance, font: selected.font, base_size: 16, title_scale: 100, colors: selected.colors } }, schema);
+        draft = presetSettings(selected, schema);
         sync();
     };
     preset.addEventListener('change', applyPreset);
+    dialog.querySelectorAll('[data-preset-choice]').forEach((button) => button.addEventListener('click', () => {
+        preset.value = button.dataset.presetChoice;
+        applyPreset();
+    }));
     dialog.querySelector('[data-appearance-reset]').addEventListener('click', () => {
         if (!preset.value) preset.value = draft.theme;
         applyPreset();
@@ -68,12 +77,13 @@ export function initializeAppearanceEditor(dialog) {
     dialog.querySelector('[data-appearance-theme]').addEventListener('change', (event) => {
         draft.theme = event.target.value; draft.appearance.colors = {}; preset.value = ''; sync();
     });
-    dialog.querySelector('[data-appearance-accent]').addEventListener('input', (event) => { draft.primary_color = event.target.value; notify(); });
+    dialog.querySelector('[data-appearance-accent]').addEventListener('input', (event) => { draft.primary_color = event.target.value; preset.value = ''; notify(); });
     dialog.querySelectorAll('[data-appearance-color]').forEach((input) => input.addEventListener('input', () => {
-        draft.appearance.colors[input.dataset.appearanceColor] = input.value; notify();
+        draft.appearance.colors[input.dataset.appearanceColor] = input.value; preset.value = ''; notify();
     }));
     dialog.querySelectorAll('[data-appearance-field]').forEach((input) => input.addEventListener('change', () => {
         draft.appearance[input.dataset.appearanceField] = input.value;
+        preset.value = '';
         draft = normalizeSettings(draft, schema); notify();
     }));
     dialog.querySelectorAll('[data-appearance-device]').forEach((button) => button.addEventListener('click', () => {

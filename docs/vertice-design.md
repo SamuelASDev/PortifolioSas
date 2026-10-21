@@ -9,9 +9,11 @@ O símbolo é um V geométrico construído em SVG, compartilhado pelo wordmark e
 ## Sistema visual
 
 - Tipografia Manrope variável, hospedada pela aplicação, com licença OFL incluída em `resources/fonts/manrope-OFL.txt`. Nenhuma requisição a serviços externos de fonte é necessária durante o uso.
-- Fundo azul quase preto, superfícies discretamente elevadas, bordas suaves e violeta como destaque principal. Verde suave identifica publicação/conclusão e vermelho discreto identifica ações destrutivas.
+- Fundo grafite, superfícies foscas, branco suave e lavanda como destaque principal. Verde claro aparece nos pontos de direção da marca; verde de status e vermelho continuam identificando publicação e ações destrutivas.
 - Títulos com espaçamento compacto, textos auxiliares em tons secundários, controles com foco visível e campos com altura confortável no celular.
-- Componentes comuns de marca, botões, campos e navegação; estilos centralizados em `resources/css/studio.css`, separados da aparência configurável dos portfólios públicos.
+- Componentes comuns de marca, botões, campos e navegação em `resources/css/studio.css`. A identidade visual do produto fica em `resources/css/vertice.css`, separada da aparência configurável dos portfólios públicos.
+- O V geométrico, as linhas de construção e os pequenos índices tipográficos remetem a perspectiva e direção. Seções editoriais com divisórias substituem cartões decorativos na apresentação do produto.
+- Botões respondem ao pressionar. A preferência por movimento reduzido remove a transformação; não há animação decorativa contínua nem novas dependências de interface.
 
 ## Telas
 
@@ -24,21 +26,12 @@ O símbolo é um V geométrico construído em SVG, compartilhado pelo wordmark e
 - Configuração do portfólio com atalhos de seção, campos em duas colunas onde houver espaço, foto e contatos reorganizados.
 - Edição/criação de projetos, organização, compartilhamento, modal de aparência e conta usam as superfícies e os controles comuns.
 
-## Validação
+## Temas dos portfólios públicos
 
-219 testes PHP (1.191 assertions), 39 testes JavaScript, build Vite e Pint aprovados. A fonte é empacotada pelo Vite, com nome versionado.
+O editor oferece onze temas e doze controles de composição: apresentação, grade/lista, largura, espaçamento, cantos, proporção das capas, foto, acabamento dos cartões, fundo, botões, cabeçalho e resumos. Estúdio Vértice usa grafite e lavanda; Oceano, azul claro; Galeria, branco e geometria; Editorial, papel e serifas; Terminal, verde e código. Escuro original e Claro essencial oferecem bases mais discretas.
 
-A conferência visual foi feita no Edge com SQLite e conta de demonstração em uma instância separada, sem editar dados da conta existente. Foram usados desktop de 1440 px e larguras de celular de 390 e 320 px; login também foi observado na janela normal. Foram conferidos navegação, dashboard, lista, apresentação, editor, aparência e autenticação. Pequenos ajustes de encaixe e tipografia foram feitos durante a inspeção.
+Horizonte combina areia, argila e capas panorâmicas. Noturno usa índigo e ouro suave. Botânico combina sálvia, verde-floresta e imagens quadradas. Concreto usa cinza mineral, monoespaçada e projetos em lista.
 
-Não houve alteração nas regras de upload, no envio de e-mail ou no comportamento do carrossel nesta entrega.
+`config/portfolio-appearance.php` centraliza o catálogo e os valores permitidos para validação, renderização e prévia. O estado continua na coluna JSON `appearance`, sem migration adicional. As predefinições restauram a composição completa e preservam a possibilidade de personalização.
 
-A instância de demonstração foi encerrada e seu banco e script temporários foram removidos após a conferência. As capturas de tela ficaram no armazenamento privado local. Nenhum commit, push ou merge foi executado.
-
-
-## Public portfolio customization
-
-The appearance editor now includes seven presets, the self-hosted Manrope font, and twelve composition controls: hero layout, project grid/list, content width, spacing, corner style, cover ratio, portrait shape, card treatment, hero backdrop, button treatment, sticky header, and project excerpt visibility.
-
-`config/portfolio-appearance.php` is the shared whitelist for PHP validation, server rendering, and live preview. Settings remain in the existing `appearance` JSON column; no database migration is required. Older appearance payloads preserve newer layout fields. Presets intentionally reset layout choices to their configured defaults. Saving updates the published appearance when applicable; canceling discards the draft.
-
-Responsive grids collapse on small screens. Reduced-motion preferences disable decorative transitions. Existing content, publication status, privacy boundaries, and carousel navigation remain intact.
+A parte pública usa superfícies derivadas da paleta escolhida, acabamento próprio para listas e cartões sem borda, filtros recolhíveis e cabeçalhos responsivos. Filtros ativos permanecem abertos. A preferência por movimento reduzido desativa transformações decorativas.

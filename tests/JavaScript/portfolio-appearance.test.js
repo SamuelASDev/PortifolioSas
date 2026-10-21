@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { afterEach, beforeEach, test } from 'node:test';
 import { JSDOM } from 'jsdom';
-import { applySettings, contrast, normalizeSettings } from '../../resources/js/appearance/settings.js';
+import { applySettings, contrast, normalizeSettings, presetSettings } from '../../resources/js/appearance/settings.js';
 import { initializeAppearanceEditor } from '../../resources/js/appearance/editor.js';
 
 const palette = { page: '#101216', ink: '#f3f4f6', title: '#f3f4f6', muted: '#b2b8c3', card: '#191c22', surface: '#191c22', header: '#101216', footer: '#101216', line: '#343943' };
@@ -12,6 +12,18 @@ const schema = {
     presets: { light: { theme: 'light', primary_color: '#24634b', font: 'serif', colors: {} } },
 };
 const initial = { theme: 'dark', primary_color: '#6366f1', appearance: { font: 'system', base_size: 16, title_scale: 100, colors: {} } };
+
+test('presets apply their typography and reset composition rather than inheriting the last theme', () => {
+    const extended = { ...schema, options: {
+        hero: { default: 'split', values: { split: 'Split', centered: 'Centered' } },
+        grid: { default: 'three', values: { three: 'Three', list: 'List' } },
+    } };
+    const chosen = presetSettings({ theme: 'light', primary_color: '#24634b', font: 'serif', title_scale: 110, base_size: 18, appearance: { hero: 'centered' }, colors: {} }, extended);
+    assert.equal(chosen.appearance.title_scale, 110);
+    assert.equal(chosen.appearance.base_size, 18);
+    assert.equal(chosen.appearance.hero, 'centered');
+    assert.equal(chosen.appearance.grid, 'three');
+});
 let dom;
 let originalFetch;
 
@@ -28,6 +40,7 @@ function mount() {
     document.body.innerHTML = `<button data-open-appearance disabled>Open</button><input id="theme" value="dark"><input id="primary_color" value="#6366f1">
         <dialog data-appearance-editor><script type="application/json" data-appearance-config></script><form action="/admin/portfolio/appearance">
         <select data-appearance-preset><option value=""></option><option value="light">Light</option></select><button type="button" data-appearance-reset>Reset</button>
+        <button type="button" data-preset-choice="light" aria-pressed="false">Light sample</button><p data-preset-description></p>
         <select data-appearance-theme><option value="dark">Dark</option><option value="light">Light</option></select><input type="color" data-appearance-accent>
         <select data-appearance-field="font"><option value="system">System</option><option value="serif">Serif</option></select>
         <select data-appearance-field="base_size"><option value="16">16</option><option value="18">18</option></select>
@@ -62,6 +75,18 @@ test('settings reject CSS injection and apply safe typography and colors with ma
     assert.equal(document.body.style.getPropertyValue('--accent-ink'), '#000000');
     assert.equal(document.documentElement.style.fontSize, '18px');
     assert.equal(contrast('#ffffff', '#000000'), 21);
+});
+
+test('visual theme samples apply the preset and custom edits clear their selected state', () => {
+    const { dialog, click, change } = mount();
+    click('[data-preset-choice="light"]');
+    assert.equal(dialog.querySelector('[data-appearance-preset]').value, 'light');
+    assert.equal(dialog.querySelector('[data-preset-choice]').getAttribute('aria-pressed'), 'true');
+    assert.equal(dialog.querySelector('[data-appearance-field="font"]').value, 'serif');
+    change('[data-appearance-accent]', '#123456', 'input');
+    assert.equal(dialog.querySelector('[data-appearance-preset]').value, '');
+    assert.equal(dialog.querySelector('[data-preset-choice]').getAttribute('aria-pressed'), 'false');
+    assert.match(dialog.querySelector('[data-preset-description]').textContent, /Personalizado/);
 });
 
 test('cancel discards unsaved changes, presets update controls and device sizes preserve real viewport', () => {
