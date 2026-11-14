@@ -7,6 +7,7 @@
 @tailwind utilities;
 
 .description-editor [hidden] { display: none !important; }
+@media (max-width: 767px) { :root { --editor-sticky-top: 73px; } }
 
 .appearance-dialog { width: min(96vw, 96rem); height: 92dvh; max-width: none; max-height: 96dvh; padding: 0; border: 1px solid #64748b; border-radius: 1rem; }
 .appearance-dialog::backdrop { background: #000b; }
@@ -50,12 +51,23 @@
 }
 
 @layer components {
-    .description-editor-shell { @apply mt-1 overflow-hidden rounded-md border border-gray-300 bg-white text-gray-900 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100; }
+    .description-editor-shell { @apply mt-1 rounded-md border border-gray-300 bg-white text-gray-900 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100; }
     .description-editor-toolbar { @apply flex flex-wrap gap-1 border-b border-gray-300 bg-gray-50 p-2 dark:border-gray-700 dark:bg-gray-800; }
     .description-editor-toolbar button, .description-editor-link-button { @apply min-h-11 rounded px-2 py-1 text-xs font-semibold hover:bg-gray-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 dark:hover:bg-gray-700; }
     .description-editor-toolbar button[aria-pressed="true"] { @apply bg-indigo-600 text-white hover:bg-indigo-700; }
     .description-editor-toolbar button:disabled { @apply cursor-not-allowed opacity-40; }
     .description-editor-content { @apply min-h-64 px-4 py-3; }
+    .description-editor-shell { overflow: clip; }
+    .description-editor-dock { position: relative; z-index: 20; border-radius: .375rem .375rem 0 0; }
+    .description-editor-shell:focus-within .description-editor-dock { position: sticky; top: var(--editor-sticky-top, 0px); @apply shadow-lg shadow-black/30; }
     .description-editor-content:focus { @apply outline-none ring-2 ring-inset ring-indigo-500; }
     .description-editor-link-panel { @apply space-y-2 border-b border-gray-300 bg-gray-50 p-3 dark:border-gray-700 dark:bg-gray-800; }
 }
+
+/* Situação do projeto */
+.project-status-dot { width: .5rem; height: .5rem; border-radius: 999px; flex-shrink: 0; background: #9ca3af; }
+[data-status="completed"] .project-status-dot { background: #22c55e; }
+[data-status="in_development"] .project-status-dot { background: #f59e0b; box-shadow: 0 0 0 3px #f59e0b33; }
+[data-status="maintenance"] .project-status-dot { background: #38bdf8; }
+[data-status="planned"] .project-status-dot { background: #a78bfa; }
+.pf-icon-brand { width: 1em; height: 1em; }

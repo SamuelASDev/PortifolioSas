@@ -1,9 +1,24 @@
 <fieldset class="space-y-4 border-t border-gray-300 dark:border-gray-700 pt-4">
-    <legend class="font-semibold text-gray-900 dark:text-gray-100 pt-4">Categoria e tecnologias</legend>
-    <div>
-        <x-input-label for="category" value="Categoria (opcional)" />
-        <select id="category" name="category" class="mt-1 w-full rounded-md border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"><option value="">Sem categoria</option>@foreach (config('projects.categories') as $key => $category)<option value="{{ $key }}" @selected(old('category', $project->category) === $key)>{{ $category['label'] }}</option>@endforeach</select>
-        <x-input-error :messages="$errors->get('category')" class="mt-2" />
+    <legend class="font-semibold text-gray-900 dark:text-gray-100 pt-4">Categoria, situação e tecnologias</legend>
+    <div class="grid gap-4 sm:grid-cols-2">
+        <div>
+            <x-input-label for="category" value="Categoria (opcional)" />
+            <select id="category" name="category" class="mt-1 w-full rounded-md border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+                <option value="">Sem categoria</option>
+                @foreach (collect(config('projects.categories'))->groupBy('group', true) as $group => $categories)
+                    <optgroup label="{{ $group }}">@foreach ($categories as $key => $category)<option value="{{ $key }}" @selected(old('category', $project->category) === $key)>{{ $category['label'] }}</option>@endforeach</optgroup>
+                @endforeach
+            </select>
+            <x-input-error :messages="$errors->get('category')" class="mt-2" />
+        </div>
+        <div>
+            <x-input-label for="status" value="Situação (opcional)" />
+            <select id="status" name="status" class="mt-1 w-full rounded-md border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+                <option value="">Não informar</option>
+                @foreach (config('projects.statuses') as $key => $label)<option value="{{ $key }}" @selected(old('status', $project->status) === $key)>{{ $label }}</option>@endforeach
+            </select>
+            <x-input-error :messages="$errors->get('status')" class="mt-2" />
+        </div>
     </div>
     <div>
         <x-input-label for="tags" value="Tecnologias / tags (opcional)" />

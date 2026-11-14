@@ -32,6 +32,8 @@ Route::middleware('auth')->group(function () {
         // Configurações do Portfólio (Slug, Cores, Tema)
         Route::get('/portfolio', [PortfolioController::class, 'edit'])->name('portfolio.edit');
         Route::get('/portfolio/preview', [PortfolioPreviewController::class, 'show'])->name('portfolio.preview');
+        Route::get('/portfolio/preview/sobre', [PortfolioPreviewController::class, 'about'])->name('portfolio.preview.about');
+        Route::get('/portfolio/preview/contato', [PortfolioPreviewController::class, 'contact'])->name('portfolio.preview.contact');
         Route::get('/portfolio/preview/projects/{project}', [PortfolioPreviewController::class, 'project'])->whereNumber('project')->name('portfolio.preview.project');
         Route::patch('/portfolio/appearance', [PortfolioAppearanceController::class, 'update'])->name('portfolio.appearance.update');
         Route::patch('/portfolio/sharing', [SharingController::class, 'portfolio'])->name('portfolio.sharing.update');
@@ -52,4 +54,6 @@ require __DIR__.'/auth.php';
 
 // --- VITRINE PÚBLICA (Deve ficar sempre no final) ---
 Route::get('/{slug}/projects/{project}', [PublicPortfolioController::class, 'project'])->whereNumber('project')->name('portfolio.projects.show');
+Route::get('/{slug}/sobre', [PublicPortfolioController::class, 'about'])->name('portfolio.about');
+Route::get('/{slug}/contato', [PublicPortfolioController::class, 'contact'])->name('portfolio.contact');
 Route::get('/{slug}', [PublicPortfolioController::class, 'show'])->name('portfolio.show');

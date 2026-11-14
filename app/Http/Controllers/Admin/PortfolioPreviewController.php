@@ -15,6 +15,16 @@ class PortfolioPreviewController extends Controller
         return $this->preview('public.portfolio', $page->data($request->user()->portfolio, $request->validated()));
     }
 
+    public function about(Request $request): Response
+    {
+        return $this->preview('public.about', ['portfolio' => $request->user()->portfolio]);
+    }
+
+    public function contact(Request $request): Response
+    {
+        return $this->preview('public.contact', ['portfolio' => $request->user()->portfolio]);
+    }
+
     public function project(Request $request, string $project): Response
     {
         $portfolio = $request->user()->portfolio;

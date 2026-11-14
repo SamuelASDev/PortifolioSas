@@ -25,7 +25,7 @@ class ProjectTaxonomyTest extends TestCase
         $other = $this->portfolio();
         app(SaveProject::class)->handle($other, $this->data(['tags' => 'Laravel']));
         $this->assertNotSame($portfolio->tags()->where('key', 'laravel')->first()->id, $other->tags()->first()->id);
-        $this->assertSame('php', app(ProjectTags::class)->icon('PHP 8'));
+        $this->assertSame('si:php', app(ProjectTags::class)->icon('PHP 8'));
         $this->assertSame('tag', app(ProjectTags::class)->icon('Minha stack'));
     }
 

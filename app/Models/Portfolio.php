@@ -18,6 +18,7 @@ class Portfolio extends Model
         'user_id', 'slug', 'theme', 'primary_color', 'professional_name', 'headline',
         'bio', 'photo_path', 'contact_email', 'github_url', 'linkedin_url', 'website_url',
         'is_published', 'show_featured_carousel', 'appearance', 'share_title', 'share_description', 'share_image_path',
+        'about', 'contact_intro', 'location', 'whatsapp', 'instagram_url',
     ];
 
     protected function casts(): array
@@ -42,6 +43,17 @@ class Portfolio extends Model
                 'view' => 'cm', 'fs' => '1', 'to' => $this->contact_email,
             ], '', '&', PHP_QUERY_RFC3986)
             : null);
+    }
+
+    protected function whatsappUrl(): Attribute
+    {
+        return Attribute::get(fn () => ($digits = preg_replace('/\D/', '', (string) $this->whatsapp)) ? 'https://wa.me/'.$digits : null);
+    }
+
+    /** Parágrafos da página Sobre (usa a bio como reserva). */
+    protected function aboutParagraphs(): Attribute
+    {
+        return Attribute::get(fn () => collect(preg_split('/\R{2,}/', trim((string) ($this->about ?: $this->bio))))->map(fn ($text) => trim($text))->filter()->values());
     }
 
     public function user(): BelongsTo

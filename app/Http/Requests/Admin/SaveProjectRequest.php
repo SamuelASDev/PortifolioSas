@@ -22,6 +22,7 @@ class SaveProjectRequest extends FormRequest
     {
         return [
             'category' => ['nullable', Rule::in(array_keys(config('projects.categories')))],
+            'status' => ['nullable', Rule::in(array_keys(config('projects.statuses')))],
             'tags' => ['sometimes', 'nullable', 'string', 'max:500', new ProjectTagList],
             'title' => ['required', 'string', 'max:255'],
             'description' => ['present_with:description_format', 'nullable', 'string', 'max:50000'],

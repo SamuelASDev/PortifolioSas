@@ -27,9 +27,10 @@ export function initializeAppearanceEditor(dialog) {
         dialog.querySelector('[data-appearance-contrast]').hidden = pairs.every(([a, b]) => contrast(colors[a], colors[b]) >= 4.5);
     };
     const sync = () => {
-        dialog.querySelector('[data-appearance-theme]').value = draft.theme;
+        const setValue = (input, value) => { if (input.type === 'radio') input.checked = input.value === String(value); else input.value = value; };
+        dialog.querySelectorAll('[data-appearance-theme]').forEach((input) => setValue(input, draft.theme));
         dialog.querySelector('[data-appearance-accent]').value = draft.primary_color;
-        dialog.querySelectorAll('[data-appearance-field]').forEach((input) => { input.value = draft.appearance[input.dataset.appearanceField]; });
+        dialog.querySelectorAll('[data-appearance-field]').forEach((input) => setValue(input, draft.appearance[input.dataset.appearanceField]));
         const colors = resolvedColors(draft, schema);
         dialog.querySelectorAll('[data-appearance-color]').forEach((input) => { input.value = colors[input.dataset.appearanceColor]; });
         notify();
@@ -74,9 +75,9 @@ export function initializeAppearanceEditor(dialog) {
         if (!preset.value) preset.value = draft.theme;
         applyPreset();
     });
-    dialog.querySelector('[data-appearance-theme]').addEventListener('change', (event) => {
+    dialog.querySelectorAll('[data-appearance-theme]').forEach((input) => input.addEventListener('change', (event) => {
         draft.theme = event.target.value; draft.appearance.colors = {}; preset.value = ''; sync();
-    });
+    }));
     dialog.querySelector('[data-appearance-accent]').addEventListener('input', (event) => { draft.primary_color = event.target.value; preset.value = ''; notify(); });
     dialog.querySelectorAll('[data-appearance-color]').forEach((input) => input.addEventListener('input', () => {
         draft.appearance.colors[input.dataset.appearanceColor] = input.value; preset.value = ''; notify();
@@ -96,7 +97,11 @@ export function initializeAppearanceEditor(dialog) {
         dialog.querySelectorAll('[data-appearance-pane]').forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
         resize();
     }));
-    dialog.querySelector('[data-appearance-home]').addEventListener('click', () => { frame.src = frame.dataset.src; });
+    dialog.querySelector('[data-appearance-home]')?.addEventListener('click', () => { frame.src = frame.dataset.src; });
+    dialog.querySelectorAll('[data-appearance-page]').forEach((button) => button.addEventListener('click', () => {
+        dialog.querySelectorAll('[data-appearance-page]').forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
+        frame.src = button.dataset.appearancePage;
+    }));
     window.addEventListener('message', (event) => {
         if (event.origin === origin && event.source === frame.contentWindow && event.data?.type === 'portfolio:preview-ready') notify();
     });

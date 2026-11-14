@@ -328,3 +328,43 @@
 @media (prefers-reduced-motion: reduce) {
     .pf-site .pf-button:active { transform: none; }
 }
+
+/* Situação do projeto */
+.project-status-dot { width: .5rem; height: .5rem; border-radius: 999px; flex-shrink: 0; background: #9ca3af; }
+[data-status="completed"] .project-status-dot { background: #22c55e; }
+[data-status="in_development"] .project-status-dot { background: #f59e0b; box-shadow: 0 0 0 3px #f59e0b33; }
+[data-status="maintenance"] .project-status-dot { background: #38bdf8; }
+[data-status="planned"] .project-status-dot { background: #a78bfa; }
+.pf-icon-brand { width: 1em; height: 1em; }
+
+/* Navegação e páginas Sobre / Contato — herdam os tokens da aparência. */
+.pf-nav { display: flex; align-items: center; gap: clamp(.75rem, 2.5vw, 1.75rem); }
+.pf-nav .pf-link { text-decoration-color: transparent; }
+.pf-nav .pf-link:hover, .pf-nav .pf-link[aria-current="page"] { text-decoration-color: var(--accent); }
+.pf-nav .pf-link[aria-current="page"] { font-weight: 700; }
+.pf-page { max-width: 60rem; margin-inline: auto; padding-block: var(--section-space) calc(var(--section-space) * 1.2); }
+.pf-page-heading { padding-bottom: calc(var(--section-space) * .5); border-bottom: 1px solid var(--line); }
+.pf-page-heading h1 { max-width: 16ch; text-wrap: balance; }
+.pf-about-heading { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: clamp(1.5rem, 4vw, 3.5rem); }
+.pf-about-heading .pf-portrait { width: clamp(9rem, 20vw, 14rem); }
+.pf-location { display: inline-flex; align-items: center; gap: .4rem; margin-top: 1rem; font-size: .9rem; }
+.pf-about-body { max-width: 65ch; padding-top: calc(var(--section-space) * .6); }
+.pf-about-body p { margin-bottom: 1.4em; line-height: 1.85; color: var(--ink); }
+.pf-about-body .pf-about-lead { font-size: 1.25em; line-height: 1.6; color: var(--title, var(--ink)); letter-spacing: -.01em; }
+.pf-page-cta { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1.25rem; margin-top: calc(var(--section-space) * .5); padding: 1.5rem; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+.pf-page-cta p { max-width: 36ch; }
+.pf-page-cta-actions { display: flex; flex-wrap: wrap; gap: .75rem; }
+.pf-contact-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr)); gap: var(--project-gap); list-style: none; padding: calc(var(--section-space) * .6) 0 0; margin: 0; }
+.pf-contact-card { display: flex; align-items: center; gap: 1rem; height: 100%; padding: 1.15rem 1.25rem; border: 1px solid var(--line); border-radius: var(--radius); background: var(--card, var(--surface)); color: var(--ink); text-decoration: none; transition: border-color .2s, transform .2s; }
+.pf-contact-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+.pf-contact-icon { display: grid; place-items: center; width: 2.75rem; height: 2.75rem; flex-shrink: 0; border-radius: min(var(--radius), .8rem); background: color-mix(in srgb, var(--accent) 16%, transparent); color: var(--accent); font-size: 1.15rem; }
+.pf-contact-text { display: grid; min-width: 0; gap: .15rem; }
+.pf-contact-text .pf-muted { font-size: .85rem; overflow-wrap: anywhere; }
+.pf-project-status { gap: .45rem; }
+@media (max-width: 640px) {
+    .pf-header-inner { flex-wrap: wrap; }
+    .pf-about-heading { grid-template-columns: 1fr; }
+    .pf-about-heading .pf-portrait { grid-row: 1; justify-self: start; }
+    .pf-page-cta-actions, .pf-page-cta-actions .pf-button { width: 100%; }
+}
+@media (prefers-reduced-motion: reduce) { .pf-contact-card { transition: none; } .pf-contact-card:hover { transform: none; } }

@@ -15,6 +15,7 @@
     <input type="hidden" name="description_format" value="{{ $format }}" data-description-format>
     <input type="hidden" name="media_token" value="{{ $mediaToken }}" data-media-token>
     <div data-editor-ui hidden class="description-editor-shell">
+        <div class="description-editor-dock">
         <div data-editor-toolbar class="description-editor-toolbar" role="toolbar" aria-label="Formatação da descrição">
             @foreach ([
                 'paragraph' => ['Texto', 'Parágrafo'], 'h2' => ['Título', 'Título de seção'], 'h3' => ['Subtítulo', 'Subtítulo'],
@@ -54,6 +55,7 @@
                 <button type="button" data-link-cancel class="description-editor-link-button">Cancelar</button>
             </div>
             <p id="description-link-error" data-link-error hidden role="alert" class="text-sm text-red-600 dark:text-red-400">Informe um endereço completo começando com http:// ou https://.</p>
+        </div>
         </div>
         <div data-editor-content></div>
     </div>

@@ -4,7 +4,7 @@
     </x-slot>
     <div class="py-12">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-            <nav class="studio-section-tabs" aria-label="Seções do portfólio"><a href="#publication-heading">Publicação</a><a href="#presentation-heading">Apresentação</a><a href="#contacts-heading">Contatos</a><a href="#appearance-heading">Aparência</a><a href="#sharing-heading">Compartilhamento</a></nav>
+            <nav class="studio-section-tabs" aria-label="Seções do portfólio"><a href="#publication-heading">Publicação</a><a href="#presentation-heading">Apresentação</a><a href="#contacts-heading">Contatos</a><a href="#pages-heading">Páginas</a><a href="#appearance-heading">Aparência</a><a href="#sharing-heading">Compartilhamento</a></nav>
             @if (session('status'))
                 <div role="status" class="p-4 bg-green-900 border border-green-500 text-white rounded-lg">{{ session('status') }}</div>
             @endif
@@ -13,6 +13,7 @@
                 @csrf
                 @method('PATCH')
                 @include('admin.portfolio.partials.presentation')
+                @include('admin.portfolio.partials.pages')
                 @include('admin.portfolio.partials.appearance')
                 <div class="border-t border-gray-200 dark:border-gray-700 pt-6">
                     <x-primary-button>Salvar alterações</x-primary-button>

@@ -1,6 +1,57 @@
 @props(['name'])
+@if (str_starts_with($name, 'si:') && ($brand = app(\App\Support\TechIcons::class)->find(substr($name, 3))))
+<svg {{ $attributes->class('pf-icon pf-icon-brand') }} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="{{ $brand['path'] }}" /></svg>
+@else
 <svg {{ $attributes->class('pf-icon') }} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
     @switch($name)
+        @case('pen')
+            <path d="M4 20h4L19 9l-4-4L4 16Z" /><path d="m13 7 4 4" />
+            @break
+        @case('cloud')
+            <path d="M7 18a5 5 0 1 1 1-9.9A6 6 0 0 1 19 10a4 4 0 0 1-1 8Z" />
+            @break
+        @case('briefcase')
+            <rect x="3" y="7" width="18" height="13" rx="2" /><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18" />
+            @break
+        @case('monitor')
+            <rect x="2" y="4" width="20" height="13" rx="2" /><path d="M8 21h8m-4-4v4" />
+            @break
+        @case('server')
+            <rect x="3" y="3" width="18" height="7" rx="1.5" /><rect x="3" y="14" width="18" height="7" rx="1.5" /><path d="M7 6.5h.01M7 17.5h.01" />
+            @break
+        @case('sparkles')
+            <path d="M12 3v4m0 10v4M3 12h4m10 0h4m-3.5-6.5-2 2m-7 7-2 2m0-11 2 2m7 7 2 2" />
+            @break
+        @case('chart')
+            <path d="M3 3v18h18" /><path d="M7 15l4-4 3 3 5-6" />
+            @break
+        @case('terminal')
+            <rect x="2" y="4" width="20" height="16" rx="2" /><path d="m6 9 3 3-3 3m5 0h6" />
+            @break
+        @case('package')
+            <path d="m12 2 9 5v10l-9 5-9-5V7Z" /><path d="m3 7 9 5 9-5M12 12v10" />
+            @break
+        @case('palette')
+            <path d="M12 3a9 9 0 1 0 0 18c1.5 0 2-1 2-2s-1-2 0-3h3a4 4 0 0 0 4-4c0-5-4-9-9-9Z" /><circle cx="7.5" cy="11" r="1" /><circle cx="10" cy="7" r="1" /><circle cx="15" cy="7.5" r="1" />
+            @break
+        @case('book')
+            <path d="M4 4h6a3 3 0 0 1 2 1 3 3 0 0 1 2-1h6v15h-6a2 2 0 0 0-2 2 2 2 0 0 0-2-2H4Z" /><path d="M12 5v16" />
+            @break
+        @case('chip')
+            <rect x="6" y="6" width="12" height="12" rx="1.5" /><path d="M9 2v4m6-4v4M9 18v4m6-4v4M2 9h4m-4 6h4m12-6h4m-4 6h4" />
+            @break
+        @case('phone')
+            <path d="M5 3h4l2 5-3 2a11 11 0 0 0 6 6l2-3 5 2v4a2 2 0 0 1-2 2A17 17 0 0 1 3 5a2 2 0 0 1 2-2Z" />
+            @break
+        @case('pin')
+            <path d="M12 21s7-6.1 7-12a7 7 0 0 0-14 0c0 5.9 7 12 7 12Z" /><circle cx="12" cy="9" r="2.5" />
+            @break
+        @case('instagram')
+            <rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4" /><path d="M17.5 6.5h.01" />
+            @break
+        @case('clock')
+            <circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" />
+            @break
         @case('search')
             <circle cx="10" cy="10" r="7" /><path d="m15 15 6 6" />
             @break
@@ -80,3 +131,4 @@
             <rect x="4" y="3" width="16" height="18" rx="2" /><path d="M8 8h8M8 12h8M8 16h5" />
     @endswitch
 </svg>
+@endif

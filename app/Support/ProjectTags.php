@@ -33,11 +33,8 @@ class ProjectTags
 
     public function icon(string $name): string
     {
-        $key = Str::lower($name);
-        if (preg_match('/^php(?:\s*\d+(?:\.\d+)*)?$/', $key)) {
-            return 'php';
-        }
+        $slug = app(TechIcons::class)->slugFor($name);
 
-        return config('projects.tag_icons.'.$key, 'tag');
+        return $slug ? 'si:'.$slug : config('projects.tag_icons.'.Str::lower(Str::squish($name)), 'tag');
     }
 }

@@ -1,4 +1,4 @@
-@props(['portfolio', 'metadata' => null, 'preview' => false])
+@props(['portfolio', 'metadata' => null, 'preview' => false, 'current' => 'home'])
 @php
     $appearance = app(\App\Support\PortfolioAppearance::class);
     $design = $appearance->settings($portfolio)['appearance'];
@@ -6,6 +6,9 @@
     $metadata ??= app(\App\Support\SharingMetadata::class)->forPortfolio($portfolio);
     $title = $metadata['title'];
     $summary = $metadata['description'];
+    $pageUrls = $preview
+        ? ['home' => route('admin.portfolio.preview'), 'about' => route('admin.portfolio.preview.about'), 'contact' => route('admin.portfolio.preview.contact')]
+        : ['home' => route('portfolio.show', $portfolio->slug), 'about' => route('portfolio.about', $portfolio->slug), 'contact' => route('portfolio.contact', $portfolio->slug)];
 @endphp
 <!DOCTYPE html>
 <html lang="pt-BR" style="font-size: {{ $appearance->settings($portfolio)['appearance']['base_size'] }}px">
@@ -41,9 +44,11 @@
     <a class="pf-skip" href="#conteudo">Pular para o conteúdo</a>
     <header class="pf-header">
         <div class="pf-container pf-header-inner">
-            <a class="pf-brand" href="{{ $preview ? route('admin.portfolio.preview') : route('portfolio.show', $portfolio->slug) }}"><span class="pf-brand-mark" aria-hidden="true">{{ mb_substr($portfolio->professional_name, 0, 1) }}</span><span>{{ $portfolio->professional_name }}</span></a>
-            <nav aria-label="Navegação principal">
-                <a class="pf-link" href="{{ $preview ? route('admin.portfolio.preview') : route('portfolio.show', $portfolio->slug) }}#projetos">Projetos</a>
+            <a class="pf-brand" href="{{ $pageUrls['home'] }}"><span class="pf-brand-mark" aria-hidden="true">{{ mb_substr($portfolio->professional_name, 0, 1) }}</span><span>{{ $portfolio->professional_name }}</span></a>
+            <nav class="pf-nav" aria-label="Navegação principal">
+                <a class="pf-link" href="{{ $pageUrls['home'] }}#projetos" @if ($current === 'home') aria-current="page" @endif>Projetos</a>
+                <a class="pf-link" href="{{ $pageUrls['about'] }}" @if ($current === 'about') aria-current="page" @endif>Sobre</a>
+                <a class="pf-link" href="{{ $pageUrls['contact'] }}" @if ($current === 'contact') aria-current="page" @endif>Contato</a>
             </nav>
         </div>
     </header>

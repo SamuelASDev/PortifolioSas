@@ -17,6 +17,23 @@ class PublicPortfolioController extends Controller
             ->header('Cache-Control', 'no-store');
     }
 
+    public function about(string $slug): Response
+    {
+        return $this->page('public.about', $slug);
+    }
+
+    public function contact(string $slug): Response
+    {
+        return $this->page('public.contact', $slug);
+    }
+
+    private function page(string $view, string $slug): Response
+    {
+        $portfolio = Portfolio::published()->where('slug', $slug)->firstOrFail();
+
+        return response()->view($view, compact('portfolio'))->header('Cache-Control', 'no-store');
+    }
+
     public function project(string $slug, string $project): Response
     {
         $portfolio = Portfolio::published()->where('slug', $slug)->firstOrFail();

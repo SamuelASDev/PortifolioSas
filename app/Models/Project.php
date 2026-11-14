@@ -20,7 +20,7 @@ class Project extends Model
 
     protected $fillable = [
         'portfolio_id', 'title', 'description', 'description_format', 'cover_image',
-        'link_demo', 'link_github', 'is_featured', 'display_order', 'share_title', 'share_description', 'share_image_path', 'category',
+        'link_demo', 'link_github', 'is_featured', 'display_order', 'share_title', 'share_description', 'share_image_path', 'category', 'status',
     ];
 
     protected $casts = [
