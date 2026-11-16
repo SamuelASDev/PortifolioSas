@@ -19,7 +19,7 @@ class AiAccessController extends Controller
 
         return view('admin.ai.show', [
             'enabled' => $user->ai_enabled,
-            'tokens' => $user->aiAccessTokens,
+            'tokens' => $user->aiAccessTokens()->get(),
             'apps' => $apps,
             'newToken' => session('ai_token'),
             'mcpUrl' => url('/mcp'),
