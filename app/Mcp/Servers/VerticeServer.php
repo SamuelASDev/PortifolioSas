@@ -6,6 +6,8 @@ use App\Mcp\Tools\CreateProjectTool;
 use App\Mcp\Tools\GetPortfolioTool;
 use App\Mcp\Tools\GetProjectTool;
 use App\Mcp\Tools\ListProjectsTool;
+use App\Mcp\Tools\RequestImageUploadTool;
+use App\Mcp\Tools\UploadImageFromUrlTool;
 use App\Mcp\Tools\UpdateProfileTool;
 use App\Mcp\Tools\UpdateProjectTool;
 use Laravel\Mcp\Server;
@@ -25,5 +27,7 @@ class VerticeServer extends Server
         CreateProjectTool::class,
         UpdateProjectTool::class,
         UpdateProfileTool::class,
+        RequestImageUploadTool::class,
+        UploadImageFromUrlTool::class,
     ];
 }

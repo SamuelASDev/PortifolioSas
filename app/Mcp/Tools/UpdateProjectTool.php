@@ -3,6 +3,7 @@
 namespace App\Mcp\Tools;
 
 use App\Actions\SaveProject;
+use App\Actions\StoreAiImage;
 use Illuminate\Contracts\JsonSchema\JsonSchema;
 use Laravel\Mcp\Request;
 use Laravel\Mcp\Response;
@@ -25,6 +26,7 @@ class UpdateProjectTool extends PortfolioTool
         unset($data['id']);
         if (array_key_exists('description', $data)) {
             $data['description_format'] ??= 'text';
+            $data['media_token'] = StoreAiImage::mediaToken($project);
         }
 
         $saved = $save->handle($portfolio, $data, $project);

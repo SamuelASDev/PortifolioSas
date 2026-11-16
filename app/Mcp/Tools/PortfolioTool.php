@@ -60,11 +60,11 @@ abstract class PortfolioTool extends Tool
     {
         return [
             'title' => $schema->string()->description('Título do projeto (até 255 caracteres).'),
-            'description' => $schema->string()->description('Descrição completa. Em "text", linhas em branco separam parágrafos. Em "html", use apenas p, h2, h3, strong, em, ul, ol, li, a, blockquote e code.'),
+            'description' => $schema->string()->description('Descrição completa. Em "text", linhas em branco separam parágrafos. Em "html", use apenas p, h2, h3, strong, em, ul, ol, li, a, blockquote, code e as imagens (figure/img com data-media-id) devolvidas pelas ferramentas de upload.'),
             'description_format' => $schema->string()->enum(['text', 'html'])->description('Formato da descrição. Padrão: text.'),
             'category' => $schema->string()->enum(array_keys(config('projects.categories')))->description('Categoria do projeto.'),
             'status' => $schema->string()->enum(array_keys(config('projects.statuses')))->description('Situação: completed, in_development, maintenance, paused ou planned.'),
-            'tags' => $schema->string()->description('Tecnologias separadas por vírgula, ex.: "Laravel, Vue, MySQL".'),
+            'tags' => $schema->string()->description('Tecnologias separadas por vírgula, no máximo 8 (ex.: "Laravel, Vue, MySQL").'),
             'link_demo' => $schema->string()->description('URL pública do projeto (http/https).'),
             'link_github' => $schema->string()->description('URL do repositório (http/https).'),
             'is_featured' => $schema->boolean()->description('Exibir entre os destaques do portfólio.'),

@@ -33,6 +33,7 @@
         ['pen', 'Criar projetos', 'Título, descrição, categoria, situação, tecnologias e links.'],
         ['gear', 'Editar projetos', 'Só os campos que você pedir.'],
         ['book', 'Atualizar seus textos', 'Título profissional, bio, página Sobre e mensagem de Contato.'],
+        ['layout', 'Enviar imagens', 'Capa e imagens da descrição, por um link temporário de uso único ou por URL pública.'],
     ];
 @endphp
 <x-app-layout>
