@@ -60,7 +60,7 @@ abstract class PortfolioTool extends Tool
     {
         return [
             'title' => $schema->string()->description('Título do projeto (até 255 caracteres).'),
-            'description' => $schema->string()->description('Descrição completa. Em "text", linhas em branco separam parágrafos. Em "html", use apenas p, h2, h3, strong, em, ul, ol, li, a, blockquote, code e as imagens (figure/img com data-media-id) devolvidas pelas ferramentas de upload.'),
+            'description' => $schema->string()->description('Descrição completa. Em "text", linhas em branco separam parágrafos. Em "html", use apenas p, h2, h3, strong, em, ul, ol, li, a, blockquote, code, pre e as imagens devolvidas pelas ferramentas de upload (figure > img com data-media-id), que aceitam legenda em figcaption dentro do figure.'),
             'description_format' => $schema->string()->enum(['text', 'html'])->description('Formato da descrição. Padrão: text.'),
             'category' => $schema->string()->enum(array_keys(config('projects.categories')))->description('Categoria do projeto.'),
             'status' => $schema->string()->enum(array_keys(config('projects.statuses')))->description('Situação: completed, in_development, maintenance, paused ou planned.'),

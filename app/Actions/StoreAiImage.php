@@ -41,7 +41,7 @@ class StoreAiImage
         $media = $this->upload->handle($portfolio, $file, self::mediaToken($project), $project);
 
         return [
-            'message' => 'Imagem enviada. Para exibi-la, inclua o trecho "html" na descrição do projeto (description_format "html") com update-project-tool, trocando o alt por uma descrição da imagem. Imagens não usadas em 24 horas são apagadas.',
+            'message' => 'Imagem enviada. Para exibi-la, inclua o trecho "html" na descrição do projeto (description_format "html") com update-project-tool, trocando o alt por uma descrição da imagem. Se quiser legenda visível, acrescente <figcaption>...</figcaption> dentro do figure. Imagens não usadas em 24 horas são apagadas.',
             'media_id' => $media->id,
             'url' => $media->url,
             'html' => '<figure><img data-media-id="'.$media->id.'" alt="Descreva a imagem"></figure>',

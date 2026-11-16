@@ -59,6 +59,16 @@ class AiAccessTest extends TestCase
         $this->assertNotNull($user->aiAccessTokens()->first()->last_used_at);
     }
 
+    public function test_oauth_registration_only_accepts_known_redirect_domains(): void
+    {
+        $register = fn (string $uri) => $this->postJson('/oauth/register', ['client_name' => 'Claude', 'redirect_uris' => [$uri]]);
+
+        $register('https://evil.example/callback')->assertStatus(400)->assertJsonPath('error', 'invalid_redirect_uri');
+        $register('https://claude.ai.evil.example/cb')->assertStatus(400);
+        $register('https://claude.ai/api/mcp/auth_callback')->assertSuccessful();
+        $register('http://localhost:33418/callback')->assertSuccessful();
+    }
+
     public function test_tools_create_and_update_only_the_users_own_content(): void
     {
         $user = $this->user();

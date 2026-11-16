@@ -32,7 +32,16 @@ class SafeImageDownloader
 
         try {
             $response = Http::timeout(15)->withoutRedirecting()
-                ->withOptions(['sink' => $path, 'curl' => [CURLOPT_RESOLVE => ["{$host}:{$port}:{$ip}"], CURLOPT_MAXFILESIZE => $limit]])
+                ->withOptions([
+                    'sink' => $path,
+                    'curl' => [CURLOPT_RESOLVE => ["{$host}:{$port}:{$ip}"], CURLOPT_MAXFILESIZE => $limit, CURLOPT_PROTOCOLS => CURLPROTO_HTTP | CURLPROTO_HTTPS],
+                    // Corta a transferência se passar do limite (servidores que não informam o tamanho).
+                    'progress' => function ($total, $downloaded) use ($limit) {
+                        if ($downloaded > $limit) {
+                            throw new \RuntimeException('Imagem acima do limite.');
+                        }
+                    },
+                ])
                 ->get($url);
         } catch (Throwable) {
             @unlink($path);
