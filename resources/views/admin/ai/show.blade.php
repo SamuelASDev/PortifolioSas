@@ -101,13 +101,19 @@
                 @csrf
                 <label for="ai-token-name" class="sr-only">Nome do token</label>
                 <input id="ai-token-name" name="name" required maxlength="60" placeholder="Ex.: Claude Code no notebook" class="ai-input" value="{{ old('name') }}">
+                <label for="ai-token-days" class="sr-only">Validade do token</label>
+                <select id="ai-token-days" name="days" class="ai-input ai-select" title="Validade do token">
+                    @foreach (\App\Models\AiAccessToken::DURATIONS as $days => $label)
+                        <option value="{{ $days }}" @selected((int) old('days', 30) === $days)>{{ $days ? 'Vale '.$label : $label }}</option>
+                    @endforeach
+                </select>
                 <button type="submit" class="studio-button studio-button-primary">Gerar token</button>
             </form>
             @if ($tokens->isNotEmpty() || $apps->isNotEmpty())
                 <ul class="ai-list">
                     @foreach ($tokens as $item)
                         <li>
-                            <div><strong>{{ $item->name }}</strong><small>Token · criado {{ $item->created_at->diffForHumans() }} · {{ $item->last_used_at ? 'usado '.$item->last_used_at->diffForHumans() : 'nunca usado' }}</small></div>
+                            <div><strong>{{ $item->name }} @if ($item->isExpired())<span class="studio-status">Expirado</span>@endif</strong><small>Token · criado {{ $item->created_at->diffForHumans() }} · {{ $item->last_used_at ? 'usado '.$item->last_used_at->diffForHumans() : 'nunca usado' }} · {{ $item->expires_at ? ($item->isExpired() ? 'expirou ' : 'expira ').$item->expires_at->diffForHumans() : 'sem validade' }}</small></div>
                             <form method="POST" action="{{ route('admin.ai.tokens.destroy', $item) }}" onsubmit="return confirm('Revogar este token? A IA que usa ele perde o acesso.')">@csrf @method('DELETE')<button type="submit" class="appearance-control">Revogar</button></form>
                         </li>
                     @endforeach

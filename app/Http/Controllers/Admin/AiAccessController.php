@@ -35,9 +35,12 @@ class AiAccessController extends Controller
 
     public function storeToken(Request $request): RedirectResponse
     {
-        $data = $request->validate(['name' => ['required', 'string', 'max:60']]);
+        $data = $request->validate([
+            'name' => ['required', 'string', 'max:60'],
+            'days' => ['required', 'integer', 'in:'.implode(',', array_keys(AiAccessToken::DURATIONS))],
+        ]);
         abort_if($request->user()->aiAccessTokens()->count() >= 10, 422, 'Limite de 10 tokens. Revogue um antes de criar outro.');
-        [, $plain] = AiAccessToken::issue($request->user(), $data['name']);
+        [, $plain] = AiAccessToken::issue($request->user(), $data['name'], (int) $data['days']);
 
         return back()->with('ai_token', $plain);
     }

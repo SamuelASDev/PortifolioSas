@@ -30,12 +30,14 @@ class AiAccessTest extends TestCase
         $this->patch(route('admin.ai.update'), ['enabled' => 1])->assertRedirect();
         $this->assertTrue($user->fresh()->ai_enabled);
 
-        $this->post(route('admin.ai.tokens.store'), ['name' => 'Claude Code'])->assertSessionHas('ai_token');
+        $this->post(route('admin.ai.tokens.store'), ['name' => 'Claude Code', 'days' => 7])->assertSessionHas('ai_token');
         $plain = session('ai_token');
         $token = $user->aiAccessTokens()->first();
         $this->assertStringStartsWith('vtx_', $plain);
         $this->assertSame(hash('sha256', $plain), $token->token_hash);
-        $this->get(route('admin.ai.show'))->assertSee($plain);
+        $this->assertTrue($token->expires_at->between(now()->addDays(7)->subMinute(), now()->addDays(7)));
+        $this->get(route('admin.ai.show'))->assertSee($plain)->assertSee('expira');
+        $this->post(route('admin.ai.tokens.store'), ['name' => 'X', 'days' => 5])->assertSessionHasErrors('days');
 
         $other = $this->user();
         $this->actingAs($other)->delete(route('admin.ai.tokens.destroy', $token))->assertNotFound();
@@ -57,6 +59,9 @@ class AiAccessTest extends TestCase
         $user->forceFill(['ai_enabled' => true])->save();
         $call($plain)->assertOk();
         $this->assertNotNull($user->aiAccessTokens()->first()->last_used_at);
+
+        $this->travel(31)->days();
+        $call($plain)->assertUnauthorized();
     }
 
     public function test_oauth_registration_only_accepts_known_redirect_domains(): void
