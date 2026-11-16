@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Services\ProjectDescription;
+use Illuminate\Support\Carbon;
 use Laravel\Passport\Passport;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
@@ -24,6 +25,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Carbon::setLocale('pt_BR'); // datas relativas ("há 2 dias") em português
         RateLimiter::for('registration', fn (Request $request) => Limit::perMinute(5)->by($request->ip()));
 
         // OAuth das IAs (MCP): tela de consentimento própria.

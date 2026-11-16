@@ -6,12 +6,14 @@
         request()->routeIs('admin.projects.organize') => 'Organizar projetos',
         request()->routeIs('admin.projects.*') => 'Projetos',
         request()->routeIs('profile.*') => 'Minha conta',
+        request()->routeIs('admin.ai.*') => 'Integrações com IA',
         default => 'Meu portfólio',
     };
     $pageDescription = match (true) {
         request()->routeIs('dashboard') => 'Um novo olhar para o que você está construindo.',
         request()->routeIs('admin.projects.*') => 'Cada projeto tem uma história. Dê espaço para a sua.',
         request()->routeIs('profile.*') => 'Cuide dos seus dados e da segurança do seu espaço.',
+        request()->routeIs('admin.ai.*') => 'Conecte o assistente que você já usa e deixe que ele trabalhe por você.',
         default => 'Sua identidade, seus detalhes, sua melhor apresentação.',
     };
 @endphp
