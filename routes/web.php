@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AiAccessController;
 use App\Http\Controllers\Admin\PortfolioAppearanceController;
 use App\Http\Controllers\Admin\PortfolioController;
 use App\Http\Controllers\Admin\PortfolioPreviewController;
@@ -47,6 +48,13 @@ Route::middleware('auth')->group(function () {
         Route::post('project-media', [ProjectMediaController::class, 'store'])->middleware('throttle:30,1')->name('project-media.store');
         Route::post('project-media/video', [ProjectMediaController::class, 'video'])->middleware('throttle:30,1')->name('project-media.video');
         Route::resource('projects', ProjectController::class)->except('show');
+
+        // Integrações com IA (MCP)
+        Route::get('ia', [AiAccessController::class, 'show'])->name('ai.show');
+        Route::patch('ia', [AiAccessController::class, 'update'])->name('ai.update');
+        Route::post('ia/tokens', [AiAccessController::class, 'storeToken'])->middleware('throttle:10,1')->name('ai.tokens.store');
+        Route::delete('ia/tokens/{token}', [AiAccessController::class, 'destroyToken'])->name('ai.tokens.destroy');
+        Route::delete('ia/apps/{client}', [AiAccessController::class, 'destroyApp'])->name('ai.apps.destroy');
     });
 });
 
